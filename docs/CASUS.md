@@ -1,10 +1,10 @@
-# Werkplekopdracht – Accessibility Hub 
+# Werkplekopdracht – Accessibility Hub
 
 ## Doel van de opdracht
 
 Je bouwt een webapplicatie voor **Stichting Accessibility**. Deze webapplicatie verbindt een groep van ongeveer 125 ervaringsdeskundigen met organisaties die **toegankelijkheidsonderzoek** willen doen. De stichting beheert de gegevens en keurt nieuwe registraties en inschrijvingen goed. Deze taak wordt op dit moment met Excel-sheets gedaan en Stichting Accessibility wil dit graag automatiseren.
 
-De webapplicatie is gemaakt met **Flask**, **Jinja2**, **HTML**, **CSS** en **SQL**.  
+De webapplicatie is gemaakt met **Flask**, **Jinja2**, **HTML**, **CSS** en **SQL**.
 Alle schermen worden op de server opgebouwd (server-side rendering). Formulieren werken met **GET/POST** en het **POST/Redirect/GET**-patroon.
 
 ---
@@ -22,35 +22,35 @@ Er zijn 3 verschillende rollen in de webapplicatie:
 
 ## Hoofdproces
 
-1. **Registratie nieuwe ervaringsdeskundige**  
+1. **Registratie nieuwe ervaringsdeskundige**
    De ervaringsdeskundige vult zijn/haar profiel in, inclusief beperkingen, voorkeuren en eventueel een toezichthouder.
-2. **Beoordeling door beheerder**  
+2. **Beoordeling door beheerder**
    De beheerder beoordeelt de registratie en keurt deze goed of af. Goed- of afkeuren kan via het beheerdersportaal.
-3. **Inloggen**  
+3. **Inloggen**
    Na goedkeuring kan de ervaringsdeskundige inloggen.
-4. **Dashboard**  
+4. **Dashboard**
    De ervaringsdeskundige ziet zijn/haar profiel en kan zich inschrijven voor onderzoeken die passen bij zijn/haar beperking en/of voorkeuren.
-6. **Detailpagina**  
+6. **Detailpagina**
    De ervaringsdeskundige kan details bekijken van onderzoeken en zich hier vervolgens voor inschrijven.
 7. **Beheerder keurt deze inschrijving**
    Vervolgens kan de beheerder via het beheerderspagina de inschrijving inzien en goed- of afkeuren.
 
 ### Organisatieproces
 
-1. **De beheerder maakt een organisatieaccount aan**  
+1. **De beheerder maakt een organisatieaccount aan**
    Hierna kan de organisatie met aangeleverde inloggegevens van Stichting Accessibility inloggen.
-2. **Nieuwe onderzoeken aanmaken**  
+2. **Nieuwe onderzoeken aanmaken**
    De organisatie kan nieuwe onderzoeken aanmaken aan de hand van een formulier.
-3. **Beoordeling door beheerder**  
+3. **Beoordeling door beheerder**
    De beheerder beoordeelt de onderzoeken en keurt deze goed of af. Goed- of afkeuren kan via het beheerdersportaal.
-4. **Overzicht van inschrijvingen**  
+4. **Overzicht van inschrijvingen**
    De organisatie ziet een overzicht van inschrijvingen.
 
-![img.png](src/img.png)
+![img.png](attachments/img.png)
 
 ---
 
-## Schermen en functies 
+## Schermen en functies
 
 ### Algemeen
 
@@ -60,12 +60,12 @@ Er zijn 3 verschillende rollen in de webapplicatie:
 * **Zoeken en filteren** via **GET-parameters**.
 * **Paginatie** voor lijsten.
 
-### Registratie 
+### Registratie
 Bij het registreren is het belangrijk dat de ervaringsdeskundige aangeeft welke beperkingen hij/zij heeft en wat de voorkeur is qua onderzoeken. Elke stap is een eigen pagina:
 
-1. **Persoonsgegevens**  
-2. **Beperkingen en voorkeuren**  
-3. **Toezichthouder** (alleen als dit nodig is, bijvoorbeeld bij minderjarigen)  
+1. **Persoonsgegevens**
+2. **Beperkingen en voorkeuren**
+3. **Toezichthouder** (alleen als dit nodig is, bijvoorbeeld bij minderjarigen)
 4. **Bevestigen en voorwaarden**
 
 ### Portal ervaringsdeskundigen
@@ -214,11 +214,11 @@ Omdat deze opdracht voor Stichting Accessibility is, is het belangrijk dat de ap
 | Telefoon        | String |                           |
 | Overige details | Tekst  |                           |
 
-### Lijst met beperkingen 
+### Lijst met beperkingen
 
-**Auditief**: Doof, Slechthorend, Doofblind  
-**Visueel**: Blind, Slechtziend, Kleurenblind, Doofblind  
-**Motorisch/lichamelijk**: Amputatie en mismaaktheid, Artritis, Fibromyalgie, Reuma, Verminderde handvaardigheid, Spierdystrofie, RSI, Tremor en Spasmen, Quadriplegie/tetraplegie  
+**Auditief**: Doof, Slechthorend, Doofblind
+**Visueel**: Blind, Slechtziend, Kleurenblind, Doofblind
+**Motorisch/lichamelijk**: Amputatie en mismaaktheid, Artritis, Fibromyalgie, Reuma, Verminderde handvaardigheid, Spierdystrofie, RSI, Tremor en Spasmen, Quadriplegie/tetraplegie
 **Cognitief/neurologisch**: ADHD, Autisme, Dyslexie, Dyscalculie, Leerstoornis, Geheugenbeperking, Multiple Sclerose, Epilepsie, Migraine
 
 ---
