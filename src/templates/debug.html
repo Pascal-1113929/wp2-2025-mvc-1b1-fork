@@ -1,19 +1,13 @@
-{% from "macros/layouts/navbar.html" import navbar %}
+{% from "macros/components/button.html" import button %}
 
-<!doctype html>
-<html lang="{{base.language}}">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="/static/style/stylesheet.css" />
-        <title>Accessibility Hub</title>
-    </head>
+{% extends 'base/default.html' %}
 
-    <body>
-        {{ navbar() }} {{lang.hello_world}}
-        <h2>debug:</h2>
-        {{base.locale}} <br />
-        {{base.path}} <br />
-        {{base.language}} <br />
-    </body>
-</html>
+
+{% block content %}
+    <h2>Debug Information</h2>
+    {{base.locale}} <br />
+    {{base.path}} <br />
+    {{base.language}} <br />
+    {{ button(text="local href", href=".debug") }}
+    {{ button(text="external href", href="https://example.com") }}
+{% endblock %}

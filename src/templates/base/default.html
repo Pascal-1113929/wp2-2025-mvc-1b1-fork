@@ -1,4 +1,4 @@
-{% from "macros/layouts/navbar.html" import navbar %}
+{% from "macros/components/button.html" import button %}
 
 <!doctype html>
 <html lang="{{base.language}}">
@@ -9,8 +9,21 @@
         <title>Accessibility Hub</title>
     </head>
     <body>
-        {{ navbar() }}
+        {% block navbar %}
+            <nav>
+                <div class="container-horizontal">
+                    <div class="cell">
+                        {{ button(text=lang.nav_home, href=".") }}
+                        {{ button(text=lang.nav_debug, href=".debug") }}
+                    </div>
+                    <div class="cell float-right">
+                        {{ button(text=lang.nav_login, href=".login") }}
+                    </div>
+                </div>
+            </nav>
+        {% endblock %}
+
         {% block content %}
-        {% endblock content %}
+        {% endblock %}
     </body>
 </html>
