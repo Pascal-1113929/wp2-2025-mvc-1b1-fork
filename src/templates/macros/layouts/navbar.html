@@ -1,9 +1,15 @@
+{% from "macros/components/button.html" import button %}
+
+
 {% macro navbar() %}
 <nav>
-    <ul>
-        <li>
-            <a href="#"> Home </a>
-        </li>
-    </ul>
+    <div class="container-horizontal">
+        <div class="cell">
+
+                {{ button(text="lang.nav_home", href='#') }}
+
+        </div>
+        <div class="cell float-right">login</div>
+    </div>
 </nav>
 {% endmacro %}

@@ -1,0 +1,16 @@
+{% from "macros/layouts/navbar.html" import navbar %}
+
+<!doctype html>
+<html lang="{{base.language}}">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="/static/style/stylesheet.css" />
+        <title>Accessibility Hub</title>
+    </head>
+    <body>
+        {{ navbar() }}
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>
