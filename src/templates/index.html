@@ -1,20 +1,27 @@
-<!doctype html>
-  <html lang="nl">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Accessibility Hub</title>
-  </head>
-  <body>
-    <h2>Welkom</h2>
-    <p>Dit is een eenvoudige start voor de casus “Accessibility Hub”. De pagina hieronder leest data uit jouw SQLite database.</p>
+{% from "macros/layouts/navbar.html" import navbar %}
 
-    <h2>Snelle statistieken</h2>
-    <ul>
-        <li>{{ counts.experts }} ervaringsdeskundigen</li>
-        <li>{{ counts.organizations }} organisaties</li>
-        <li>{{ counts.studies }} onderzoeken</li>
-        <li>{{ counts.enrollments }} inschrijvingen</li>
-    </ul>
-  </body>
+<!doctype html>
+<html lang="nl">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="/static/style/stylesheet.css" />
+        <title>Accessibility Hub</title>
+    </head>
+    <body>
+        {{ navbar() }}
+        <h2>Welkom</h2>
+        <p>
+            Dit is een eenvoudige start voor de casus “Accessibility Hub”. De
+            pagina hieronder leest data uit jouw SQLite database.
+        </p>
+
+        <h2>Snelle statistieken</h2>
+        <ul>
+            <li>{{ counts.experts }} ervaringsdeskundigen</li>
+            <li>{{ counts.organizations }} organisaties</li>
+            <li>{{ counts.studies }} onderzoeken</li>
+            <li>{{ counts.enrollments }} inschrijvingen</li>
+        </ul>
+    </body>
 </html>
