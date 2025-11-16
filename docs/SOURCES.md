@@ -3,6 +3,8 @@ Sources used in this project:
  - https://youtu.be/_Rz6jmxvBAM
  - https://medium.com/@ebojacky/api-route-parameters-vs-query-parameters-clearly-explained-in-flask-and-express-e2cea6ad5ab1
  - https://stackoverflow.com/questions/61960811/jinja-macro-doesnt-render-string-variable
+ - https://www.w3schools.com/accessibility/accessibility_labels.php
+ - https://kinaole.co/en/sr-only-just-a-class/
 
 Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing

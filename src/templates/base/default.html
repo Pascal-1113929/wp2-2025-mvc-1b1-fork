@@ -1,4 +1,5 @@
 {% from "macros/components/button.html" import button %}
+{% from "macros/components/dropdown.html" import dropdown %}
 
 <!doctype html>
 <html lang="{{base.language}}">
@@ -6,24 +7,26 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="/static/style/stylesheet.css" />
+        <script src="/static/script/ui.js" type="module"></script>
         <title>Accessibility Hub</title>
     </head>
     <body>
         {% block navbar %}
-            <nav>
-                <div class="container-horizontal">
-                    <div class="cell">
-                        {{ button(text=lang.nav_home, href=".") }}
-                        {{ button(text=lang.nav_debug, href=".debug") }}
-                    </div>
-                    <div class="cell float-right">
-                        {{ button(text=lang.nav_login, href=".login") }}
-                    </div>
+        <nav>
+            <div class="container-horizontal">
+                <div class="cell">
+                    {{ button(text=lang.nav_home, href=".") }} {{
+                    button(text=lang.nav_debug, href=".debug") }}
                 </div>
-            </nav>
-        {% endblock %}
-
-        {% block content %}
-        {% endblock %}
+                <div class="cell float-right">
+                    {{ dropdown(options=[
+                        {"value": "nl-NL", "text": "Nederlands", "selected": true, "image": "/static/img/flags/nl-NL.png"},
+                        {"value": "en-US", "text": "English", "image": "/static/img/flags/en-US.png"}
+                    ], name="", id="language-selector", class="") }}
+                    {{ button(text=lang.nav_login, href=".login") }}
+                </div>
+            </div>
+        </nav>
+        {% endblock %} {% block content %} {% endblock %}
     </body>
 </html>
