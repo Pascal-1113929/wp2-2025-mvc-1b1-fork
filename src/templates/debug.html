@@ -1,0 +1,15 @@
+{% from "macros/components/button.html" import button %}
+{% from "macros/components/dropdown.html" import dropdown %}
+
+{% extends 'base/default.html' %}
+
+
+{% block content %}
+    <h2>Debug Information</h2>
+    {{base.locale}} <br />
+    {{base.path}} <br />
+    {{base.language}} <br />
+    {{ button(text="local href", href=".debug") }}
+    {{ button(text="external href", href="https://example.com") }} <br />
+    {{ dropdown(options=[{"value": "a", "text": "Option 1", "image": "/static/img/flags/en-US.png"}, {"value": "b", "text": "Option 2", "selected": true, "image": "/static/img/flags/en-US.png"}, {"value": "c", "text": "Option 3", "image": "/static/img/flags/nl-NL.png"}], name="", id="", class="") }}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% macro button(href="", text="") %}
+    {% if href %}
+        <a
+            {% if href.startswith('.') %}
+                href="/{{ request.path.split('/')[1] }}/{{ href[1:] }}"
+            {% else %}
+                href="{{ href }}"
+            {% endif %}
+            class="button" >{{ text }}</a
+        >
+    {% else %}
+        <button type="button" class="button">{{ text }}</button>
+    {% endif %}
+{% endmacro %}

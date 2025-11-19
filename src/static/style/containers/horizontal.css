@@ -1,0 +1,6 @@
+.container-horizontal {
+    display: flex;
+}
+.container-horizontal .cell {
+    flex: 1;
+}
