@@ -12,7 +12,7 @@
             <thead>
                 <tr>
                     <th>
-                        Naam
+                        Titel
                     </th>
                     <th>
                         Status
@@ -41,32 +41,34 @@
             {% for study in study_list %}
                 <tr>
                     <td>
-                        {study.name}
+                        <a href="organization/study/{{ study.id }}">
+                            {{study.title}}
+                        </a>
                     </td>
                     <td>
-                        {study.status}
+                        {{study.status}}
                     </td>
                     <td>
-                        {study.start_date}
+                        {{study.start_date}}
                     </td>
                     <td>
-                        {study.end_date}
+                        {{study.end_date}}
                     </td>
                     <td>
                         {% if study.location == None %}
-                        {study.study_type}
+                        {{study.study_type}}
                         {% else %}
-                        {study.location}
+                        {{study.location}}
                         {% endif %}
                     </td>
                     <td>
-                        {study.reward}
+                        {{study.reward}}
                     </td>
                     <td>
-                        {study.age_min}
+                        {{study.age_min}}
                     </td>
                     <td>
-                        {study.age_max}
+                        {{study.age_max}}
                     </td>
                 </tr>
             {% endfor %}
