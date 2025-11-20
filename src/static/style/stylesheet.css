@@ -11,3 +11,20 @@ body {
     margin: 0;
     padding: 0;
 }
+.seperator {
+    width: 100vw;
+    height: 0.2vh;
+    background-color: #000000;
+}
+
+.spacer {
+    height: 0.2vh;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    text-align: center;
+}

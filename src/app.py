@@ -36,6 +36,19 @@ def index(language):
     return render("index.html", counts=counts)
 
 
+@app.route("/<language>/organization/<id>/")
+def organization_dashboard_render(language, id):
+    # TODO: validate with a session if the logged in user is a organization and the correct organization
+    org = organizations.get_organization_by_id(id)
+    if not org:
+        # TODO: Display an error
+        return redirect("/")
+
+    study_list = studies.get_study_by_organization_id(id)
+
+    return render("organization.html", organization=org, study_list=study_list)
+
+
 @app.route("/<language>/debug")
 def debug(language):
     return render("debug.html")
