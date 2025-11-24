@@ -2,3 +2,6 @@
 "nav_home": "Home"
 "nav_debug": "Debug"
 "nav_login": "Login"
+"error_not_found_title": "Page not found"
+"error_not_found_message": "Sorry, the page you are looking for does not exist or has been moved."
+"error_not_found_back_button": "Back to the home page"

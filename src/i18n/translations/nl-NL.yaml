@@ -2,3 +2,6 @@
 "nav_home": "Startpagina"
 "nav_debug": "Debuggen"
 "nav_login": "Inloggen"
+"error_not_found_title": "Pagina niet gevonden"
+"error_not_found_message": "Sorry, de pagina die je zoekt bestaat niet of is verplaatst."
+"error_not_found_back_button": "Terug naar de home pagina"
