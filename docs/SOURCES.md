@@ -5,6 +5,7 @@ Sources used in this project:
  - https://stackoverflow.com/questions/61960811/jinja-macro-doesnt-render-string-variable
  - https://www.w3schools.com/accessibility/accessibility_labels.php
  - https://kinaole.co/en/sr-only-just-a-class/
+ - https://stackoverflow.com/questions/29516093/how-to-redirect-to-a-external-404-page-python-flask
 
 Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing
