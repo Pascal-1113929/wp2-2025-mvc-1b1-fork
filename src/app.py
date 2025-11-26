@@ -8,6 +8,7 @@ from models.enrollment import Enrollment
 from models.organization import Organization
 from models.study import Study
 from models.user import User
+from models.profile import Profile
 
 app = Flask(__name__)
 
@@ -19,6 +20,7 @@ users = User(DB_PATH)
 organizations = Organization(DB_PATH)
 studies = Study(DB_PATH)
 enrollments = Enrollment(DB_PATH)
+profiles = Profile(DB_PATH)
 
 
 @app.route("/")
@@ -49,6 +51,15 @@ def organization_dashboard_render(language, id):
     study_list = studies.get_study_by_organization_id(id)
 
     return render("organization.html", organization=org, study_list=study_list)
+
+
+@app.route("/<language>/expert/")
+def expert_dashboard_render(language):
+    userid = 3 #TODO: get userid from session after login has been completed
+
+    expert_user = users.get_user_by_id(userid)
+    exper_profile = profiles.get_profile_by_userid(expert_user.id)
+
 
 
 @app.route("/<language>/debug")
