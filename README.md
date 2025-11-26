@@ -8,3 +8,9 @@ Bij inlevering moet hier het volgende staan:
 - Screenshots
 - Andere dingen die je wilt melden of belangrijk zijn (bonus functionaliteiten bijvoorbeeld)
 - APA bronnen
+
+
+om de app te runnen
+```
+py src/app.py
+```

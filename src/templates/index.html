@@ -1,17 +1,147 @@
-{% extends 'base/default.html' %}
+{% extends 'layouts/default.html' %}
 
 {% block content %}
-    <h2>Welkom</h2>
-    <p>
-        Dit is een eenvoudige start voor de casus “Accessibility Hub”. De
-        pagina hieronder leest data uit jouw SQLite database.
-    </p>
+<main class="home">
+    <section class="hero">
+        <p class="eyebrow">{{ lang.home_eyebrow }}</p>
+        <h1>{{ lang.home_title }}</h1>
+        <p class="lede">{{ lang.home_subtitle }}</p>
+        <div class="hero-actions">
+            {{ button(text=lang.home_cta_repo, href="https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice", class_name="primary") }}
+            {{ button(text=lang.home_cta_login, href=".login", class_name="ghost") }}
+        </div>
+        <div class="hero-meta">
+            <span class="pill">{{ lang.home_pill_accessible }}</span>
+            <span class="pill">{{ lang.home_pill_secure }}</span>
+            <span class="pill">{{ lang.home_pill_roles }}</span>
+        </div>
+    </section>
 
-    <h2>Snelle statistieken</h2>
-    <ul>
-        <li>{{ counts.experts }} ervaringsdeskundigen</li>
-        <li>{{ counts.organizations }} organisaties</li>
-        <li>{{ counts.studies }} onderzoeken</li>
-        <li>{{ counts.enrollments }} inschrijvingen</li>
-    </ul>
+    <section class="stats">
+        <div class="section-heading">
+            <p class="eyebrow">{{ lang.home_section_snapshot }}</p>
+            <h2>{{ lang.home_stats_title }}</h2>
+            <p class="muted">{{ lang.home_stats_caption }}</p>
+        </div>
+        <div class="stat-grid">
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.home_stat_experts }}</p>
+                <p class="stat-value">{{ counts.experts }}</p>
+                <p class="muted">{{ lang.home_stat_experts_hint }}</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.home_stat_orgs }}</p>
+                <p class="stat-value">{{ counts.organizations }}</p>
+                <p class="muted">{{ lang.home_stat_orgs_hint }}</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.home_stat_studies }}</p>
+                <p class="stat-value">{{ counts.studies }}</p>
+                <p class="muted">{{ lang.home_stat_studies_hint }}</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.home_stat_enrollments }}</p>
+                <p class="stat-value">{{ counts.enrollments }}</p>
+                <p class="muted">{{ lang.home_stat_enrollments_hint }}</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="feature-grid">
+        <div class="section-heading">
+            <p class="eyebrow">{{ lang.home_section_features }}</p>
+            <h2>{{ lang.home_features_title }}</h2>
+            <p class="muted">{{ lang.home_features_caption }}</p>
+        </div>
+        <div class="card-grid">
+            <article class="card">
+                <div class="badge">{{ lang.home_feature_one_badge }}</div>
+                <h3>{{ lang.home_feature_one_title }}</h3>
+                <p>{{ lang.home_feature_one_desc }}</p>
+            </article>
+            <article class="card">
+                <div class="badge">{{ lang.home_feature_two_badge }}</div>
+                <h3>{{ lang.home_feature_two_title }}</h3>
+                <p>{{ lang.home_feature_two_desc }}</p>
+            </article>
+            <article class="card">
+                <div class="badge">{{ lang.home_feature_three_badge }}</div>
+                <h3>{{ lang.home_feature_three_title }}</h3>
+                <p>{{ lang.home_feature_three_desc }}</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="audiences">
+        <div class="section-heading">
+            <p class="eyebrow">{{ lang.home_section_roles }}</p>
+            <h2>{{ lang.home_roles_title }}</h2>
+            <p class="muted">{{ lang.home_roles_caption }}</p>
+        </div>
+        <div class="card-grid">
+            <article class="card">
+                <h3>{{ lang.home_role_admin_title }}</h3>
+                <ul>
+                    <li>{{ lang.home_role_admin_item_one }}</li>
+                    <li>{{ lang.home_role_admin_item_two }}</li>
+                    <li>{{ lang.home_role_admin_item_three }}</li>
+                </ul>
+            </article>
+            <article class="card">
+                <h3>{{ lang.home_role_expert_title }}</h3>
+                <ul>
+                    <li>{{ lang.home_role_expert_item_one }}</li>
+                    <li>{{ lang.home_role_expert_item_two }}</li>
+                    <li>{{ lang.home_role_expert_item_three }}</li>
+                </ul>
+            </article>
+            <article class="card">
+                <h3>{{ lang.home_role_org_title }}</h3>
+                <ul>
+                    <li>{{ lang.home_role_org_item_one }}</li>
+                    <li>{{ lang.home_role_org_item_two }}</li>
+                    <li>{{ lang.home_role_org_item_three }}</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <section class="workflow">
+        <div class="section-heading">
+            <p class="eyebrow">{{ lang.home_section_flow }}</p>
+            <h2>{{ lang.home_flow_title }}</h2>
+            <p class="muted">{{ lang.home_flow_caption }}</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <h4>{{ lang.home_flow_step_one_title }}</h4>
+                    <p>{{ lang.home_flow_step_one_desc }}</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <h4>{{ lang.home_flow_step_two_title }}</h4>
+                    <p>{{ lang.home_flow_step_two_desc }}</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <h4>{{ lang.home_flow_step_three_title }}</h4>
+                    <p>{{ lang.home_flow_step_three_desc }}</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>
+                    <h4>{{ lang.home_flow_step_four_title }}</h4>
+                    <p>{{ lang.home_flow_step_four_desc }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
 {% endblock %}
