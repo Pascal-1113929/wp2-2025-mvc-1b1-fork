@@ -1,4 +1,4 @@
-{% macro button(href="", text="") %}
+{% macro button(href="", text="", class_name="") %}
     {% if href %}
         <a
             {% if href.startswith('.') %}
@@ -6,9 +6,12 @@
             {% else %}
                 href="{{ href }}"
             {% endif %}
-            class="button" >{{ text }}</a
+            class="button{% if class_name %} {{ class_name }}{% endif %}"
+            >{{ text }}</a
         >
     {% else %}
-        <button type="button" class="button">{{ text }}</button>
+        <button type="button" class="button{% if class_name %} {{ class_name }}{% endif %}">
+            {{ text }}
+        </button>
     {% endif %}
 {% endmacro %}
