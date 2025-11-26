@@ -228,7 +228,6 @@ p {
     }
 }
 .seperator {
-    width: 100vw;
     height: 0.2vh;
     background-color: #000000;
 }
