@@ -1,11 +1,13 @@
 import os
-from flask import Flask, render_template, redirect, request
+
+from flask import Flask, redirect, render_template, request
+
 from data.database import Database
-from models.user import User
+from i18n.locale import get_i18n, list_locales
+from models.enrollment import Enrollment
 from models.organization import Organization
 from models.study import Study
-from models.enrollment import Enrollment
-from i18n.locale import list_locales, get_i18n
+from models.user import User
 
 app = Flask(__name__)
 
@@ -36,13 +38,30 @@ def index(language):
     return render("index.html", counts=counts)
 
 
+@app.route("/<language>/organization/<id>/")
+def organization_dashboard_render(language, id):
+    # TODO: validate with a session if the logged in user is a organization and the correct organization
+    org = organizations.get_organization_by_id(id)
+    if not org:
+        # TODO: Display an error
+        return redirect("/")
+
+    study_list = studies.get_study_by_organization_id(id)
+
+    return render("organization.html", organization=org, study_list=study_list)
+
+
 @app.route("/<language>/debug")
 def debug(language):
     return render("debug.html")
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render('error/not_found.html'), 404
+
 
 def render(template, **kwargs):
-    language = request.view_args.get("language")
+    language = request.path.split("/")[1]
 
     if language not in list_locales():
         return redirect_langauge()

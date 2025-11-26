@@ -1,8 +1,3 @@
-"hello_world": "hello world"
-"nav_brand": "Accessibility Hub"
-"nav_home": "Home"
-"nav_debug": "Debug"
-"nav_login": "Login"
 "home_eyebrow": "Inclusive research platform"
 "home_title": "Connect lived experience, organizations, and studies."
 "home_subtitle": "A modern hub where experts with lived experience, administrators, and organizations collaborate on accessible research."
@@ -60,3 +55,8 @@
 "home_flow_step_three_desc": "Experts browse studies filtered by fit and status, then enroll."
 "home_flow_step_four_title": "Approve"
 "home_flow_step_four_desc": "Admins and organizations approve enrollments and keep participants up to date."
+"error_not_found_title": "Page not found"
+"error_not_found_message": "Sorry, the page you are looking for does not exist or has been moved."
+"error_not_found_back_button": "Back to the home page"
+
+"back": "Go Back"
