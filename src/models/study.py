@@ -1,4 +1,5 @@
 from data.database import Database
+from datetime import datetime
 
 
 class Study:
@@ -17,7 +18,19 @@ class Study:
             cur = con.cursor()
             cur.execute("SELECT * FROM studies WHERE organization_id=?", (organization_id,))
             con.commit()
-            return cur.fetchall()
+            study_list = cur.fetchall()
+
+            new_study_list = []
+            for study in study_list:
+                study_dict = dict(study)
+                # This is needed fo the narrator pronounces the date correctly
+                study_dict["start_date"] = datetime.strptime(study_dict["start_date"], "%Y-%m-%d")
+                study_dict["end_date"] = datetime.strptime(study_dict["end_date"], "%Y-%m-%d")
+                study_dict["start_date"] = study_dict["start_date"].strftime("%d-%m-%Y")
+                study_dict["end_date"] = study_dict["end_date"].strftime("%d-%m-%Y")
+                new_study_list.append(study_dict)
+
+            return new_study_list
 
     def get_all_available(self):
         with self.db.connect() as con:
