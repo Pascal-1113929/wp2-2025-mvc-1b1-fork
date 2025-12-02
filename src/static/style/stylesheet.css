@@ -126,7 +126,8 @@ p {
 .stats,
 .feature-grid,
 .audiences,
-.workflow {
+.workflow,
+.sectioncard {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 20px;

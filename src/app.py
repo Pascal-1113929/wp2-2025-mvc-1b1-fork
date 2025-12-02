@@ -6,6 +6,8 @@ from models.organization import Organization
 from models.study import Study
 from models.enrollment import Enrollment
 from i18n.locale import list_locales, get_i18n
+from routes.web import load_web_routes
+from routes.base import render, redirect_langauge
 
 app = Flask(__name__)
 
@@ -40,25 +42,7 @@ def index(language):
 def debug(language):
     return render("debug.html")
 
-
-def render(template, **kwargs):
-    language = request.view_args.get("language")
-
-    if language not in list_locales():
-        return redirect_langauge()
-
-    base = {
-        "locale": language,
-        "language": language.split("-")[0],
-        "path": "/" + request.path.split("/", 2)[-1],
-    }
-    return render_template(template, base=base, lang=get_i18n(language), **kwargs)
-
-
-def redirect_langauge():
-    locale = request.accept_languages.best_match(list_locales())
-    return redirect(f"/{locale}", code=302)
-
+load_web_routes(app)
 
 if __name__ == "__main__":
     app.run(debug=True)

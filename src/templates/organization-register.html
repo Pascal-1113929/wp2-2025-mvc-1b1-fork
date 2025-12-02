@@ -1,0 +1,15 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+<main class="home">
+    <section class="sectioncard">
+        <form action="/organizations/register/save" method="post">
+            <input type="text" name="name">
+            <select name="type">
+                <option value="commercieel">commercieel</option>
+                <option value="non-profit">non-profit</option>
+            </select>
+        </form>
+    </section>
+</main>
+{% endblock %}
