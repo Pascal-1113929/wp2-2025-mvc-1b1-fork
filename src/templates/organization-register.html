@@ -3,12 +3,47 @@
 {% block content %}
 <main class="home">
     <section class="sectioncard">
-        <form action="/organizations/register/save" method="post">
-            <input type="text" name="name">
-            <select name="type">
-                <option value="commercieel">commercieel</option>
-                <option value="non-profit">non-profit</option>
-            </select>
+        <form class="org-form" action="/organizations/register/save" method="post">
+
+            <div class="form-group">
+                <label for="org-name">Organisatienaam</label>
+                <input id="org-name" type="text" name="name" required placeholder="Bijv: Stiching sekswerkers">
+            </div>
+
+            <div class="form-group">
+                <label for="org-type">Type organisatie</label>
+                <select id="org-type" name="type" required>
+                    <option value="commercieel">Commercieel</option>
+                    <option value="non-profit">Non-profit</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="website">Website</label>
+                <input id="website" type="text" name="website" placeholder="Bijv: https://www.mijnorganisatie.nl">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Beschrijving</label>
+                <textarea id="description" name="description" rows="4" aria-setsize="false" placeholder="Bijv: Onze bedrijf gaat over dit en dat en zus en zo"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="contact-person">Contactpersoon</label>
+                <input id="contact-person" type="text" name="contact_person" placeholder="Bijv: Mia Rhoades">
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input id="email" type="email" name="email" required placeholder="Bijv: ameren@xwms.nl">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telefoonnummer</label>
+                <input id="phone" type="text" name="phone" placeholder="Bijv: 067409236450">
+            </div>
+
+            <button class="submit-btn" type="submit">Opslaan</button>
         </form>
     </section>
 </main>
