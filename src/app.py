@@ -10,7 +10,7 @@ from models.organization import Organization
 from models.study import Study
 from models.user import User
 from models.profile import Profile
-from src.models.disabilities import Disablity
+from models.disabilities import Disablity
 
 app = Flask(__name__)
 
