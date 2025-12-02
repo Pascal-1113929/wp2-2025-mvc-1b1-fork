@@ -20,6 +20,10 @@ organizations = Organization(DB_PATH)
 studies = Study(DB_PATH)
 enrollments = Enrollment(DB_PATH)
 
+app.users = users
+app.organizations = organizations
+app.studies = studies
+app.enrollments = enrollments
 
 @app.route("/")
 def goto_locale_page():
