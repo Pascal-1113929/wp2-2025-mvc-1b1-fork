@@ -1,5 +1,6 @@
 from routes.base import render
-from flask import request
+from flask import request, redirect
+from i18n.locale import list_locales
 
 from models.organization import Organization
 
@@ -8,8 +9,8 @@ def load_web_routes(app):
     def org_register(language):
         return render("organization-register.html")
     
-    @app.route("/<language>/organizations/register/save", methods=["POST"])
-    def org_register_save(language):
+    @app.route("/organizations/register/save", methods=["POST"])
+    def org_register_save():
 
         name = request.form.get("name")
         type = request.form.get("type")
@@ -19,12 +20,14 @@ def load_web_routes(app):
         email = request.form.get("email")
         phone = request.form.get("phone")
 
+        language = request.accept_languages.best_match(list_locales())
+
         try:
-            org_id = Organization.create(
+            Organization.create(
                 name, type, website, description, contact_person, email, phone
             )
             message = "Organisatie succesvol aangemaakt!"
+            return redirect(f"/{language}/organizations/register?success=1")
         except Exception as e:
             message = f"Er is iets fout gegaan: {str(e)}"
-
-        return render("organization-register.html", message=message)
+            return redirect(f"/{language}/organizations/register?error={message}")
