@@ -3,8 +3,8 @@
 {% block content %}
 <main class="home">
     <section class="sectioncard">
+        {% if not message %}
         <form class="org-form" action="/organizations/register/save" method="post">
-
             <div class="form-group">
                 <label for="org-name">Organisatienaam</label>
                 <input id="org-name" type="text" name="name" required placeholder="Bijv: Stiching sekswerkers">
@@ -45,6 +45,14 @@
 
             <button class="submit-btn" type="submit">Opslaan</button>
         </form>
+        {% endif %}
+
+        {% if message %}
+        <div class="alert success">
+            {{ message }}
+        </div>
+        {% endif %}
+
     </section>
 </main>
 {% endblock %}
