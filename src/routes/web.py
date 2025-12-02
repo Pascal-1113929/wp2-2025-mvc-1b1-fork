@@ -2,12 +2,12 @@ from routes.base import render
 from flask import request, redirect
 from i18n.locale import list_locales
 
-from models.organization import Organization
-
 def load_web_routes(app):
     @app.route("/<language>/organizations/register", methods=["GET"])
     def org_register(language):
-        return render("organization-register.html")
+        success = request.args.get("success")
+        error = request.args.get("error")
+        return render("organization-register.html", success=success, error=error)
     
     @app.route("/organizations/register/save", methods=["POST"])
     def org_register_save():
@@ -23,7 +23,7 @@ def load_web_routes(app):
         language = request.accept_languages.best_match(list_locales())
 
         try:
-            Organization.create(
+            app.organizations.create(
                 name, type, website, description, contact_person, email, phone
             )
             message = "Organisatie succesvol aangemaakt!"

@@ -3,7 +3,6 @@
 {% block content %}
 <main class="home">
     <section class="sectioncard">
-        {% if not message %}
         <form class="org-form" action="/organizations/register/save" method="post">
             <div class="form-group">
                 <label for="org-name">Organisatienaam</label>
@@ -45,11 +44,16 @@
 
             <button class="submit-btn" type="submit">Opslaan</button>
         </form>
-        {% endif %}
 
         {% if success %}
-            <div class="alert success">
+            <div class="alert alert-success">
                 Organisatie succesvol aangemaakt!
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
             </div>
         {% endif %}
 

@@ -164,3 +164,26 @@
         gap: 12px;
     }
 }
+
+
+.alert {
+    margin-top: 20px;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-left: 4px solid #28a745;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+}
