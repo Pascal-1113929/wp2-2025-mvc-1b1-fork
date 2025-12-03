@@ -3,12 +3,14 @@ from flask import Blueprint
 
 from data.database import DB_PATH
 from models.organization import Organization
+from models.user import User
 from models.study import Study
 from view import redirect_home, render
 from flask import request, redirect
 from i18n.locale import list_locales
 
 organizations = Organization(DB_PATH)
+users = User(DB_PATH)
 studies = Study(DB_PATH)
 
 org_bp = Blueprint('organization', __name__)
@@ -33,6 +35,9 @@ def org_register(language):
 @org_bp.route("/register/save", methods=["POST"])
 def org_register_save():
 
+    email = request.form.get("email")
+    password = request.form.get("password")
+    
     name = request.form.get("name")
     type = request.form.get("type")
     website = request.form.get("website")
@@ -44,9 +49,14 @@ def org_register_save():
     language = request.accept_languages.best_match(list_locales())
 
     try:
-        organizations.create(
+        orgId = organizations.create(
             name, type, website, description, contact_person, email, phone
         )
+        
+        users.create(
+            email, password, organization_id=orgId, role="organization", status="nieuw"
+        )
+        
         message = "Organisatie succesvol aangemaakt!"
         return redirect(f"/{language}/organizations/register?success=1")
     except Exception as e:
