@@ -1,5 +1,13 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/ltgmuiIo)
-# Werkplaats 2 - Accessibility hub
+# Werkplaats 2: Accessibility hub
+### Een accessable website voor research
+
+## Credits
+| Naam              | Github         | Discord             | Student nummer |
+|-------------------|----------------|---------------------|----------------|
+| Max van der Wolf  | MVDW-Java      | spit_on_that_thang_ | 1121058        |
+| Amerencio Windzak | ALW-2005       | .atjezuid           | 1124568        |
+| Shemar Braafheid  | Shemar-126662  | kevin3456           | 1126662        |
+| Pascal Benink     | Pascal-1113929 | desamsamers         | 1113929        |
 
 Bij inlevering moet hier het volgende staan:
 - Installatie instructies
