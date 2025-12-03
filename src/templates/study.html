@@ -1,0 +1,27 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+
+
+    <main>
+<!--        Dit zit in main vanwege styling redenen-->
+    <header>
+    <h1>
+        Detail pagina van {{ study.title }} van {{ organization.name }}
+    </h1>
+        <p>Dit is de detail pagina van {{ study.title }} voor de organisatie: {{ organization.name }}</p>
+    </header>
+    <div class="seperator"></div>
+        <section>
+            <h2>
+                De volgende beperkingen zijn hierbij betrokken:
+            </h2>
+            <ul>
+                {% for item in data %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+
+{% endblock %}

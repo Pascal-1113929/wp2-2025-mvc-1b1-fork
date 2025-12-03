@@ -59,3 +59,10 @@ def expert_dashboard_render(language):
         study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
 
     return render("expert.html", expert=expert, study_list=available_studies)
+
+@expert_bp.route("/study/<study_id>")
+def study_dashboard_render(language, study_id):
+    study = studies.get_study_by_id(study_id)
+    organization = organizations.get_organization_by_id(study["organization_id"])
+
+    return render("study.html", study=study, organization=organization)

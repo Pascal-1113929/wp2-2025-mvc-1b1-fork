@@ -45,7 +45,7 @@
             {% for study in study_list %}
                 <tr>
                     <td>
-                        <a href="/en-US/expert/study/{{ study.id }}" role="button">
+                        <a href="/{{ base.locale }}/expert/study/{{ study.id }}" role="button">
                             {{study.title}}
                         </a>
                     </td>
