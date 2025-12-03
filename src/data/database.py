@@ -1,4 +1,8 @@
+import os
 import sqlite3
+
+BASE_DIR = os.path.dirname(__file__)
+DB_PATH = os.path.join(BASE_DIR, "app.db")
 
 class Database:
     def __init__(self, path: str):

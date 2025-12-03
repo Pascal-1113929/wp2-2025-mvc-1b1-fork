@@ -7,6 +7,7 @@ Sources used in this project:
  - https://kinaole.co/en/sr-only-just-a-class/
  - https://www.w3schools.com/html/html_table_borders.asp (border styling for table)
  - https://stackoverflow.com/questions/29516093/how-to-redirect-to-a-external-404-page-python-flask
+ - https://www.geeksforgeeks.org/python/flask-blueprints/
 
 Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing
