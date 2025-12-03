@@ -245,6 +245,10 @@ p {
     height: 0.2vh;
 }
 
+.l-spacer {
+    height: 3vh;
+}
+
 table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
