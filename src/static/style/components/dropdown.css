@@ -1,7 +1,7 @@
 .dropdown {
+    font-family: "Space Grotesk", "Twemoji Mozilla", "Segoe UI", "Roboto", sans-serif !important;
     position: relative;
     display: inline-block;
-    font-family: system-ui, sans-serif;
     background: #ffffff;
     border: 1px solid #cfe7d8;
     border-radius: 12px;
@@ -13,6 +13,7 @@
     justify-content: space-between;
     color: #0f172a;
     gap: 8px;
+    font-size: 1.25rem;
 }
 .dropdown:hover {
     background: #e7f4ec;
