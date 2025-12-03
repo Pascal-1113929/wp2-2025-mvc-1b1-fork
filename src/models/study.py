@@ -1,4 +1,5 @@
 from data.database import Database
+from datetime import datetime
 
 
 class Study:
@@ -11,3 +12,45 @@ class Study:
             cur.execute("SELECT COUNT() FROM studies")
             con.commit()
             return cur.fetchone()
+
+    def get_study_by_organization_id(self, organization_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM studies WHERE organization_id=?", (organization_id,))
+            con.commit()
+            study_list = cur.fetchall()
+
+            new_study_list = []
+            for study in study_list:
+                study_dict = dict(study)
+                # This is needed fo the narrator pronounces the date correctly
+                study_dict["start_date"] = datetime.strptime(study_dict["start_date"], "%Y-%m-%d")
+                study_dict["end_date"] = datetime.strptime(study_dict["end_date"], "%Y-%m-%d")
+                study_dict["start_date"] = study_dict["start_date"].strftime("%d-%m-%Y")
+                study_dict["end_date"] = study_dict["end_date"].strftime("%d-%m-%Y")
+                new_study_list.append(study_dict)
+
+            return new_study_list
+
+    def get_all_available(self):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM studies WHERE available=1")
+            con.commit()
+            return cur.fetchall()
+
+    def get_study_id_by_disability_id(self, disability_id: list):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT study_id FROM study_disabilities WHERE disability_id=?", (disability_id,))
+            con.commit()
+            row = cur.fetchone()
+            study_id = row["study_id"]
+            return study_id
+
+    def get_available_study_by_id(self, study_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM studies WHERE available=1 AND id=?", (study_id,))
+            con.commit()
+            return dict(cur.fetchone())

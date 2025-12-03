@@ -6,6 +6,14 @@
 @import url("./pages/organization.css");
 @import url("./pages/index.css");
 
+@font-face {
+  font-family: "Twemoji Mozilla";
+  src: url("/static/font/Twemoji.Mozilla.ttf") format("truetype");
+  font-display: swap;
+}
+
+
+
 :root {
     --bg: #f7fbf7;
     --surface: #ffffff;
@@ -15,7 +23,7 @@
     --text-muted: #5b6573;
     --bs-primary: #1f9c67;
     --accent: #1f9c67;
-    --accent-strong: #168856;
+    --accent-strong: #107347;
     --accent-soft: #e1f5eb;
     --shadow: 0 20px 60px rgba(13, 94, 60, 0.12);
 }
@@ -27,9 +35,10 @@
 }
 
 body {
+    font-family: "Space Grotesk", "Twemoji Mozilla", "Segoe UI", "Roboto", sans-serif !important;
+    background-color: #ffffff;
     margin: 0;
     padding: 0;
-    font-family: "Space Grotesk", "Segoe UI", Arial, sans-serif;
     background: radial-gradient(circle at 20% 20%, #e8f7ef, #f7fbf7 40%),
         radial-gradient(circle at 80% 0%, #dff3e8, transparent 45%),
         var(--bg);
@@ -62,4 +71,12 @@ p {
 
 .muted {
     color: var(--text-muted);
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    text-align: center;
 }

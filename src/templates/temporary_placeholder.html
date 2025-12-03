@@ -1,0 +1,17 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+
+    <main>
+    <h1>Dit is een placeholder pagina dit van {{ pagename }}</h1>
+    <p>
+        Deze pagina is nog niet gemaakt dit betekent dat deze pagina nu niks doet hieronder is eeen knop om terug naar de volgende pagina te gaan
+    </p>
+    <a>
+        <button onclick="history.back()">
+            {{ lang.back }}
+        </button>
+    </a>
+    </main>
+
+{% endblock %}

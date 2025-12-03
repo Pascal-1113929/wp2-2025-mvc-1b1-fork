@@ -1,0 +1,91 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+
+    {% if organization %}
+    <main>
+    <h1>Organisatie pagina: {{ organization.name }}</h1>
+    <div class="seperator"></div>
+    <section>
+        <h2>Lijst met onderzoeken</h2>
+        <div class="spacer"></div>
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Titel
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        StartDatum
+                    </th>
+                    <th>
+                        Einddatum
+                    </th>
+                    <th>
+                        Locatie
+                    </th>
+                    <th>
+                        Vergoeding
+                    </th>
+                    <th>
+                        Minimum leeftijd
+                    </th>
+                    <th>
+                        Maximum leeftijd
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for study in study_list %}
+                <tr>
+                    <td>
+                        <a href="/en-US/organization/study/{{ study.id }}">
+                            {{study.title}}
+                        </a>
+                    </td>
+                    <td>
+                        {{study.status}}
+                    </td>
+                    <td>
+                        {{study.start_date}}
+                    </td>
+                    <td>
+                        {{study.end_date}}
+                    </td>
+                    <td>
+                        {% if study.location == None %}
+                        {{study.study_type}}
+                        {% else %}
+                        {{study.location}}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{study.reward}}
+                    </td>
+                    <td>
+                        {{study.age_min}}
+                    </td>
+                    <td>
+                        {{study.age_max}}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    </main>
+{% else %}
+    <main>
+    <h1>De Organisatie waar u naar zocht, is niet gevonden</h1>
+    <p>
+        De gezochte organisatie is niet gevonden, probeer graag later opnieuw
+    </p>
+    {{ button(text=lang.nav_home, href=".") }}
+    </main>
+{% endif %}
+
+
+{% endblock %}

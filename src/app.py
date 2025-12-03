@@ -8,6 +8,10 @@ from models.enrollment import Enrollment
 from i18n.locale import list_locales, get_i18n
 from routes.web import load_web_routes
 from routes.base import render, redirect_langauge
+from routes.expert import expert_bp
+from routes.index import index_bp
+from routes.organization import org_bp
+from view import redirect_home, render
 
 app = Flask(__name__)
 
@@ -25,22 +29,14 @@ app.organizations = organizations
 app.studies = studies
 app.enrollments = enrollments
 
+app = Flask(__name__)
+app.register_blueprint(index_bp, url_prefix='/<language>')
+app.register_blueprint(org_bp, url_prefix='/<language>/organization')
+app.register_blueprint(expert_bp, url_prefix='/<language>/expert')
+
 @app.route("/")
 def goto_locale_page():
-    return redirect_langauge()
-
-
-@app.route("/<language>/")
-def index(language):
-    counts = {
-        "experts": users.count_all()[0],
-        "organizations": organizations.count_all()[0],
-        "studies": studies.count_all()[0],
-        "enrollments": enrollments.count_all()[0],
-    }
-
-    return render("index.html", counts=counts)
-
+    return redirect_home()
 
 @app.route("/<language>/debug")
 def debug(language):
@@ -51,6 +47,10 @@ def test(language):
     return render("test.html")
 
 load_web_routes(app)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render('error/not_found.html'), 404
 
 if __name__ == "__main__":
     app.run(debug=True)
