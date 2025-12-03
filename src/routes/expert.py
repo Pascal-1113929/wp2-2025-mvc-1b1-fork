@@ -1,4 +1,3 @@
-
 from datetime import datetime
 
 from flask import Blueprint
@@ -17,12 +16,12 @@ studies = Study(DB_PATH)
 profiles = Profile(DB_PATH)
 disabilities = Disablity(DB_PATH)
 
-expert_bp = Blueprint('expert', __name__)
+expert_bp = Blueprint("expert", __name__)
 
 
 @expert_bp.route("/")
-def expert_dashboard_render(language):
-    userid = 3  #TODO: get userid from session after login has been completed
+def expert_dashboard_render():
+    userid = 3  # TODO: get userid from session after login has been completed
 
     expert_user = dict(users.get_user_by_id(userid))
     expert_profile = dict(profiles.get_profile_by_userid(userid))

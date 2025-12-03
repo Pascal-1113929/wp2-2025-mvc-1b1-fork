@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, g, request
 
 from routes.expert import expert_bp
 from routes.index import index_bp
@@ -6,21 +6,29 @@ from routes.organization import org_bp
 from view import redirect_home, render
 
 app = Flask(__name__)
-app.register_blueprint(index_bp, url_prefix='/<language>')
-app.register_blueprint(org_bp, url_prefix='/<language>/organization')
-app.register_blueprint(expert_bp, url_prefix='/<language>/expert')
+
+BLUEPRINTS = {"/": index_bp, "/organization": org_bp, "/expert": expert_bp}
+
 
 @app.route("/")
 def goto_locale_page():
     return redirect_home()
 
-@app.route("/<language>/debug")
-def debug(language):
-    return render("debug.html")
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render('error/not_found.html'), 404
+    return render("error/not_found.html"), 404
+
+
+def remove_language_from_view_args(endpoint, values):
+    if values and "language" in values:
+        values.pop("language")
+
+
+for key, value in BLUEPRINTS.items():
+    value.url_value_preprocessor(remove_language_from_view_args)
+    app.register_blueprint(value, url_prefix="/<language>" + key)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
