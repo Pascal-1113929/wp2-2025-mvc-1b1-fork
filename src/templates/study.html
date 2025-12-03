@@ -16,11 +16,26 @@
             <h2>
                 De volgende beperkingen zijn hierbij betrokken:
             </h2>
-            <ul>
-                {% for item in data %}
-                <li>{{ item }}</li>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Categorie
+                        </th>
+                        <th>
+                            Beperking
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for disability in study.disabilities %}
+                <tr>
+                    <td>{{ disability.category }}</td>
+                    <td>{{ disability.name }}</td>
+                </tr>
                 {% endfor %}
-            </ul>
+                </tbody>
+            </table>
         </section>
     </main>
 

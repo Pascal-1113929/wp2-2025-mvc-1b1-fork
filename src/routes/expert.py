@@ -64,5 +64,8 @@ def expert_dashboard_render(language):
 def study_dashboard_render(language, study_id):
     study = studies.get_study_by_id(study_id)
     organization = organizations.get_organization_by_id(study["organization_id"])
+    disability_list = disabilities.get_disability_list_by_studyid(study["id"])
+    study["disabilities"] = disability_list
+    print(study)
 
     return render("study.html", study=study, organization=organization)

@@ -22,3 +22,19 @@ class Disablity:
             con.commit()
             disability = dict(cur.fetchone())
             return disability
+
+    def get_disability_list_by_studyid(self, studyid):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT disabilities.id as id, disabilities.category as category, disabilities.name as name "
+                        "FROM disabilities "
+                        "INNER JOIN study_disabilities ON disabilities.id = study_disabilities.disability_id "
+                        "WHERE study_disabilities.study_id = ?", (studyid,))
+            con.commit()
+            result = cur.fetchall()
+
+            disability_list = []
+            for row in result:
+                disability_list.append(dict(row))
+
+            return disability_list
