@@ -1,5 +1,8 @@
+import os
+
 from flask import Flask
 
+from routes.base import render
 from routes.expert import expert_bp
 from routes.index import index_bp
 from routes.organization import org_bp
@@ -17,6 +20,10 @@ def goto_locale_page():
 @app.route("/<language>/debug")
 def debug(language):
     return render("debug.html")
+
+@app.route("/<language>/test")
+def test(language):
+    return render("test.html")
 
 @app.errorhandler(404)
 def page_not_found(e):
