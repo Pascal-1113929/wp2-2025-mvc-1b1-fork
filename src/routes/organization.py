@@ -16,7 +16,7 @@ org_bp = Blueprint("organization", __name__)
 
 
 @org_bp.route("/<id>/")
-def organization_dashboard_render(language, id):
+def organization_dashboard_render(id):
     # TODO: validate with a session if the logged in user is a organization and the correct organization
     org = organizations.get_organization_by_id(id)
 
@@ -28,14 +28,14 @@ def organization_dashboard_render(language, id):
 
 
 @org_bp.route("/register")
-def org_register(language):
+def org_register():
     success = request.args.get("success")
     error = request.args.get("error")
     return render("organization-register.html", success=success, error=error)
 
 
 @org_bp.route("/register/save", methods=["POST"])
-def org_register_save(language):
+def org_register_save():
     email = request.form.get("email")
     password = request.form.get("password")
 
