@@ -65,5 +65,9 @@
 "error_not_found_title": "Page not found"
 "error_not_found_message": "Sorry, the page you are looking for does not exist or has been moved."
 "error_not_found_back_button": "Back to the home page"
-
-"back": "Go Back"
+"error_method_not_allowed_title": "Method not allowed"
+"error_method_not_allowed_message": "Due to a misconfiguration, the method you are using is not allowed for this resource. We are sorry for the inconvenience."
+"error_method_not_allowed_refresh_button": "Refresh the page"
+"error_internal_server_error_title": "Internal server error"
+"error_internal_server_error_message": "An internal server error has occurred. We will fix this as soon as possible."
+"error_internal_server_error_back_button": "Back to the home page"
