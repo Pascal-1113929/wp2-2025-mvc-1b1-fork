@@ -1,43 +1,9 @@
 {% macro dropdown(options=[], name="", id="", class="") %}
-    <div class="dropdown-select" aria-label="{{ name }} selector">
-        <select class="dropdown-hidden-select" name="{{ name }}" aria-hidden="true" tabindex="-1" id="dropdown-{% if id %}{{ id }}{% endif %}">
-            {% for option in options %}
-            <option value="{{ option.value }}" {% if option.selected %}selected{% endif %}>
-                {{ option.text }}
-            </option>
-            {% endfor %}
-        </select>
-        <button
-            class="dropdown-button {{ class }}"
-            aria-haspopup="listbox"
-            aria-expanded="false"
-        >
-            {%- if options %}
-                {%- for option in options if option.selected %}
-                    {% if option.image %}
-                    <img src="{{ option.image }}" alt="" class="dropdown-image" />
-                    {% endif %}
-                    <span>{{ option.text }}</span>
-                {%- else %}
-                    {% if options[0].image %}
-                    <img src="{{ options[0].image }}" alt="" class="dropdown-image" />
-                    {% endif %}
-                    <span>{{ options[0].text }}</span>
-                {%- endfor %}
-            {%- endif %}
-        </button>
-
-        <ul class="dropdown-options" role="listbox">
-            {% for option in options %}
-            <li>
-                <button class="dropdown-option" role="option" value="{{ option.value }}">
-                    {% if option.image %}
-                    <img src="{{ option.image }}" alt="" class="dropdown-image" />
-                    {% endif %}
-                    <span>{{ option.text }}</span>
-                </button>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+    <select class="dropdown {{ class }}" name="{{ name }}" {% if id %}id="dropdown-{{ id }}"{% endif %}>
+        {% for option in options %}
+        <option value="{{ option.value }}" {% if option.selected %}selected{% endif %}>
+            {{ option.text }}
+        </option>
+        {% endfor %}
+    </select>
 {% endmacro %}
