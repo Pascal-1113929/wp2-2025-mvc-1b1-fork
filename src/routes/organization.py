@@ -15,6 +15,12 @@ studies = Study(DB_PATH)
 org_bp = Blueprint("organization", __name__)
 
 
+@org_bp.route("/")
+def organization_list():
+    # TODO: list orginisation
+    return render("temporary_placeholder.html")
+
+
 @org_bp.route("/<id>/")
 def organization_dashboard_render(id):
     # TODO: validate with a session if the logged in user is a organization and the correct organization

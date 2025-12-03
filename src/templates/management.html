@@ -1,1 +1,10 @@
-{{}}sdfgsf{g}
+{% extends 'layouts/default.html' %}
+{% from "macros/components/button.html" import button %}
+
+{% block content %}
+    <main class="management">
+        <h1>Select the things you wanna manage</h1>
+
+        {{ button(".organization", "Organizations") }}
+    </main>
+{% endblock %}
