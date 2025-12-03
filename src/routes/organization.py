@@ -54,7 +54,7 @@ def org_register_save(language):
         )
         
         users.create(
-            email, password, organization_id=orgId, role="organization", status="nieuw"
+            email, password, organization_id=orgId, role="organization", status="goedgekeurt"
         )
         
         message = "Organisatie succesvol aangemaakt!"
