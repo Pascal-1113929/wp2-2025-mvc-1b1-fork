@@ -1,13 +1,19 @@
 from flask import Flask
 
-from routes.expert import expert_bp
+from routes.account import account_bp
 from routes.index import index_bp
 from routes.organization import org_bp
+from routes.research import research_bp
 from view import redirect_home, render
 
 app = Flask(__name__)
 
-BLUEPRINTS = {"/": index_bp, "/organization": org_bp, "/expert": expert_bp}
+BLUEPRINTS = {
+    "/": index_bp,
+    "/organization": org_bp,
+    "/account": account_bp,
+    "/research": research_bp,
+}
 
 
 @app.route("/")

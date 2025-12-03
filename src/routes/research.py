@@ -16,11 +16,11 @@ studies = Study(DB_PATH)
 profiles = Profile(DB_PATH)
 disabilities = Disablity(DB_PATH)
 
-expert_bp = Blueprint("expert", __name__)
+research_bp = Blueprint("research", __name__)
 
 
-@expert_bp.route("/")
-def expert_dashboard_render():
+@research_bp.route("/")
+def research_dashboard_render():
     userid = 3  # TODO: get userid from session after login has been completed
 
     expert_user = dict(users.get_user_by_id(userid))
@@ -57,4 +57,4 @@ def expert_dashboard_render():
         study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
         study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
 
-    return render("expert.html", expert=expert, study_list=available_studies)
+    return render("research_list.html", expert=expert, study_list=available_studies)
