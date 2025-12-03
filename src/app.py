@@ -46,6 +46,10 @@ def index(language):
 def debug(language):
     return render("debug.html")
 
+@app.route("/<language>/test")
+def test(language):
+    return render("test.html")
+
 load_web_routes(app)
 
 if __name__ == "__main__":
