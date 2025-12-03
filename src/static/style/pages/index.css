@@ -18,6 +18,9 @@
     border-radius: 999px;
     margin-bottom: 12px;
 }
+.eyebrow i {
+    margin-right: 8px;
+}
 
 .hero {
     background: linear-gradient(135deg, #ecf9f1, #ffffff);
@@ -164,7 +167,6 @@
         gap: 12px;
     }
 }
-
 
 .alert {
     margin-top: 20px;
