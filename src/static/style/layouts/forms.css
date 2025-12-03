@@ -1,0 +1,64 @@
+.cm-form {
+    background: var(--surface);
+    padding: 2rem;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    max-width: 650px;
+    margin: 2rem auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.cm-form::before {
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 140px;
+    height: 140px;
+    background: var(--accent-soft);
+    border-radius: 50%;
+    z-index: 0;
+    transition: 0.3s ease;
+}
+
+.cm-form:hover::before {
+    transform: scale(1.15);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.3rem;
+    position: relative;
+    z-index: 2;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+}
+
+.cm-form input,
+.cm-form select,
+.cm-form textarea {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-muted);
+    color: var(--text);
+    font-size: 0.95rem;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.cm-form input:focus,
+.cm-form select:focus,
+.cm-form textarea:focus {
+    border-color: var(--bs-primary);
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}

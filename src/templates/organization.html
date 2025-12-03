@@ -2,6 +2,7 @@
 
 {% block content %}
 
+    {% if organization %}
     <main>
     <h1>Organisatie pagina: {{ organization.name }}</h1>
     <div class="seperator"></div>
@@ -76,6 +77,15 @@
         </table>
     </section>
     </main>
+{% else %}
+    <main>
+    <h1>De Organisatie waar u naar zocht, is niet gevonden</h1>
+    <p>
+        De gezochte organisatie is niet gevonden, probeer graag later opnieuw
+    </p>
+    {{ button(text=lang.nav_home, href=".") }}
+    </main>
+{% endif %}
 
 
 {% endblock %}

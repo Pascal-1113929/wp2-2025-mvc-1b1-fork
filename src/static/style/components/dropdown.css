@@ -1,14 +1,7 @@
-.dropdown-select {
+.dropdown {
+    font-family: "Space Grotesk", "Twemoji Mozilla", "Segoe UI", "Roboto", sans-serif !important;
     position: relative;
     display: inline-block;
-    font-family: system-ui, sans-serif;
-}
-
-.dropdown-hidden-select {
-    display: none;
-}
-
-.dropdown-button {
     background: #ffffff;
     border: 1px solid #cfe7d8;
     border-radius: 12px;
@@ -20,59 +13,12 @@
     justify-content: space-between;
     color: #0f172a;
     gap: 8px;
+    font-size: 1.25rem;
 }
-
-.dropdown-button:hover {
+.dropdown:hover {
     background: #e7f4ec;
 }
 
-.dropdown-options {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #fff;
-    border: 1px solid #cfe7d8;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 100;
-    width: 100%;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-}
-
-.dropdown-select.open .dropdown-options {
-    display: block;
-}
-
-.dropdown-option {
-    display: flex;
-    align-items: center;
-    padding: 10px 12px;
-    text-decoration: none;
-    color: #333;
-    background: none;
-    border: none;
-    width: 100%;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: inherit;
-    text-align: left;
-}
-
-.dropdown-option:hover,
-.dropdown-option:focus {
-    background-color: #e7f4ec;
-}
-
-.dropdown-image {
-    width: 20px;
-    height: 14px;
-    margin-right: 8px;
-    object-fit: cover;
-}
 
 .dropdown-select.compact .dropdown-button {
     min-width: 120px;
