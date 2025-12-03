@@ -33,7 +33,7 @@ def org_register(language):
     return render("organization-register.html", success=success, error=error)
     
 @org_bp.route("/register/save", methods=["POST"])
-def org_register_save():
+def org_register_save(language):
 
     email = request.form.get("email")
     password = request.form.get("password")
@@ -58,7 +58,7 @@ def org_register_save():
         )
         
         message = "Organisatie succesvol aangemaakt!"
-        return redirect(f"/{language}/organizations/register?success=1")
+        return redirect(f"/{language}/organization/register?success=1")
     except Exception as e:
         message = f"Er is iets fout gegaan: {str(e)}"
-        return redirect(f"/{language}/organizations/register?error={message}")
+        return redirect(f"/{language}/organization/register?error={message}")
