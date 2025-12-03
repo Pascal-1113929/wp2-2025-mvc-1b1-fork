@@ -1,32 +1,12 @@
 import os
-from flask import Flask, render_template, redirect, request
-from data.database import Database
-from models.user import User
-from models.organization import Organization
-from models.study import Study
-from models.enrollment import Enrollment
-from i18n.locale import list_locales, get_i18n
-from routes.base import render, redirect_langauge
+
+from flask import Flask
+
+from routes.base import render
 from routes.expert import expert_bp
 from routes.index import index_bp
 from routes.organization import org_bp
 from view import redirect_home, render
-
-app = Flask(__name__)
-
-BASE_DIR = os.path.dirname(__file__)
-DB_PATH = os.path.join(BASE_DIR, "data", "app.db")
-
-_db = Database(DB_PATH)
-users = User(DB_PATH)
-organizations = Organization(DB_PATH)
-studies = Study(DB_PATH)
-enrollments = Enrollment(DB_PATH)
-
-app.users = users
-app.organizations = organizations
-app.studies = studies
-app.enrollments = enrollments
 
 app = Flask(__name__)
 app.register_blueprint(index_bp, url_prefix='/<language>')
