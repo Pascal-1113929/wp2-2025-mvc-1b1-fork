@@ -7,7 +7,6 @@ error_bp = Blueprint("error", __name__)
 
 @error_bp.app_errorhandler(404)
 def page_not_found(e):
-    print("aaaaa")
     return render("error/not_found.html"), 404
 
 
