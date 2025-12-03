@@ -26,9 +26,9 @@
 }
 
 .button.ghost {
-    background: #ffffff;
+    background: transparent;
     color: #168856;
-    border: 1px solid #cfe7d8;
+    outline: 1px solid #cfe7d8;
     box-shadow: none;
 }
 
