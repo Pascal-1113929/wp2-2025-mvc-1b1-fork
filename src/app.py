@@ -37,10 +37,6 @@ def index(language):
 
     return render("index.html", counts=counts)
 
-@app.route("/<language>/organization/register")
-def organization_register(language):
-    return render("organization-register.html")
-
 
 @app.route("/<language>/organization/<id>/")
 def organization_dashboard_render(language, id):
