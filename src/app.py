@@ -6,7 +6,6 @@ from models.organization import Organization
 from models.study import Study
 from models.enrollment import Enrollment
 from i18n.locale import list_locales, get_i18n
-from routes.web import load_web_routes
 from routes.base import render, redirect_langauge
 from routes.expert import expert_bp
 from routes.index import index_bp
@@ -45,8 +44,6 @@ def debug(language):
 @app.route("/<language>/test")
 def test(language):
     return render("test.html")
-
-load_web_routes(app)
 
 @app.errorhandler(404)
 def page_not_found(e):
