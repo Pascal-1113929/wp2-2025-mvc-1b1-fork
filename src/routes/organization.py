@@ -15,9 +15,9 @@ org_bp = Blueprint('organization', __name__)
 def organization_dashboard_render(language, id):
     # TODO: validate with a session if the logged in user is a organization and the correct organization
     org = organizations.get_organization_by_id(id)
-    if not org:
-        redirect_home()
 
-    study_list = studies.get_study_by_organization_id(id)
+    study_list = []
+    if org is not None:
+        study_list = studies.get_study_by_organization_id(id)
 
     return render("organization.html", organization=org, study_list=study_list)
