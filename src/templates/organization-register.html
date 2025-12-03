@@ -3,7 +3,7 @@
 {% block content %}
 <main class="home">
     <section class="sectioncard">
-        <form class="cm-form" action="/organizations/register/save" method="post">
+        <form class="cm-form" action="{{ url_for('org_register_save')}}" method="post">
             <div class="form-group">
                 <label for="usr-email">Email</label>
                 <input id="usr-email" type="email" name="email" required placeholder="Voer hier uw naam in">
@@ -16,7 +16,7 @@
             <hr>
             <div class="form-group">
                 <label for="org-name">Organisatienaam</label>
-                <input id="org-name" type="text" name="name" required placeholder="Bijv: Stiching sekswerkers">
+                <input id="org-name" type="text" name="name" required placeholder="vul hier uw organisatie naam in">
             </div>
 
             <div class="form-group">
@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label for="description">Beschrijving</label>
-                <textarea id="description" name="description" rows="4" aria-setsize="false" placeholder="Bijv: Onze bedrijf gaat over dit en dat en zus en zo"></textarea>
+                <textarea id="description" name="description" rows="4" aria-setsize="false" placeholder="vul hier uw organisatie bescrijving in"></textarea>
             </div>
 
             <div class="form-group">
