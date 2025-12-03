@@ -8,6 +8,7 @@ Sources used in this project:
  - https://www.w3schools.com/html/html_table_borders.asp (border styling for table)
  - https://stackoverflow.com/questions/29516093/how-to-redirect-to-a-external-404-page-python-flask
  - https://www.geeksforgeeks.org/python/flask-blueprints/
+ - https://github.com/mozilla/twemoji-colr
 
 Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing
