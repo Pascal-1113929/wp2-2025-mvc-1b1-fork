@@ -1,16 +1,11 @@
-import os
-
 from flask import Blueprint
 
-from data.database import Database
+from data.database import DB_PATH, Database
 from models.enrollment import Enrollment
 from models.organization import Organization
 from models.study import Study
 from models.user import User
 from view import render
-
-BASE_DIR = os.path.join(os.path.dirname(__file__), "..")
-DB_PATH = os.path.join(BASE_DIR, "data", "app.db")
 
 _db = Database(DB_PATH)
 users = User(DB_PATH)
