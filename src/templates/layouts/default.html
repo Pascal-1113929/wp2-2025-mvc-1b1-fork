@@ -6,24 +6,33 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="/static/style/stylesheet.css" />
         <script src="/static/script/ui.js" type="module"></script>
         <title>Accessibility Hub</title>
     </head>
     <body>
         {% block navbar %}
-        <nav>
-            <div class="container-horizontal">
-                <div class="cell">
-                    {{ button(text=lang.nav_home, href=".") }} {{
-                    button(text=lang.nav_debug, href=".debug") }}
+        <nav class="navbar">
+            <div class="nav-inner">
+                <div class="nav-left">
+                    <a class="brand" href=".">{{ lang.nav_brand }}</a>
+                    <div class="nav-links">
+                        {{ button(text=lang.nav_home, href=".") }}
+                        {{ button(text=lang.nav_debug, href=".debug", class_name="ghost") }}
+                    </div>
                 </div>
-                <div class="cell float-right">
+                <div class="nav-right">
                     {{ dropdown(options=[
                         {"value": "nl-NL", "text": "Nederlands", "selected": true, "image": "/static/img/flags/nl-NL.png"},
                         {"value": "en-US", "text": "English", "image": "/static/img/flags/en-US.png"}
-                    ], name="", id="language-selector", class="") }}
-                    {{ button(text=lang.nav_login, href=".login") }}
+                    ], name="", id="language-selector", class="compact") }}
+                    {{ button(text=lang.nav_login, href=".login", class_name="primary") }}
                 </div>
             </div>
         </nav>
