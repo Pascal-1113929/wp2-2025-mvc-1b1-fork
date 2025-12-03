@@ -26,3 +26,8 @@ def index():
     }
 
     return render("index.html", counts=counts)
+
+
+@index_bp.route("/debug")
+def debug():
+    return render("debug.html")
