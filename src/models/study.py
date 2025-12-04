@@ -54,3 +54,10 @@ class Study:
             cur.execute("SELECT * FROM studies WHERE available=1 AND id=?", (study_id,))
             con.commit()
             return dict(cur.fetchone())
+
+    def get_study_by_id(self, study_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM studies WHERE id=?", (study_id,))
+            con.commit()
+            return dict(cur.fetchone())
