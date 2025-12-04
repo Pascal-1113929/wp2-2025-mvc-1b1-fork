@@ -13,11 +13,11 @@ organizations = Organization(DB_PATH)
 studies = Study(DB_PATH)
 enrollments = Enrollment(DB_PATH)
 
+index_bp = Blueprint("index", __name__)
 
-index_bp = Blueprint('index', __name__)
 
 @index_bp.route("/")
-def index(language):
+def index():
     counts = {
         "experts": users.count_all()[0],
         "organizations": organizations.count_all()[0],
@@ -26,3 +26,8 @@ def index(language):
     }
 
     return render("index.html", counts=counts)
+
+
+@index_bp.route("/debug")
+def debug():
+    return render("debug.html")

@@ -1,0 +1,54 @@
+{% extends 'layouts/default.html' %} {% block content %}
+
+<main>
+    <header>
+        <h1>
+            Onderzoeken van {{ expert.profile.first_name }} {{
+            expert.profile.last_name }}
+        </h1>
+    </header>
+    <div class="seperator"></div>
+    <section>
+        <h2>Lijst met beschikbare onderzoeken</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Titel</th>
+                    <th>Bedrijf</th>
+                    <th>StartDatum</th>
+                    <th>Einddatum</th>
+                    <th>Locatie</th>
+                    <th>Vergoeding</th>
+                    <th>Minimum leeftijd</th>
+                    <th>Maximum leeftijd</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for study in study_list %}
+                <tr>
+                    <td>
+                        <a
+                            href="/en-US/expert/study/{{ study.id }}"
+                            role="button"
+                        >
+                            {{study.title}}
+                        </a>
+                    </td>
+                    <td>{{study.organization}}</td>
+                    <td>{{study.start_date}}</td>
+                    <td>{{study.end_date}}</td>
+                    <td>
+                        {% if study.location == None %} {{study.study_type}} {%
+                        else %} {{study.location}} {% endif %}
+                    </td>
+                    <td>{{study.reward}}</td>
+                    <td>{{study.age_min}}</td>
+                    <td>{{study.age_max}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+
+{% endblock %}

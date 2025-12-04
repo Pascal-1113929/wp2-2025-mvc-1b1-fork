@@ -25,6 +25,8 @@
                     <div class="nav-links">
                         {{ button(text=lang.nav_home, href=".") }}
                         {{ button(text=lang.nav_debug, href=".debug", class_name="ghost") }}
+                        {{ button(text=lang.nav_research, href=".research", class_name="ghost") }}
+                        {{ button(text=lang.nav_management, href=".management", class_name="ghost") }}
                     </div>
                 </div>
                 <div class="nav-right">
@@ -32,7 +34,8 @@
                         {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL"},
                         {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US"}
                     ], name="", id="language-selector") }}
-                    {{ button(text=lang.nav_login, href=".login", class_name="primary") }}
+                    {{ button(text=lang.nav_login, href=".account/login", class_name="primary") }}
+                    {{ button(text=lang.nav_my_account, href=".account", class_name="primary") }}
                 </div>
             </div>
         </nav>
