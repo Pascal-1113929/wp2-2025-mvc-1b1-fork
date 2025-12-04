@@ -10,7 +10,9 @@
     text-decoration: none;
     font-weight: 700;
     letter-spacing: -0.01em;
-    transition: transform 0.15s ease, box-shadow 0.15s ease,
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
         background 0.2s ease;
 }
 
@@ -35,4 +37,7 @@
 .button.ghost:hover {
     background: #e7f4ec;
     transform: none;
+}
+.button i {
+    margin-right: 8px;
 }

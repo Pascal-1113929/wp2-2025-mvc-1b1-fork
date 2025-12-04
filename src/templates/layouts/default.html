@@ -12,6 +12,13 @@
             href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+            integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
         <link rel="stylesheet" href="/static/style/stylesheet.css" />
         <script src="/static/script/ui.js" type="module"></script>
         <title>Accessibility Hub</title>
@@ -23,10 +30,10 @@
                 <div class="nav-left">
                     <a class="brand" href=".">{{ lang.nav_brand }}</a>
                     <div class="nav-links">
-                        {{ button(text=lang.nav_home, href=".") }}
-                        {{ button(text=lang.nav_debug, href=".debug", class_name="ghost") }}
-                        {{ button(text=lang.nav_research, href=".research", class_name="ghost") }}
-                        {{ button(text=lang.nav_management, href=".management", class_name="ghost") }}
+                        {{ button(text=lang.nav_home, href=".", class_name="ghost" if base.path != "/") }}
+                        {{ button(text=lang.nav_debug, href=".debug", class_name="ghost" if base.path != "/debug") }}
+                        {{ button(text=lang.nav_research, href=".research", class_name="ghost" if base.path != "/research") }}
+                        {{ button(text=lang.nav_management, href=".management", class_name="ghost" if base.path != "/management") }}
                     </div>
                 </div>
                 <div class="nav-right">
