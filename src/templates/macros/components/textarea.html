@@ -1,0 +1,15 @@
+{% macro input(name="", label="", type="text", placeholder="", id="", required=false, value="", rows=4) %}
+    <div class="form-group">
+        <label for="{{ id }}">{{ label }}</label>
+        <textarea 
+        id="{{ id }}" 
+        type="{{ type }}" 
+        name="{{ name }}"
+        value="{{ value }}"
+        rows="{{ rows }}"
+        {%- if required %}
+        required
+        {%- endif %}
+        placeholder="{{ placeholder}}"></textarea>
+    </div>
+{% endmacro %}

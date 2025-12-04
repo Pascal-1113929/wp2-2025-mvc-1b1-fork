@@ -1,0 +1,72 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+<main class="home">
+    <section class="sectioncard">
+        <form class="cm-form" action="{{ url_for('organization.org_register_save', language=base.locale)}}" method="post">
+            <div class="form-group">
+                <label for="usr-email">Email</label>
+                <input id="usr-email" type="email" name="email" required placeholder="Voer hier uw naam in">
+            </div>
+            <div class="form-group">
+                <label for="usr-pass">Wachtwoord</label>
+                <input id="usr-pass" type="password" name="password" required placeholder="Voer hier uw wachtwoord in">
+            </div>
+
+            <hr>
+            <div class="form-group">
+                <label for="org-name">Organisatienaam</label>
+                <input id="org-name" type="text" name="name" required placeholder="vul hier uw organisatie naam in">
+            </div>
+
+            <div class="form-group">
+                <label for="org-type">Type organisatie</label>
+                <select id="org-type" name="type" required>
+                    <option value="commercieel">Commercieel</option>
+                    <option value="non-profit">Non-profit</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="website">Website</label>
+                <input id="website" type="text" name="website" placeholder="Bijv: https://www.mijnorganisatie.nl">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Beschrijving</label>
+                <textarea id="description" name="description" rows="4" aria-setsize="false" placeholder="vul hier uw organisatie bescrijving in"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="contact-person">Contactpersoon</label>
+                <input id="contact-person" type="text" name="contact_person" placeholder="Bijv: Mia Rhoades">
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input id="email" type="email" name="email" required placeholder="Bijv: ameren@xwms.nl">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telefoonnummer</label>
+                <input id="phone" type="text" name="phone" placeholder="Bijv: 067409236450">
+            </div>
+
+            <button class="submit-btn" type="submit">Opslaan</button>
+        </form>
+
+        {% if success %}
+            <div class="alert alert-success">
+                Organisatie succesvol aangemaakt!
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+    </section>
+</main>
+{% endblock %}
