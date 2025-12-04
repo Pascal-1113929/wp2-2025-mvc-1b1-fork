@@ -1,4 +1,3 @@
-
 from datetime import datetime
 
 from flask import Blueprint
@@ -17,12 +16,12 @@ studies = Study(DB_PATH)
 profiles = Profile(DB_PATH)
 disabilities = Disablity(DB_PATH)
 
-expert_bp = Blueprint('expert', __name__)
+research_bp = Blueprint("research", __name__)
 
 
-@expert_bp.route("/")
-def expert_dashboard_render(language):
-    userid = 3  #TODO: get userid from session after login has been completed
+@research_bp.route("/")
+def research_dashboard_render():
+    userid = 3  # TODO: get userid from session after login has been completed
 
     expert_user = dict(users.get_user_by_id(userid))
     expert_profile = dict(profiles.get_profile_by_userid(userid))
@@ -58,4 +57,15 @@ def expert_dashboard_render(language):
         study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
         study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
 
-    return render("expert.html", expert=expert, study_list=available_studies)
+    return render("research_list.html", expert=expert, study_list=available_studies)
+
+
+@research_bp.route("/<study_id>")
+def study_dashboard_render(study_id):
+    study = studies.get_study_by_id(study_id)
+    organization = organizations.get_organization_by_id(study["organization_id"])
+    disability_list = disabilities.get_disability_list_by_studyid(study["id"])
+    study["disabilities"] = disability_list
+    print(study)
+
+    return render("study.html", study=study, organization=organization)

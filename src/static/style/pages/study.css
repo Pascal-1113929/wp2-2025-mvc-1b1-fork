@@ -1,0 +1,9 @@
+.grid-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 15px;
+}
+
+.grid-article1 { grid-area: 1 / 1 / 2 / 3; }
+.grid-article2 { grid-area: 1 / 2 / 2 / 3; }

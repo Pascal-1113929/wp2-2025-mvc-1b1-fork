@@ -1,0 +1,84 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+
+
+    <main>
+<!--        Dit zit in main vanwege styling redenen-->
+    <header>
+    <h1>
+        Detail pagina: {{ study.title }} van {{ organization.name }}
+    </h1>
+        <p>Dit is de detail pagina van {{ study.title }} voor de organisatie: {{ organization.name }}</p>
+        <p>Dit onderzoek heeft een minimum leeftijd van: {{ study.age_min }} en een maximum leeftijd van: {{ study.age_max }}</p>
+    </header>
+    <div class="seperator"></div>
+        <section>
+            <h2>
+                De volgende beperkingen zijn hierbij betrokken:
+            </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Categorie
+                        </th>
+                        <th>
+                            Beperking
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for disability in study.disabilities %}
+                <tr>
+                    <td>{{ disability.category }}</td>
+                    <td>{{ disability.name }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        <div class="l-spacer"></div>
+        <div class="seperator"></div>
+        <section>
+            <h2>Beschijving</h2>
+            <p>
+                {{ study.description }}
+            </p>
+        </section>
+        <section>
+            <h2>Belangrijke informatie</h2>
+            <div class="grid-section">
+                <article class="grid-article1">
+                    <h3>
+                        Locatie
+                    </h3>
+                    {% if study.type == "online" %}
+                    <p>Dit onderzoek is online.</p>
+                    {% elif study.type == "telefonisch" %}
+                    <p>Dit onderzoek is telefonisch en gaat dus via de telefoon</p>
+                    {% else %}
+                    <p>Dit onderzoek is op locatie in: {{ study.location }}</p>
+                    {% endif %}
+                </article>
+                <article class="grid-article2">
+                    <h3>
+                        Vergoeding
+                    </h3>
+                    {% if study.has_reward == 1 %}
+                    <p>Dit onderzoek heeft een Vergoeding</p>
+                    <p>Deze vergoeding bedraagt: {{ study.reward }}</p>
+                    {% else %}
+                    <p>Dit onderzoek heeft geen Vergoeding</p>
+                    {% endif %}
+                </article>
+            </div>
+        </section>
+        <section>
+            <button class="button">
+                Schrijf in op dit onderzoek
+            </button>
+        </section>
+    </main>
+
+{% endblock %}

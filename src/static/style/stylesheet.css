@@ -5,6 +5,7 @@
 @import url("./containers/horizontal.css");
 @import url("./pages/organization.css");
 @import url("./pages/index.css");
+@import url("./pages/study.css");
 
 @font-face {
     font-family: "Twemoji Mozilla";
@@ -76,6 +77,11 @@ p {
 table,
 th,
 td {
+.l-spacer {
+    height: 3vh;
+}
+
+table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
     padding-left: 0.5vw;
