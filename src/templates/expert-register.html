@@ -27,8 +27,9 @@
             <div class="form-group">
                 <label for="prf-disabil">Beperkingen:</label>
                 <select id="prf-disabil" name="disability" required>
+                    <option value="invalid">Selecteer een Beperking</option> {# Placeholder #}
                     {% for disability in disabilities %}
-                    <option value={{ disability.id }}>{{ disability.naam }} - {{ disability.category }}</option>
+                        <option value={{ disability.id }}>{{ disability.name }} - {{ disability.category }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -45,7 +46,7 @@
 
             <div class="form-group">
                 <label for="phone">Telefoonnummer</label>
-                <input id="phone" type="text" name="phone" placeholder="Bijv: 067409236450">
+                <input id="phone" type="tel" name="phone" placeholder="Bijv: 067409236450">
             </div>
 
             <div class="form-group">
@@ -53,7 +54,10 @@
                 <input id="prf-bdate" type="date" name="birthdate" placeholder="Bijv: 067409236450">
             </div>
 
-            <button class="submit-btn" type="submit">Opslaan</button>
+            <div class="grid-section">
+                <button class="submit-btn" type="submit">Opslaan</button>
+                <button class="reset-btn" type="reset">Reset</button>
+            </div>
         </form>
 
         {% if success %}

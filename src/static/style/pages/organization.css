@@ -16,3 +16,22 @@
     transform: translateY(-2px);
     box-shadow: 0 12px 30px rgba(31, 156, 103, 0.25);
 }
+
+.reset-btn {
+    background: #9C1F1FFF;
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 0.9rem 1.3rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.reset-btn:hover {
+    background: #731010FF;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(156, 31, 31, 0.25);
+}
