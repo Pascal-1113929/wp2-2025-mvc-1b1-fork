@@ -15,19 +15,28 @@
 
             <hr>
             <div class="form-group">
-                <label for="prf-name">Voornaam</label>
-                <input id="prf-name" type="text" name="fisrtname" required placeholder="vul hier voornaam in">
+                <label for="prf-fname">Voornaam</label>
+                <input id="prf-fname" type="text" name="fisrtname" required placeholder="vul hier voornaam in">
             </div>
 
             <div class="form-group">
-                <label for="prf-name">Achternaam</label>
-                <input id="prf-name" type="text" name="lastname" required placeholder="vul hier achternaam in">
+                <label for="prf-lname">Achternaam</label>
+                <input id="prf-lname" type="text" name="lastname" required placeholder="vul hier achternaam in">
+            </div>
+
+            <div class="form-group">
+                <label for="prf-gender">Gender</label>
+                <select id="prf-gender" name="gender" required>
+                    <option value="M">Man</option>
+                    <option value="V">Vrouw</option>
+                    <option value="X">Anders</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label for="prf-disabil">Beperkingen:</label>
                 <select id="prf-disabil" name="disability" required>
-                    <option value="invalid">Selecteer een Beperking</option> {# Placeholder #}
+                    <option value="">Selecteer een Beperking</option> {# Placeholder #}
                     {% for disability in disabilities %}
                         <option value={{ disability.id }}>{{ disability.name }} - {{ disability.category }}</option>
                     {% endfor %}
@@ -51,8 +60,37 @@
 
             <div class="form-group">
                 <label for="prf-bdate">Geboorte Datum</label>
-                <input id="prf-bdate" type="date" name="birthdate" placeholder="Bijv: 067409236450">
+                <input id="prf-bdate" type="date" name="birthdate">
             </div>
+
+            <div class="form-group">
+                <label for="prf-atools">Hulpmiddelen</label>
+                <input id="prf-atools" type="date" name="atools" placeholder="Bijv: Screenreader">
+            </div>
+
+            <div class="form-group">
+                <label for="prf-contact">Contact preferentie</label>
+                <select id="prf-contact" name="gender" required>
+                    <option value="telefoon">Telefoom</option>
+                    <option value="e-mail">e-mail</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="prf-researchtype">Onderzoek type preferentie</label>
+                <select id="prf-researchtype" name="gender" required>
+                    <option value="telefonisch">Telefonisch</option>
+                    <option value="online">Online</option>
+                    <option value="op locatie">Op locatie</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="prf-availab">Beschikbaarheid</label>
+                <input id="prf-availab" type="date" name="availability" placeholder="Bijv: Ma-Wo overdag">
+            </div>
+
+
 
             <div class="grid-section">
                 <button class="submit-btn" type="submit">Opslaan</button>
