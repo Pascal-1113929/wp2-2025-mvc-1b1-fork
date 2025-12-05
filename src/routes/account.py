@@ -27,3 +27,14 @@ def account_login():
 @account_bp.route("/")
 def expert_dashboard_render():
     return render("dashboard.html")
+
+
+@account_bp.route("/register")
+def account_register():
+    disability_list = disabilities.get_all_disabilities()
+    return render("expert-register.html", disabilities=disability_list)
+
+
+@account_bp.route("/register/save")
+def account_register_save():
+    return render("register.html")

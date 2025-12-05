@@ -5,6 +5,18 @@ class Disablity:
     def __init__(self, db_path: str):
         self.db = Database(db_path)
 
+    def get_all_disabilities(self):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM disabilities")
+            rows = cur.fetchall()
+
+            disability_list = []
+            for row in rows:
+                disability_list.append(dict(row))
+
+            return disability_list
+
     def get_disability_ids_by_profileid(self, profileid):
         with self.db.connect() as con:
             cur = con.cursor()
