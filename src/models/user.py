@@ -21,6 +21,15 @@ class User:
             con.commit()
             return cur.lastrowid
 
+    def create_new_expert(self, email, password, role="expert", status="nieuw"):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("""
+                INSERT INTO users (email, password, role, status)
+            """)
+            con.commit()
+            return cur.lastrowid
+
     def get_user_by_id(self, user_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
