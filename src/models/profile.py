@@ -10,3 +10,15 @@ class Profile:
             cur.execute("SELECT * FROM profiles WHERE user_id = ?", (userid,))
             con.commit()
             return cur.fetchone()
+
+    def create(self, userid: int, firstname, lastname, gender, postal, intro, phone, birthdate, atools,
+               contact, researchtype, availability, aterms):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("""
+            INSERT INTO profiles (user_id, first_name, last_name, postcode, gender, phone, birth_date, assistive_tools, 
+                                  intro, agreed_terms, contact_preference, preferred_study_type, availability)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""", (userid, firstname, lastname, postal, gender, phone,
+                        birthdate, atools, intro, aterms, contact, researchtype, availability))
+            con.commit()
+            return cur.lastrowid

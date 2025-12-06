@@ -1,5 +1,6 @@
 from data.database import Database
 
+
 class User:
     def __init__(self, db_path: str):
         self.db = Database(db_path)
@@ -10,7 +11,7 @@ class User:
             cur.execute("SELECT COUNT() FROM users")
             con.commit()
             return cur.fetchone()
-        
+
     def create(self, email, password, organization_id=None, role="organization", status="nieuw"):
         with self.db.connect() as con:
             cur = con.cursor()
@@ -26,7 +27,8 @@ class User:
             cur = con.cursor()
             cur.execute("""
                 INSERT INTO users (email, password, role, status)
-            """)
+                VALUES (?, ?, ?, ?)
+            """, (email, password, role, status))
             con.commit()
             return cur.lastrowid
 

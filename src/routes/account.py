@@ -36,10 +36,10 @@ def account_register():
     error = request.args.get("error")
 
     disability_list = disabilities.get_all_disabilities()
-    return render("expert-register.html", disabilities=disability_list)
+    return render("expert-register.html", disabilities=disability_list, success=success, error=error)
 
 
-@account_bp.route("/register/save")
+@account_bp.route("/register/save", methods=["POST"])
 def account_register_save():
     language = request.accept_languages.best_match(list_locales())
 
@@ -58,13 +58,28 @@ def account_register_save():
     contact = request.form.get("contact")
     researchtype = request.form.get("researchtype")
     availability = request.form.get("availability")
+    aterms = request.form.get("aterms")
 
-    user_id = None
     try:
         user_id = users.create_new_expert(email, password)
 
     except Exception as e:
-        message = f"Er is iets fout gegaan: {str(e)}"
-        return redirect(f"/{language}/organization/register?error={message}")
+        message = f"Er is iets fout gegaan at: {str(e)}"
+        return redirect(f"/{language}/account/register?error={message}")
 
-    print(user_id)
+    try:
+        profile_id = profiles.create(user_id, firstname, lastname, gender, postal, intro, phone, birthdate,
+                                     atools, contact, researchtype, availability, aterms)
+
+    except Exception as e:
+        message = f"Er is iets fout gegaan at: {str(e)}"
+        return redirect(f"/{language}/account/register?error={message}")
+
+    try:
+        disabilities.create_profile_disabilities(profile_id, disability)
+
+    except Exception as e:
+        message = f"Er is iets fout gegaan at at: {str(e)}"
+        return redirect(f"/{language}/account/register?error={message}")
+
+    return redirect(f"/{language}/account/register?success=1")
