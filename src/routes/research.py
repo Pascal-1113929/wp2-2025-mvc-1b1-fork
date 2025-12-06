@@ -21,7 +21,7 @@ research_bp = Blueprint("research", __name__)
 
 @research_bp.route("/")
 def research_dashboard_render():
-    userid = 6010  # TODO: get userid from session after login has been completed
+    userid = 3  # TODO: get userid from session after login has been completed
 
     expert_user = dict(users.get_user_by_id(userid))
     expert_profile = dict(profiles.get_profile_by_userid(userid))
