@@ -7,7 +7,7 @@ def render(template, **kwargs):
     language = request.path.split("/")[1]
 
     if language not in list_locales():
-        return redirect_home()
+        return redirect_page()
 
     base = {
         "locale": language,
@@ -17,6 +17,6 @@ def render(template, **kwargs):
     return render_template(template, base=base, lang=get_i18n(language), **kwargs)
 
 
-def redirect_home():
+def redirect_page(path=""):
     locale = request.accept_languages.best_match(list_locales())
-    return redirect(f"/{locale}", code=302)
+    return redirect(f"/{locale}/{path}", code=302)

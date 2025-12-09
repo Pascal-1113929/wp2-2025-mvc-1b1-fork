@@ -6,7 +6,7 @@ from routes.organization import org_bp
 from routes.research import research_bp
 from routes.management import management_bp
 from routes.error import error_bp
-from view import redirect_home
+from view import redirect_page
 
 app = Flask(__name__)
 
@@ -22,7 +22,7 @@ BLUEPRINTS = {
 
 @app.route("/")
 def goto_locale_page():
-    return redirect_home()
+    return redirect_page()
 
 
 def remove_language_from_view_args(endpoint, values):
