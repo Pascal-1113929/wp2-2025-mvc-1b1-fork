@@ -6,6 +6,9 @@
         action="{{ url_for('account.account_login', language=base.locale)}}"
         method="post"
     >
+        {% if post_status %}
+        <div class="alert alert-error">Invalid email or password</div>
+        {% endif %}
         <div class="form-group">
             <label for="usr-email">Email</label>
             <input
@@ -29,11 +32,5 @@
         <div class="form-group">
             <button class="submit-btn" type="submit">Login</button>
     </form>
-
-    {% if success %}
-    <div class="alert alert-success">Organisatie succesvol aangemaakt!</div>
-    {% endif %} {% if error %}
-    <div class="alert alert-error">{{ error }}</div>
-    {% endif %}
 </main>
 {% endblock %}

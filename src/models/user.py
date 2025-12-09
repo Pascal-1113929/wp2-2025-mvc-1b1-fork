@@ -1,5 +1,6 @@
 from data.database import Database
 
+
 class User:
     def __init__(self, db_path: str):
         self.db = Database(db_path)
@@ -10,14 +11,29 @@ class User:
             cur.execute("SELECT COUNT() FROM users")
             con.commit()
             return cur.fetchone()
-        
-    def create(self, email, password, organization_id=None, role="organization", status="nieuw"):
+
+    def check_login(self, email, password):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("""
+            cur.execute(
+                "SELECT * FROM users WHERE email = ? AND password = ?",
+                (email, password),
+            )
+            con.commit()
+            return cur.fetchone()
+
+    def create(
+        self, email, password, organization_id=None, role="organization", status="nieuw"
+    ):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                """
                 INSERT INTO users (email, password, organization_id, role, status)
                 VALUES (?, ?, ?, ?, ?)
-            """, (email, password, organization_id, role, status))
+            """,
+                (email, password, organization_id, role, status),
+            )
             con.commit()
             return cur.lastrowid
 
