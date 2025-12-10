@@ -1,0 +1,21 @@
+{% extends 'layouts/default.html' %} {% block content %}
+<main class="home">
+    <h1>Dit is het profiel van: {{ user.name }}</h1>
+    <section>
+        <h2>
+            Introductie
+        </h2>
+        <p>
+            {{ user.intro }}
+        </p>
+        <p>
+            Beschikbaar: {{ user.availability }}
+        </p>
+    </section>
+    <section>
+        <h2>
+
+        </h2>
+    </section>
+</main>
+{% endblock %}
