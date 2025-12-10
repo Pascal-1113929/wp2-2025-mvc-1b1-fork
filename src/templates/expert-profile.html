@@ -16,30 +16,53 @@
         <h2>
             Informatie
         </h2>
-        <article>
-            <h3>Beperkingen</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Categorie</th>
-                        <th>Beperking</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for disability in user.disability_list %}
-                    <tr>
-                        <td>
-                            {{ disability.category }}
-                        </td>
-                        <td>
-                            {{ disability.name }}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </article>
+        <div class="grid-section">
+            <article class="grid-article1">
+                <h3>Beperkingen</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Categorie</th>
+                            <th>Beperking</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for disability in user.disability_list %}
+                        <tr>
+                            <td>
+                                {{ disability.category }}
+                            </td>
+                            <td>
+                                {{ disability.name }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </article>
+            <article class="grid-article2">
+                <h3>Tools</h3>
+                <p>Ik maak gebruik van <spa>{{user.assistive_tools}}</spa></p>
+            </article>
+        </div>
     </section>
+    <section>
+        <h2>
+            Contact Informatie
+        </h2>
+        <h3>Contact preferentie: {{user.contact_preference}}</h3>
+        <p>
+            Email: {{user.email}}
+        </p>
+        <p>
+            Telefoon: {{user.phone}}
+        </p>
+    </section>
+    {% if user.has_guardian == 1 %}
+    <section>
+        <h1>Toezichthouder Informatie</h1>
+    </section>
+    {% endif %}
     {{user}}
 </main>
 {% endblock %}
