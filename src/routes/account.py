@@ -33,8 +33,11 @@ def expert_profile():
     userid = 3 #TODO: get id from session after that is implemented (session.get("userid")) and validate role
     dbuser = users.get_user_by_id(userid)
     profile = profiles.get_profile_by_userid(userid)
+    disability_list = disabilities.get_disability_list_by_profileid(profile["id"])
     user = {
         **dbuser,
         **profile,
+        **disability_list
     }
+    print(user)
     return render("expert-profile.html", user=user)
