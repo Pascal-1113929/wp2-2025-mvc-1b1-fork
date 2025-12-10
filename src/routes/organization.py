@@ -4,7 +4,7 @@ from data.database import DB_PATH
 from models.organization import Organization
 from models.user import User
 from models.study import Study
-from view import redirect_home, render
+from view import redirect_page, render
 from flask import request, redirect
 from i18n.locale import list_locales
 
@@ -53,8 +53,6 @@ def org_register_save():
     email = request.form.get("email")
     phone = request.form.get("phone")
 
-    language = request.accept_languages.best_match(list_locales())
-
     try:
         orgId = organizations.create(
             name, type, website, description, contact_person, email, phone
@@ -69,7 +67,7 @@ def org_register_save():
         )
 
         message = "Organisatie succesvol aangemaakt!"
-        return redirect(f"/{language}/organization/register?success=1")
+        return redirect_page("organization/register?success=1")
     except Exception as e:
         message = f"Er is iets fout gegaan: {str(e)}"
-        return redirect(f"/{language}/organization/register?error={message}")
+        return redirect_page(f"organization/register?error={message}")
