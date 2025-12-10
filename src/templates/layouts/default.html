@@ -28,7 +28,7 @@
         <nav class="navbar">
             <div class="nav-inner">
                 <div class="nav-left">
-                    <a class="brand" href=".">{{ lang.nav_brand }}</a>
+                    <a class="brand" href="/{{ base.locale }}/">{{ lang.nav_brand }}</a>
                     <div class="nav-links">
                         {{ button(text=lang.nav_home, href=".", class_name="ghost" if base.path != "/") }}
                         {{ button(text=lang.nav_debug, href=".debug", class_name="ghost" if base.path != "/debug") }}
