@@ -9,4 +9,4 @@ class Profile:
             cur = con.cursor()
             cur.execute("SELECT * FROM profiles WHERE user_id = ?", (userid,))
             con.commit()
-            return cur.fetchone()
+            return dict(cur.fetchone())

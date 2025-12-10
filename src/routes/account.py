@@ -30,12 +30,11 @@ def expert_dashboard_render():
 
 @account_bp.route("/expert-profile/")
 def expert_profile():
-    userid = 3 #TODO: get id from session after that is implemented
+    userid = 3 #TODO: get id from session after that is implemented (session.get("userid")) and validate role
     dbuser = users.get_user_by_id(userid)
     profile = profiles.get_profile_by_userid(userid)
     user = {
         **dbuser,
-        **profile.to_dict(),
+        **profile,
     }
-    print(user)
-    return render("expert-profile.html")
+    return render("expert-profile.html", user=user)
