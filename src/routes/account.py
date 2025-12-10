@@ -5,11 +5,15 @@ from flask import Blueprint, request, session
 
 from data.database import DB_PATH
 from models.user import User
+from models.disabilities import Disablity
+from models.profile import Profile
 from view import render
 from i18n.locale import list_locales
 from view import render, redirect_page
 
 users = User(DB_PATH)
+profiles = Profile(DB_PATH)
+disabilities = Disablity(DB_PATH)
 
 account_bp = Blueprint("account", __name__)
 
