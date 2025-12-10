@@ -27,3 +27,15 @@ def account_login():
 @account_bp.route("/")
 def expert_dashboard_render():
     return render("dashboard.html")
+
+@account_bp.route("/expert-profile/")
+def expert_profile():
+    userid = 3 #TODO: get id from session after that is implemented
+    dbuser = users.get_user_by_id(userid)
+    profile = profiles.get_profile_by_userid(userid)
+    user = {
+        **dbuser,
+        **profile.to_dict(),
+    }
+    print(user)
+    return render("expert-profile.html")
