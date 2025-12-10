@@ -88,3 +88,12 @@ table, th, td {
     padding-right: 0.5vw;
     text-align: center;
 }
+
+.inline {
+    display: flex;
+    flex-direction: row;
+}
+
+.horizontal-spacer {
+ width: 2vw
+}

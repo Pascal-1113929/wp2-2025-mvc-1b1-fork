@@ -36,6 +36,9 @@
                     <th>
                         Maximum leeftijd
                     </th>
+                    <th>
+                        Opties
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +73,13 @@
                     </td>
                     <td>
                         {{study.age_max}}
+                    </td>
+                    <td>
+                        <div class="inline">
+                            {{ button(icon="fa-solid fa-pen", href=".", class_name="primary") }}
+                            <div class="horizontal-spacer"></div>
+                            {{ button(icon="fa-solid fa-trash-can", href=".", class_name="delete") }}
+                        </div>
                     </td>
                 </tr>
             {% endfor %}

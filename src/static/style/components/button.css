@@ -27,6 +27,12 @@
     border-color: #178f5c;
 }
 
+.button.delete {
+    background: linear-gradient(135deg, #9c1f1f, #881616);
+    color: #ffffff;
+    border-color: #8f1717;
+}
+
 .button.ghost {
     background: transparent;
     color: #168856;
