@@ -14,7 +14,7 @@
                 {{ error }}
             </div>
         {% endif %}
-        <form class="cm-form" action="{{ url_for('account.account_register_save', language=base.locale)}}" method="post">
+        <form class="cm-form" action="{{ url_for('account.account_register', language=base.locale)}}" method="post">
             <div class="form-group">
                 <label for="usr-email">Email</label>
                 <input id="usr-email" type="email" name="email" required placeholder="Voer hier uw naam in">
