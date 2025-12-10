@@ -45,7 +45,9 @@ def expert_profile():
     user = {
         **dbuser,
         **profile,
-        **disability_list
+        "disability_list": [disability for disability in disability_list]
     }
+    for disability in disability_list:
+        user |= disability
     print(user)
     return render("expert-profile.html", user=user)

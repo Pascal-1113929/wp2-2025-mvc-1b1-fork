@@ -44,7 +44,7 @@ class Disablity:
             cur = con.cursor()
             cur.execute("SELECT disabilities.id as id, disabilities.category as category, disabilities.name as name "
                         "FROM disabilities "
-                        "INNER JOIN study_disabilities ON disabilities.id = profile_disabilities.disability_id "
+                        "INNER JOIN profile_disabilities ON disabilities.id = profile_disabilities.disability_id "
                         "WHERE profile_disabilities.profile_id = ?", (profileid,))
             con.commit()
             result = cur.fetchall()

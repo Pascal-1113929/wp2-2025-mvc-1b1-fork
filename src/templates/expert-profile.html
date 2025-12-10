@@ -16,6 +16,30 @@
         <h2>
             Informatie
         </h2>
+        <article>
+            <h3>Beperkingen</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categorie</th>
+                        <th>Beperking</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for disability in user.disability_list %}
+                    <tr>
+                        <td>
+                            {{ disability.category }}
+                        </td>
+                        <td>
+                            {{ disability.name }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </article>
     </section>
+    {{user}}
 </main>
 {% endblock %}
