@@ -9,6 +9,7 @@ from routes.error import error_bp
 from view import redirect_page
 
 app = Flask(__name__)
+app.secret_key = "aseu4a3fh375yaw3kjsddsafa3w95uhdsf"
 
 BLUEPRINTS = {
     "": [error_bp],

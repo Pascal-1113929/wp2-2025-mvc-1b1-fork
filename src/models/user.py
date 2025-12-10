@@ -20,7 +20,7 @@ class User:
                 (email, password),
             )
             con.commit()
-            return cur.fetchone()
+            return dict(cur.fetchone())
 
     def create(
         self, email, password, organization_id=None, role="organization", status="nieuw"

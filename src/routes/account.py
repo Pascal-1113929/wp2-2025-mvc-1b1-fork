@@ -19,7 +19,8 @@ def account_login():
 
         user = users.check_login(email, password)
         if user:
-            session["user_id"] = user.id
+            session["user_id"] = user["id"]
+            session["role"] = user["role"]
             return redirect_page("/dashboard")
         else:
             return render("login.html", post_status=1)
@@ -28,4 +29,5 @@ def account_login():
 
 @account_bp.route("/dashboard")
 def expert_dashboard_render():
+    print(session["user_id"], session["role"])
     return render("dashboard.html")
