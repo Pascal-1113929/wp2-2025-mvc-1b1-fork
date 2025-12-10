@@ -1,5 +1,6 @@
 {% from "macros/components/button.html" import button %}
 {% from "macros/components/dropdown.html" import dropdown %}
+{% from "macros/components/table.html" import table %}
 
 {% extends 'layouts/default.html' %}
 
@@ -18,5 +19,7 @@
             {"value": "c", "text": "Option 3", "image": "/static/img/flags/nl-NL.png"}
         ], name="", id="", class="") }}
         Twemoji parsing test:  🤔
+        {{ table(headers=[ "a", "b", "c" ], rows=[[{"type": "text", "value": "hello world"}, {"type": "text", "value": "me me me"}, {"type": "button", "href": ".", "text": "Click me"}]]) }}
+
     </main>
 {% endblock %}
