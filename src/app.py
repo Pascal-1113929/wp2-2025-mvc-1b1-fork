@@ -9,12 +9,12 @@ from routes.error import error_bp
 from view import redirect_page
 
 app = Flask(__name__)
+app.secret_key = "aseu4a3fh375yaw3kjsddsafa3w95uhdsf"
 
 BLUEPRINTS = {
     "": [error_bp],
-    "/": index_bp,
+    "/": [index_bp, account_bp],
     "/organization": org_bp,
-    "/account": account_bp,
     "/research": research_bp,
     "/management": management_bp,
 }
@@ -39,6 +39,9 @@ def register_bp(url_prefix, blueprint):
 
 
 if __name__ == "__main__":
+    # set cache control manually for static files due to twemoji flickering
+    app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 3600
+
     for url_prefix, blueprint_or_list in BLUEPRINTS.items():
         if isinstance(blueprint_or_list, list):
             for blueprint in blueprint_or_list:
