@@ -1,11 +1,12 @@
 {% from "macros/components/button.html" import button %}
+{% from "macros/components/link.html" import link %}
 
 {% macro table(headers=[], rows=[], id="", class="") %}
     <table {% if id %}id="{{ id }}"{% endif %} class="table {{ class }}">
         <thead>
             <tr>
                 {% for header in headers %}
-                <th>{{ header }}</th>
+                    <th>{{ header }}</th>
                 {% endfor %}
             </tr>
         </thead>
@@ -18,8 +19,8 @@
                         {{ cell.value }}
                     {% elif cell.type == "button" %}
                         {{ button(href=cell.href, text=cell.text, icon=cell.icon, class_name=cell.class_name) }}
-                        {% elif cell.type == "link" %}
-                            <a href="{{ cell.href }}" role="button">{{ cell.text }}</a>
+                    {% elif cell.type == "link" %}
+                        {{ link(href=cell.href, text=cell.text, class_name=cell.class_name, icon=cell.icon) }}
                     {% endif %}
                 </td>
                 {% endfor %}
