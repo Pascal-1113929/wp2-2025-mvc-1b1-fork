@@ -117,7 +117,8 @@ class Database:
 
             # Ensure uniqueness for study seeds (idempotency)
             try:
-                cur.execute('CREATE UNIQUE INDEX IF NOT EXISTS ux_studies_org_title_start ON studies(organization_id, title, start_date)')
+                cur.execute('CREATE UNIQUE INDEX IF NOT EXISTS ux_studies_org_title_start '
+                            'ON studies(organization_id, title, start_date)')
             except sqlite3.OperationalError:
                 # If duplicates already exist, the index creation can fail; keep going.
                 pass

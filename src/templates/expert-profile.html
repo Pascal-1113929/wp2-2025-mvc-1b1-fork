@@ -64,7 +64,16 @@
     <section>
         <h2>Toezichthouder Informatie</h2>
         <article>
-            <h3></h3>
+            <h3>Toezichthouder Naam</h3>
+            <p>{{ user.guardian_name }}</p>
+        </article>
+        <article>
+            <h3>Toezichthouder Email</h3>
+            <p>{{ user.guardian_email }}</p>
+        </article>
+        <article>
+            <h3>Toezichthouder Telefoonnummer</h3>
+            <p>{{ user.guardian_phone }}</p>
         </article>
     </section>
     {% endif %}
