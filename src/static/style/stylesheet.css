@@ -1,8 +1,14 @@
+/* components */
 @import url("./components/button.css");
 @import url("./components/dropdown.css");
+@import url("./components/table.css");
+@import url("./containers/horizontal.css");
+
+/* layouts */
 @import url("./layouts/navbar.css");
 @import url("./layouts/forms.css");
-@import url("./containers/horizontal.css");
+
+/* pages specific */
 @import url("./pages/organization.css");
 @import url("./pages/index.css");
 @import url("./pages/study.css");
@@ -72,19 +78,4 @@ p {
 
 .muted {
     color: var(--text-muted);
-}
-
-table,
-th,
-td {
-.l-spacer {
-    height: 3vh;
-}
-
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding-left: 0.5vw;
-    padding-right: 0.5vw;
-    text-align: center;
 }
