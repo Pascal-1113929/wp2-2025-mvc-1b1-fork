@@ -18,6 +18,8 @@
                         {{ cell.value }}
                     {% elif cell.type == "button" %}
                         {{ button(href=cell.href, text=cell.text, icon=cell.icon, class_name=cell.class_name) }}
+                        {% elif cell.type == "link" %}
+                            <a href="{{ cell.href }}" role="button">{{ cell.text }}</a>
                     {% endif %}
                 </td>
                 {% endfor %}
