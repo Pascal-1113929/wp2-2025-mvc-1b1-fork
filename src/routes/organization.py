@@ -43,8 +43,10 @@ def organization_dashboard_render(id):
         ]
         table = Table(study_list)
 
-        table.set_type("title", "link", ["https://text.com"])
-        table.add_column("modify", "button", ["delete", ".delete/<id>"])
+        table.set_type("title", "link", [".organization/study/<id>"])
+        table.add_column(
+            "modify", "button", ["delete", ".organization/study/<id>/delete"]
+        )
         table.whitelist_data(table_header)
         table.set_order(table_header)
 
