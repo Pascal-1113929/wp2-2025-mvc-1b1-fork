@@ -39,6 +39,12 @@ def expert_dashboard_render():
 
 @account_bp.route("/expert-profile/<id>")
 def expert_profile(id):
+    userid = session.get("user_id")
+    allow_delete = False
+
+    if userid == id:
+        allow_delete = True
+
     dbuser = users.get_user_by_id(id)
     profile = profiles.get_profile_by_userid(id)
     disability_list = disabilities.get_disability_list_by_profileid(profile["id"])
@@ -48,3 +54,9 @@ def expert_profile(id):
         "disability_list": [disability for disability in disability_list]
     }
     return render("expert-profile.html", user=user)
+
+
+@account_bp.route("/expert-delete")
+def expert_delete():
+    userid = session.get("user_id")
+    return render("expert-delete.html")

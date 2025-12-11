@@ -77,5 +77,11 @@
         </article>
     </section>
     {% endif %}
+    {% if allow_delete %}
+    <section>
+        <h2>Opties</h2>
+        <button class="reset-btn" type="button" onclick="window.location.href='{{ url_for('account.expert_delete' ,language=base.locale) }}';">Delete Account</button>
+    </section>
+    {% endif %}
 </main>
 {% endblock %}
