@@ -1,6 +1,6 @@
 {% extends 'layouts/default.html' %} {% block content %}
 <main class="home">
-    <h1>Dit is het profiel van: {{ user.name }}</h1>
+    <h1>Dit is het profiel van: {{ user.first_name }} {{ user.last_name }}</h1>
     <section>
         <h2>
             Introductie
@@ -54,7 +54,7 @@
         </h2>
         <h3>Contact preferentie: {{user.contact_preference}}</h3>
         <p>
-            Email: {{user.email}}
+            E-mail: {{user.email}}
         </p>
         <p>
             Telefoon: {{user.phone}}
@@ -68,7 +68,7 @@
             <p>{{ user.guardian_name }}</p>
         </article>
         <article>
-            <h3>Toezichthouder Email</h3>
+            <h3>Toezichthouder E-mail</h3>
             <p>{{ user.guardian_email }}</p>
         </article>
         <article>
@@ -77,6 +77,5 @@
         </article>
     </section>
     {% endif %}
-    {{user}}
 </main>
 {% endblock %}

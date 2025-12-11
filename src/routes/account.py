@@ -36,11 +36,11 @@ def expert_dashboard_render():
     print(session["user_id"], session["role"])
     return render("dashboard.html")
 
-@account_bp.route("/expert-profile/")
-def expert_profile():
-    userid = 3 #TODO: get id from session after that is implemented (session.get("userid")) and validate role
-    dbuser = users.get_user_by_id(userid)
-    profile = profiles.get_profile_by_userid(userid)
+
+@account_bp.route("/expert-profile/<id>")
+def expert_profile(id):
+    dbuser = users.get_user_by_id(id)
+    profile = profiles.get_profile_by_userid(id)
     disability_list = disabilities.get_disability_list_by_profileid(profile["id"])
     user = {
         **dbuser,
