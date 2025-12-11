@@ -19,7 +19,9 @@
         <div class="grid-section">
             <article class="grid-article1">
                 <h3>Beperkingen</h3>
-                <table>
+                <table
+{#                        class="t-classic"#}
+                >
                     <thead>
                         <tr>
                             <th>Categorie</th>
@@ -60,7 +62,10 @@
     </section>
     {% if user.has_guardian == 1 %}
     <section>
-        <h1>Toezichthouder Informatie</h1>
+        <h2>Toezichthouder Informatie</h2>
+        <article>
+            <h3></h3>
+        </article>
     </section>
     {% endif %}
     {{user}}
