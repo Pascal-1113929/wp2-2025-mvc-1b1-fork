@@ -22,18 +22,26 @@ class User:
             con.commit()
             return dict(cur.fetchone())
 
-    def create(
-        self, email, password, organization_id=None, role="organization", status="nieuw"
-    ):
+    def create(self, email, password, organization_id=None, role="organization", status=1):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
                 """
-                INSERT INTO users (email, password, organization_id, role, status)
+                INSERT INTO users (email, password, organization_id, role, status_id)
                 VALUES (?, ?, ?, ?, ?)
             """,
                 (email, password, organization_id, role, status),
             )
+            con.commit()
+            return cur.lastrowid
+
+    def create_new_expert(self, email, password, role="expert", status=1):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("""
+                INSERT INTO users (email, password, role, status_id)
+                VALUES (?, ?, ?, ?)
+            """, (email, password, role, status))
             con.commit()
             return cur.lastrowid
 

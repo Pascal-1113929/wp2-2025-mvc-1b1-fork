@@ -31,6 +31,9 @@
     --accent-strong: #107347;
     --accent-soft: #e1f5eb;
     --shadow: 0 20px 60px rgba(13, 94, 60, 0.12);
+    --bg-submit: #146141;
+    --bg-reset: #9C1F1FFF;
+    --accent-reset: #731010FF;
 }
 
 *,
