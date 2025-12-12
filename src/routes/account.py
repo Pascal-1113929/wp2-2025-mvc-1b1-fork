@@ -4,9 +4,9 @@ from data.database import DB_PATH
 from models.user import User
 from models.disabilities import Disablity
 from models.profile import Profile
-from view import render
 from i18n.locale import list_locales
 from view import render, redirect_page
+from utils.dropdown import Dropdown
 
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)
@@ -64,8 +64,21 @@ def account_register():
         try:
             user_id = users.create_new_expert(email, password)
 
-            profile_id = profiles.create(user_id, firstname, lastname, gender, postal, intro, phone, birthdate,
-                                         atools, contact, researchtype, availability, aterms)
+            profile_id = profiles.create(
+                user_id,
+                firstname,
+                lastname,
+                gender,
+                postal,
+                intro,
+                phone,
+                birthdate,
+                atools,
+                contact,
+                researchtype,
+                availability,
+                aterms,
+            )
             disabilities.create_profile_disabilities(profile_id, disability)
 
             return redirect_page("account/register?success=1")
@@ -74,5 +87,13 @@ def account_register():
             message = f"Er is iets fout gegaan"
             return redirect_page(f"/{language}/account/register?error={message}")
 
-    disability_list = disabilities.get_all_disabilities()
-    return render("expert-register.html", disabilities=disability_list, success=success, error=error)
+    disability_dropdown = Dropdown(disabilities.get_all_disabilities())
+    disability_dropdown.set("value", "<id>")
+    disability_dropdown.set("text", "<name> - <category>")
+
+    return render(
+        "expert-register.html",
+        disabilities=disability_dropdown.export_to_macro(),
+        success=success,
+        error=error,
+    )
