@@ -27,6 +27,12 @@
     border-color: #178f5c;
 }
 
+.button.danger {
+    background: linear-gradient(135deg, #ff6b6b, #ff4747);
+    color: #ffffff;
+    border-color: #ff4747;
+}
+
 .button.ghost {
     background: transparent;
     color: #168856;

@@ -1,5 +1,22 @@
+{% from "macros/components/button.html" import button %}
+
 {% extends 'layouts/default.html' %} {% block content %}
+
 <main class="home">
+
+    <section class="sectioncard">
+        <div class="section-heading">
+            <h1>Dashboard</h1>
+            <p class="muted">Welcome, UID {{ base.user.user_id }}</p>
+        </div>
+        {{ button(text="Open Settings", href=".settings") }}
+
+    </section>
+
+
+
+    {% if base.user.role == 'expert' %}
+
     <section class="sectioncard">
         <div class="section-heading">
             <h2>Research statistics</h2>
@@ -23,11 +40,37 @@
             </article>
         </div>
     </section>
+    {% elif base.user.role == 'organization' %}
 
     <section class="sectioncard">
         <div class="section-heading">
-            <h2>Management statistics</h2>
-            <p class="muted">TODO: only show for managers</p>
+            <h2>Organization statistics</h2>
+            <p class="muted">TODO: only show for organization members</p>
+        </div>
+        <div class="stat-grid">
+            <article class="stat-card">
+                <p class="stat-label">Active members</p>
+                <p class="stat-value">42</p>
+                <p class="muted"></p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">Projects this quarter</p>
+                <p class="stat-value">9</p>
+                <p class="muted"></p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">Pending invitations</p>
+                <p class="stat-value">5</p>
+                <p class="muted"></p>
+            </article>
+        </div>
+    </section>
+    {% elif base.user.role == 'admin' %}
+
+    <section class="sectioncard">
+        <div class="section-heading">
+            <h2>Admin statistics</h2>
+            <p class="muted">TODO: only show for admins</p>
         </div>
         <div class="stat-grid">
             <article class="stat-card">
@@ -47,5 +90,8 @@
             </article>
         </div>
     </section>
+    {% endif %}
+
+
 </main>
 {% endblock %}

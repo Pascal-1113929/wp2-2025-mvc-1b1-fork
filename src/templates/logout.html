@@ -1,0 +1,14 @@
+{% from "macros/components/button.html" import button %}
+
+{% extends 'layouts/default.html' %}
+
+
+{% block content %}
+    <main >
+        <h1>Logged out successfully</h1>
+        <p>You can safely close this window.</p>
+        {{ button(text="Log back in", href=".login") }}
+
+
+    </main>
+{% endblock %}

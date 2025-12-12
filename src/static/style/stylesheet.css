@@ -32,8 +32,8 @@
     --accent-soft: #e1f5eb;
     --shadow: 0 20px 60px rgba(13, 94, 60, 0.12);
     --bg-submit: #146141;
-    --bg-reset: #9C1F1FFF;
-    --accent-reset: #731010FF;
+    --bg-reset: #9c1f1fff;
+    --accent-reset: #731010ff;
 }
 
 *,
@@ -61,7 +61,7 @@ a {
 }
 
 main {
-    max-width: 1100px;
+    max-width: 1252px;
     margin: 0 auto;
     padding: 32px 24px 80px;
 }

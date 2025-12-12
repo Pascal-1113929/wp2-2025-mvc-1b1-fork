@@ -41,8 +41,13 @@
                         {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL"},
                         {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US"}
                     ], name="", id="language-selector") }}
-                    {{ button(text=lang.nav_login, href=".login", class_name="primary") }}
-                    {{ button(text=lang.nav_my_account, href=".dashboard", class_name="primary") }}
+                    {% if base.user %}
+                        {{ button(text=lang.nav_my_account, href=".dashboard", class_name="primary", icon="fa-solid fa-user") }}
+                        {{ button(text="logout", href=".logout", class_name="danger", icon="fa-solid fa-right-from-bracket") }}
+                    {% else %}
+                        {{ button(text=lang.nav_login, href=".login", class_name="primary") }}
+                    {% endif %}
+
                 </div>
             </div>
         </nav>

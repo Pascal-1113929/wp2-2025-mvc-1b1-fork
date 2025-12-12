@@ -7,6 +7,7 @@ from models.profile import Profile
 from i18n.locale import list_locales
 from view import render, redirect_page
 from utils.dropdown import Dropdown
+from utils.authorization import is_authenticated
 
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)
@@ -33,8 +34,15 @@ def account_login():
 
 @account_bp.route("/dashboard")
 def expert_dashboard_render():
-    print(session["user_id"], session["role"])
+    if not is_authenticated():
+        return redirect_page("/login")
     return render("dashboard.html")
+
+
+@account_bp.route("/logout")
+def account_logout():
+    session.clear()
+    return render("logout.html")
 
 
 @account_bp.route("/register", methods=["GET", "POST"])
@@ -42,8 +50,6 @@ def account_register():
     success = request.args.get("success")
     error = request.args.get("error")
     if request.method == "POST":
-        language = request.accept_languages.best_match(list_locales())
-
         email = request.form.get("email")
         password = request.form.get("password")
 
