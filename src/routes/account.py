@@ -1,6 +1,3 @@
-from datetime import datetime
-
-from flask import Blueprint, request, redirect
 from flask import Blueprint, request, session
 
 from data.database import DB_PATH
@@ -71,9 +68,11 @@ def account_register():
                                          atools, contact, researchtype, availability, aterms)
             disabilities.create_profile_disabilities(profile_id, disability)
 
+            return redirect_page("account/register?success=1")
+
         except Exception as e:
             message = f"Er is iets fout gegaan"
-            return redirect(f"/{language}/account/register?error={message}")
+            return redirect_page(f"/{language}/account/register?error={message}")
 
     disability_list = disabilities.get_all_disabilities()
     return render("expert-register.html", disabilities=disability_list, success=success, error=error)

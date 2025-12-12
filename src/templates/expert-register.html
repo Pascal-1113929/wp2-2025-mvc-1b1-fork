@@ -52,6 +52,10 @@
                         <option value={{ disability.id }}>{{ disability.name }} - {{ disability.category }}</option>
                     {% endfor %}
                 </select>
+{#                {{ dropdown(options=[#}
+{#                        {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL"},#}
+{#                        {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US"}#}
+{#                    ], name="", id="language-selector") }}#}
             </div>
 
             <div class="form-group">
