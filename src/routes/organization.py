@@ -63,7 +63,7 @@ def org_register_save():
             password,
             organization_id=orgId,
             role="organization",
-            status="goedgekeurd",
+            status=2,
         )
 
         message = "Organisatie succesvol aangemaakt!"
