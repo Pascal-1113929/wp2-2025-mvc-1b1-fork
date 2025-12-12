@@ -68,11 +68,12 @@ def account_register():
                                          atools, contact, researchtype, availability, aterms)
             disabilities.create_profile_disabilities(profile_id, disability)
 
-            return redirect_page("account/register?success=1")
+            return redirect_page("register?success=1")
 
         except Exception as e:
             message = f"Er is iets fout gegaan"
-            return redirect_page(f"/{language}/account/register?error={message}")
+            print(e)
+            return redirect_page(f"register?error={message}")
 
     disability_list = disabilities.get_all_disabilities()
     return render("expert-register.html", disabilities=disability_list, success=success, error=error)

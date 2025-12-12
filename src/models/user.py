@@ -27,7 +27,7 @@ class User:
             cur = con.cursor()
             cur.execute(
                 """
-                INSERT INTO users (email, password, organization_id, role, status)
+                INSERT INTO users (email, password, organization_id, role, status_id)
                 VALUES (?, ?, ?, ?, ?)
             """,
                 (email, password, organization_id, role, status),
@@ -39,7 +39,7 @@ class User:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute("""
-                INSERT INTO users (email, password, role, status)
+                INSERT INTO users (email, password, role, status_id)
                 VALUES (?, ?, ?, ?)
             """, (email, password, role, status))
             con.commit()
