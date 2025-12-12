@@ -1,5 +1,18 @@
-{% macro dropdown(options=[], name="", id="", class="") %}
-    <select class="dropdown {{ class }}" name="{{ name }}" {% if id %}id="dropdown-{{ id }}"{% endif %}>
+{% macro dropdown(options=[], name="", id="", class="", required=false, placeholder="") %}
+    <select class="dropdown {{ class }}" name="{{ name }}" {% if id %}id="dropdown-{{ id }}"{% endif %} {% if required %}required{% endif %}>
+        {% if placeholder %}
+            {% set has_selected = false %}
+            {% for option in options %}
+                {% if option.selected %}
+                    {% set has_selected = true %}
+                {% endif %}
+            {% endfor %}
+            {% if not has_selected %}
+                <option value="" disabled selected hidden>{{ placeholder }}</option>
+            {% else %}
+                <option value="" disabled hidden>{{ placeholder }}</option>
+            {% endif %}
+        {% endif %}
         {% for option in options %}
         <option value="{{ option.value }}" {% if option.selected %}selected{% endif %}>
             {{ option.text }}
