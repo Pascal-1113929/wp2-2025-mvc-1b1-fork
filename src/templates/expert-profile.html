@@ -1,3 +1,5 @@
+{% from "macros/components/table.html" import table %}
+
 {% extends 'layouts/default.html' %} {% block content %}
 <main class="home">
     <h1>Dit is het profiel van: {{ user.first_name }} {{ user.last_name }}</h1>
@@ -19,28 +21,7 @@
         <div class="grid-section">
             <article class="grid-article1">
                 <h3>Beperkingen</h3>
-                <table
-{#                        class="t-classic"#}
-                >
-                    <thead>
-                        <tr>
-                            <th>Categorie</th>
-                            <th>Beperking</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for disability in user.disability_list %}
-                        <tr>
-                            <td>
-                                {{ disability.category }}
-                            </td>
-                            <td>
-                                {{ disability.name }}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                {{ table(['Categorie', 'Naam'], table_data, class="t-small") }}
             </article>
             <article class="grid-article2">
                 <h3>Tools</h3>

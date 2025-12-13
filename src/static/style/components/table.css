@@ -32,3 +32,7 @@ td {
 tbody tr:last-child td {
     border-bottom: none;
 }
+
+.t-small {
+    width: 15vw;
+}

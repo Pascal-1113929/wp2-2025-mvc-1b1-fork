@@ -9,6 +9,7 @@ from models.profile import Profile
 from i18n.locale import list_locales
 from view import render, redirect_page
 from utils.dropdown import Dropdown
+from utils.table import Table
 
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)
@@ -112,13 +113,26 @@ def expert_profile(id):
 
     dbuser = users.get_user_by_id(id)
     profile = profiles.get_profile_by_userid(id)
+    if not profile:
+        return render("404.html"), 404
+
     disability_list = disabilities.get_disability_list_by_profileid(profile["id"])
     user = {
         **dbuser,
         **profile,
         "disability_list": [disability for disability in disability_list]
     }
-    return render("expert-profile.html", user=user)
+    table_header = [
+        "category",
+        "name",
+    ]
+    table = Table(user["disability_list"])
+    table.whitelist_data(table_header)
+    table.set_order(table_header)
+
+    table_data = table.export_to_macro()
+
+    return render("expert-profile.html", user=user, table_data=table_data)
 
 
 @account_bp.route("/expert-delete")

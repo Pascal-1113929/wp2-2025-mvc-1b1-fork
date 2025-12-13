@@ -10,6 +10,7 @@ from models.study import Study
 from models.user import User
 from view import render
 from werkzeug.exceptions import NotFound
+from utils.table import Table
 
 users = User(DB_PATH)
 organizations = Organization(DB_PATH)
@@ -74,6 +75,15 @@ def study_dashboard_render(study_id):
     organization = organizations.get_organization_by_id(study["organization_id"])
     disability_list = disabilities.get_disability_list_by_studyid(study["id"])
     study["disabilities"] = disability_list
+    table_header = [
+        "category",
+        "name",
+    ]
+    table = Table(disability_list)
+    table.whitelist_data(table_header)
+    table.set_order(table_header)
+
+    table_data = table.export_to_macro()
     print(study)
 
-    return render("study.html", study=study, organization=organization)
+    return render("study.html", study=study, organization=organization, table_data=table_data)
