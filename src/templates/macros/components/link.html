@@ -1,0 +1,15 @@
+{% macro link(href="", text="", class_name="", icon="") %}
+    <a
+        {% if href.startswith('.') %}
+            href="/{{ request.path.split('/')[1] }}/{{ href[1:] }}"
+        {% else %}
+            href="{{ href }}"
+        {% endif %}
+        class="link{% if class_name %} {{ class_name }}{% endif %}"
+    >
+        {% if icon %}
+            <i class="{{ icon }}"></i>
+        {% endif %}
+        {{ text }}
+    </a>
+{% endmacro %}

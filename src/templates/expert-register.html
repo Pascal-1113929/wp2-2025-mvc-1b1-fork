@@ -1,0 +1,112 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+<main class="home">
+    <section class="sectioncard">
+                {% if success %}
+            <div class="alert alert-success">
+                Succesvol Geregistreerd Wachten op Goedkeuring!
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% endif %}
+        <form class="cm-form" action="{{ url_for('account.account_register', language=base.locale)}}" method="post">
+            <div class="form-group">
+                <label for="usr-email">Email</label>
+                <input id="usr-email" type="email" name="email" required placeholder="Voer hier uw email in">
+            </div>
+            <div class="form-group">
+                <label for="usr-pass">Wachtwoord</label>
+                <input id="usr-pass" type="password" name="password" required placeholder="Voer hier uw wachtwoord in">
+            </div>
+
+            <hr>
+            <div class="form-group">
+                <label for="prf-fname">Voornaam</label>
+                <input id="prf-fname" type="text" name="firstname" required placeholder="vul hier uw voornaam in">
+            </div>
+
+            <div class="form-group">
+                <label for="prf-lname">Achternaam</label>
+                <input id="prf-lname" type="text" name="lastname" required placeholder="vul hier uw achternaam in">
+            </div>
+
+            <div class="form-group">
+                <label for="prf-gender">Gender</label>
+                {{ dropdown(options=[
+                    {"value": "M", "text": "Man"},
+                    {"value": "V", "text": "Vrouw"},
+                    {"value": "X", "text": "Anders"}
+                ], name="gender", id="", class="", required=true, placeholder="Selecteer uw geslacht") }}
+            </div>
+
+            <div class="form-group">
+                <label for="prf-disabil">Beperkingen:</label>
+                {{ dropdown(options=disabilities, name="disability", id="", class="", required=true, placeholder="Selecteer een beperking") }}
+            </div>
+
+            <div class="form-group">
+                <label for="prf-postal">Postcode</label>
+                <input id="prf-postal" type="text" name="postal" placeholder="vul hier postcode in">
+            </div>
+
+            <div class="form-group">
+                <label for="prf-inro">Intro</label>
+                <textarea id="prf-inro" name="intro" rows="4" aria-setsize="false" placeholder="vul hier uw intro voor uw profiel in"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telefoonnummer</label>
+                <input id="phone" type="tel" name="phone" placeholder="Bijv: 067409236450" maxlength="10">
+            </div>
+
+            <div class="form-group">
+                <label for="prf-bdate">Geboorte Datum</label>
+                <input id="prf-bdate" type="date" name="birthdate">
+            </div>
+
+            <div class="form-group">
+                <label for="prf-atools">Hulpmiddelen</label>
+                <input id="prf-atools" type="text" name="atools" placeholder="Bijv: Screenreader">
+            </div>
+
+            <div class="form-group">
+                <label for="prf-contact">Contact preferentie</label>
+                {{ dropdown(options=[
+                    {"value": "telefoon", "text": "Telefoon"},
+                    {"value": "e-mail", "text": "E-mail"},
+                ], name="contact", id="", class="", required=true, placeholder="Selecteer uw contact preferentie") }}
+            </div>
+
+            <div class="form-group">
+                <label for="prf-researchtype">Onderzoek type preferentie</label>
+                {{ dropdown(options=[
+                    {"value": "telefonisch", "text": "Telefonisch"},
+                    {"value": "online", "text": "Online"},
+                    {"value": "locatie", "text": "Op locatie"},
+                ], name="researchtype", id="", class="", required=true, placeholder="Selecteer uw onderzoek type preferentie") }}
+            </div>
+
+            <div class="form-group">
+                <label for="prf-availab">Beschikbaarheid</label>
+                <input id="prf-availab" type="text" name="availability" placeholder="Bijv: Ma-Wo overdag">
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" id="prf-aterms" name="aterms" value=1>
+                <label for="prf-aterms"> Ik ben het eens met de Userpolicy</label>
+            </div>
+
+            <div class="grid-section">
+                <button class="submit-btn" type="submit">Opslaan</button>
+                <button class="reset-btn" type="reset">Reset</button>
+            </div>
+        </form>
+
+    </section>
+</main>
+{% endblock %}

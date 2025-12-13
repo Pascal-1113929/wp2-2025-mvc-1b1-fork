@@ -45,9 +45,11 @@ class Study:
             cur.execute("SELECT study_id FROM study_disabilities WHERE disability_id=?", (disability_id,))
             con.commit()
             row = cur.fetchone()
-            if row is not None:
-                return row["study_id"]
-            return None
+            try:
+                study_id = row["study_id"]
+            except TypeError:
+                study_id = None
+            return study_id
 
     def get_available_study_by_id(self, study_id: int):
         with self.db.connect() as con:

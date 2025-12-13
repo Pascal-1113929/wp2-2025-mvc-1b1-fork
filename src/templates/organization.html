@@ -1,3 +1,5 @@
+{% from "macros/components/table.html" import table %}
+
 {% extends 'layouts/default.html' %}
 
 {% block content %}
@@ -9,82 +11,7 @@
     <section>
         <h2>Lijst met onderzoeken</h2>
         <div class="spacer"></div>
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        Titel
-                    </th>
-                    <th>
-                        Status
-                    </th>
-                    <th>
-                        StartDatum
-                    </th>
-                    <th>
-                        Einddatum
-                    </th>
-                    <th>
-                        Locatie
-                    </th>
-                    <th>
-                        Vergoeding
-                    </th>
-                    <th>
-                        Minimum leeftijd
-                    </th>
-                    <th>
-                        Maximum leeftijd
-                    </th>
-                    <th>
-                        Opties
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for study in study_list %}
-                <tr>
-                    <td>
-                        <a href="/en-US/organization/study/{{ study.id }}">
-                            {{study.title}}
-                        </a>
-                    </td>
-                    <td>
-                        {{study.status}}
-                    </td>
-                    <td>
-                        {{study.start_date}}
-                    </td>
-                    <td>
-                        {{study.end_date}}
-                    </td>
-                    <td>
-                        {% if study.location == None %}
-                        {{study.study_type}}
-                        {% else %}
-                        {{study.location}}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{study.reward}}
-                    </td>
-                    <td>
-                        {{study.age_min}}
-                    </td>
-                    <td>
-                        {{study.age_max}}
-                    </td>
-                    <td>
-                        <div class="inline">
-                            {{ button(icon="fa-solid fa-pen", href=".", class_name="primary") }}
-                            <div class="horizontal-spacer"></div>
-                            {{ button(icon="fa-solid fa-trash-can", href=".", class_name="delete") }}
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {{ table(['Titel', 'Status', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd', "Modify"], study_list) }}
     </section>
     </main>
 {% else %}

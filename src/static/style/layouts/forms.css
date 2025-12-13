@@ -35,6 +35,14 @@
     z-index: 2;
 }
 
+.form-check {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1.3rem;
+    position: relative;
+    z-index: 2;
+}
+
 .form-group label {
     font-weight: 600;
     color: var(--text);
