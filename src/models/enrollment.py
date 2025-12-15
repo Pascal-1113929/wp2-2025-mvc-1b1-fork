@@ -15,7 +15,7 @@ class Enrollment:
     def get_new_enrolment_by_study_id(self, study_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM enrollments WHERE study_id = %s and status = 'nieuw'", (study_id,))# QUESTIONS: Do we do this with a id?
+            cur.execute("SELECT * FROM enrollments WHERE study_id = %s and status = 'nieuw'", (study_id,))# QUESTIONS: Do we want this with an id?
             con.commit()
 
             enrollment_list = cur.fetchall()
@@ -23,7 +23,6 @@ class Enrollment:
             new_enrollment_list = []
             for enrollment in enrollment_list:
                 enrollment_dict = dict(enrollment)
-                enrollment_list.append(enrollment)
+                new_enrollment_list.append(enrollment_dict)
 
-            return enrollment_list
-
+            return new_enrollment_list
