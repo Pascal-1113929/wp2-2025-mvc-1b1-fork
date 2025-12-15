@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, session, abort
 
 from data.database import DB_PATH
 from models.organization import Organization
@@ -24,7 +24,10 @@ def organization_list():
 
 @org_bp.route("/<id>/")
 def organization_dashboard_render(id):
-    # TODO: validate with a session if the logged in user is a organization and the correct organization
+    user_id = session.get("user_id")
+    verified_org_id = users.get_organization_id_by_userid(user_id)['organization_id']
+    if verified_org_id != id:
+        return abort(403)
     org = organizations.get_organization_by_id(id)
 
     study_table_data = []
@@ -93,3 +96,7 @@ def org_register_save():
     except Exception as e:
         message = f"Er is iets fout gegaan: {str(e)}"
         return redirect_page(f"organization/register?error={message}")
+
+
+# @org_bp.route("/<oid>/study/<sid>/")
+# def organization_dashboard_render(oid, sid):

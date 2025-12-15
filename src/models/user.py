@@ -51,3 +51,10 @@ class User:
             cur.execute("SELECT * FROM users WHERE id = ?", (user_id,))
             con.commit()
             return cur.fetchone()
+
+    def get_organization_id_by_userid(self, id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT organization_id FROM users WHERE id = ?", (id,))
+            con.commit()
+            return dict(cur.fetchone())
