@@ -11,3 +11,19 @@ class Enrollment:
             cur.execute("SELECT COUNT() FROM enrollments")
             con.commit()
             return cur.fetchone()
+
+    def get_new_enrolment_by_study_id(self, study_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM enrollments WHERE study_id = %s and status = 'nieuw'", (study_id,))# QUESTIONS: Do we do this with a id?
+            con.commit()
+
+            enrollment_list = cur.fetchall()
+
+            new_enrollment_list = []
+            for enrollment in enrollment_list:
+                enrollment_dict = dict(enrollment)
+                enrollment_list.append(enrollment)
+
+            return enrollment_list
+
