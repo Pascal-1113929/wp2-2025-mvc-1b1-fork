@@ -102,14 +102,14 @@ def org_register_save():
 def organization_study_page_render(oid, sid):
     user_id = session.get("user_id")
     verified_org_id = users.get_organization_id_by_userid(user_id)['organization_id']
-    if verified_org_id is not oid:
+    if verified_org_id != int(oid):
         print(f"forbidden id mismatch {verified_org_id} {oid}")
         return abort(403)
     org = organizations.get_organization_by_id(oid)
     study = studies.get_study_by_id(sid)
 
-    if oid != study['organization_id']:
+    if int(oid) != study['organization_id']:
         print("forbidden study_orgid mismatch")
         return abort(403)
 
-    return render("organization.html", organization=org, study=study)
+    return render("study-org.html", organization=org, study=study)
