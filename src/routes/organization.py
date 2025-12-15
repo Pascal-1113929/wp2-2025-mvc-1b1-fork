@@ -8,10 +8,12 @@ from view import redirect_page, render
 from flask import request, redirect
 from i18n.locale import list_locales
 from utils.table import Table
+from models.disabilities import Disablity
 
 organizations = Organization(DB_PATH)
 users = User(DB_PATH)
 studies = Study(DB_PATH)
+disabilities = Disablity(DB_PATH)
 
 org_bp = Blueprint("organization", __name__)
 
@@ -107,6 +109,8 @@ def organization_study_page_render(oid, sid):
         return abort(403)
     org = organizations.get_organization_by_id(oid)
     study = studies.get_study_by_id(sid)
+    disability_list = disabilities.get_disability_list_by_studyid(study["id"])
+    study["disabilities"] = disability_list
 
     if int(oid) != study['organization_id']:
         print("forbidden study_orgid mismatch")
