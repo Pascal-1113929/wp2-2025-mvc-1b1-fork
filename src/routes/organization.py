@@ -98,5 +98,18 @@ def org_register_save():
         return redirect_page(f"organization/register?error={message}")
 
 
-# @org_bp.route("/<oid>/study/<sid>/")
-# def organization_dashboard_render(oid, sid):
+@org_bp.route("/<oid>/study/<sid>/")
+def organization_study_page_render(oid, sid):
+    user_id = session.get("user_id")
+    verified_org_id = users.get_organization_id_by_userid(user_id)['organization_id']
+    if verified_org_id is not oid:
+        print(f"forbidden id mismatch {verified_org_id} {oid}")
+        return abort(403)
+    org = organizations.get_organization_by_id(oid)
+    study = studies.get_study_by_id(sid)
+
+    if oid != study['organization_id']:
+        print("forbidden study_orgid mismatch")
+        return abort(403)
+
+    return render("organization.html", organization=org, study=study)
