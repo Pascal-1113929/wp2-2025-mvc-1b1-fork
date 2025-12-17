@@ -12,3 +12,6 @@ Sources used in this project:
 
 Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing
+
+AI links:
+ - https://chatgpt.com/share/69428d78-c8f8-8002-9424-7e08fc3e5b39
