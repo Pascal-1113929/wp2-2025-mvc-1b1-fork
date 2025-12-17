@@ -10,12 +10,14 @@ from i18n.locale import list_locales
 from utils.table import Table
 from models.disabilities import Disablity
 from models.enrollment import Enrollment
+from models.profile import Profile
 
 organizations = Organization(DB_PATH)
 users = User(DB_PATH)
 studies = Study(DB_PATH)
 disabilities = Disablity(DB_PATH)
 enrolments = Enrollment(DB_PATH)
+profiles = Profile(DB_PATH)
 
 org_bp = Blueprint("organization", __name__)
 
@@ -112,7 +114,46 @@ def organization_study_page_render(oid, sid):
 
     org = organizations.get_organization_by_id(oid)
     study = studies.get_study_by_id(sid)
-    new_enrolment_list = enrolments.get_enrolment_list(sid)
+    raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(sid, "nieuw")
+
+    new_enrolment_list = []
+    for enrolment in new_enrolment_list:
+        profile = profiles.get_profile_by_id(enrolment["profile_id"])
+        user = users.get_user_by_id(profile["user_id"])
+        new_enrolment = {
+            "organization_id": int(oid),
+            "study_id": enrolment["study_id"],
+            "profile_id": profile["id"],
+            "name": profile["first_name"] + profile["last_name"],
+            "phonenr": profile["phone"],
+            "email": user["email"],
+            "contact-preference": profile["contact_preference"],
+            "availability": profile["availability"],
+        }
+        new_enrolment_list.append(new_enrolment)
+
+    table_header = [
+        "name",
+        "phonenr",
+        "email",
+        "contact-preference",
+        "availability",
+        "view_profile",
+        "unlist",
+    ]
+    table = Table(new_enrolment_list)
+
+    table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
+    table.add_column(
+        "view_profile", "button", ["Bekijk Profiel", ".expert-profile/<profile_id>"]
+    )
+    table.add_column(
+        "unlist", "button", ["Uitschrijven", ".organization/<organization_id>/study/<id>/<profile_id>/unlist"]
+    )
+    table.whitelist_data(table_header)
+    table.set_order(table_header)
+
+    table_data = table.export_to_macro()
 
     if int(oid) != study['organization_id']:
         print("forbidden study_orgid mismatch")
