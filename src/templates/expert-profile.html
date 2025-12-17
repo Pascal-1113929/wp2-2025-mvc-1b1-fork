@@ -61,7 +61,7 @@
     {% if allow_delete %}
     <section>
         <h2>Opties</h2>
-        <button class="reset-btn" type="button" onclick="window.location.href='{{ url_for('account.expert_delete' ,language=base.locale) }}';">Delete Account</button>
+        {{ button(text=lang.delete_account, href=url_for('account.account_register', language=base.locale), class_name="s-button") }}
     </section>
     {% endif %}
 </main>

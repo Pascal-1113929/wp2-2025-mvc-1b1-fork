@@ -109,7 +109,7 @@ def expert_profile(id):
     userid = session.get("user_id")
     allow_delete = False
 
-    if userid == id:
+    if userid == int(id):
         allow_delete = True
 
     dbuser = users.get_user_by_id(id)
@@ -132,8 +132,9 @@ def expert_profile(id):
     table.set_order(table_header)
 
     table_data = table.export_to_macro()
+    print(allow_delete)
 
-    return render("expert-profile.html", user=user, table_data=table_data)
+    return render("expert-profile.html", user=user, table_data=table_data, allow_delete=allow_delete)
 
 
 @account_bp.route("/expert-delete")
