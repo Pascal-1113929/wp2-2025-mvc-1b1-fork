@@ -61,3 +61,19 @@ class Disablity:
             con.commit()
             return cur.lastrowid
 
+
+    def get_disability_list_by_profileid(self, profileid):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT disabilities.id as id, disabilities.category as category, disabilities.name as name "
+                        "FROM disabilities "
+                        "INNER JOIN profile_disabilities ON disabilities.id = profile_disabilities.disability_id "
+                        "WHERE profile_disabilities.profile_id = ?", (profileid,))
+            con.commit()
+            result = cur.fetchall()
+
+            disability_list = []
+            for row in result:
+                disability_list.append(dict(row))
+
+            return disability_list

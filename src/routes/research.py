@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint
+from flask import Blueprint, session
 
 from data.database import DB_PATH
 from models.disabilities import Disablity
@@ -9,6 +9,8 @@ from models.profile import Profile
 from models.study import Study
 from models.user import User
 from view import render
+from werkzeug.exceptions import NotFound
+from utils.table import Table
 
 users = User(DB_PATH)
 organizations = Organization(DB_PATH)
@@ -21,7 +23,12 @@ research_bp = Blueprint("research", __name__)
 
 @research_bp.route("/")
 def research_dashboard_render():
-    userid = 3  # TODO: get userid from session after login has been completed
+    # userid = 3  # TODO: get userid from session after login has been completed
+    userid = session.get("user_id")
+    # role = session.get("role")
+
+    if userid is None:
+        raise NotFound()
 
     expert_user = dict(users.get_user_by_id(userid))
     expert_profile = dict(profiles.get_profile_by_userid(userid))
@@ -46,6 +53,7 @@ def research_dashboard_render():
             study_ids.append(study_id)
 
     available_studies = []
+    print(study_ids)
     for study_id in study_ids:
         study = studies.get_available_study_by_id(study_id)
         organization = organizations.get_organization_by_id(study["organization_id"])
@@ -67,6 +75,15 @@ def study_dashboard_render(study_id):
     organization = organizations.get_organization_by_id(study["organization_id"])
     disability_list = disabilities.get_disability_list_by_studyid(study["id"])
     study["disabilities"] = disability_list
+    table_header = [
+        "category",
+        "name",
+    ]
+    table = Table(disability_list)
+    table.whitelist_data(table_header)
+    table.set_order(table_header)
+
+    table_data = table.export_to_macro()
     print(study)
 
-    return render("study.html", study=study, organization=organization)
+    return render("study.html", study=study, organization=organization, table_data=table_data)

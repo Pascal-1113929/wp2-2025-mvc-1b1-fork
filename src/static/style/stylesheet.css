@@ -82,3 +82,16 @@ p {
 .muted {
     color: var(--text-muted);
 }
+
+.l-spacer {
+    height: 3vh;
+}
+
+.inline {
+    display: flex;
+    flex-direction: row;
+}
+
+.horizontal-spacer {
+ width: 2vw
+}

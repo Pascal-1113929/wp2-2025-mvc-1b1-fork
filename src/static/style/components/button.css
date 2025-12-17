@@ -27,6 +27,12 @@
     border-color: #178f5c;
 }
 
+.button.delete {
+    background: linear-gradient(135deg, #9c1f1f, #881616);
+    color: #ffffff;
+    border-color: #8f1717;
+}
+
 .button.ghost {
     background: transparent;
     color: #168856;
@@ -40,4 +46,17 @@
 }
 .button i {
     margin-right: 8px;
+}
+
+.s-button {
+    background: var(--bg-reset);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 0.9rem 1.3rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    width: 10vw;
+    font-size: 1rem;
 }
