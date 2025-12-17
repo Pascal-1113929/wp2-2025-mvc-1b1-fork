@@ -10,6 +10,7 @@ from i18n.locale import list_locales
 from view import render, redirect_page
 from utils.dropdown import Dropdown
 from utils.table import Table
+from werkzeug.exceptions import NotFound
 
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)
@@ -114,7 +115,7 @@ def expert_profile(id):
     dbuser = users.get_user_by_id(id)
     profile = profiles.get_profile_by_userid(id)
     if not profile:
-        return render("404.html"), 404
+        raise NotFound()
 
     disability_list = disabilities.get_disability_list_by_profileid(profile["id"])
     user = {
