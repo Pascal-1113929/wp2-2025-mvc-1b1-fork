@@ -117,14 +117,14 @@ def organization_study_page_render(oid, sid):
     raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(sid, "nieuw")
 
     new_enrolment_list = []
-    for enrolment in new_enrolment_list:
+    for enrolment in raw_new_enrolment_list:
         profile = profiles.get_profile_by_id(enrolment["profile_id"])
         user = users.get_user_by_id(profile["user_id"])
         new_enrolment = {
             "organization_id": int(oid),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
-            "name": profile["first_name"] + profile["last_name"],
+            "name": profile["first_name"] + "   " + profile["last_name"],
             "phonenr": profile["phone"],
             "email": user["email"],
             "contact-preference": profile["contact_preference"],

@@ -8,11 +8,12 @@
     <main>
 <!--        Dit zit in main vanwege styling redenen-->
     <header>
-    <h1>
-        Inschrijflijst pagina: {{ study.title }} van {{ organization.name }}
-    </h1>
+        <h1>
+            Inschrijflijst pagina: {{ study.title }} van {{ organization.name }}
+        </h1>
+    </header>
         <section>
-
+            {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data) }}
         </section>
     </main>
 
