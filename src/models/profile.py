@@ -16,6 +16,18 @@ class Profile:
 
             return profile
 
+    def get_profile_by_id(self, pid: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM profiles WHERE id = ?", (pid,))
+            con.commit()
+            try:
+                profile = dict(cur.fetchone())
+            except TypeError:
+                profile = None
+
+            return profile
+
     def create(self, userid: int, firstname, lastname, gender, postal, intro, phone, birthdate, atools,
                contact, researchtype, availability, aterms):
         with self.db.connect() as con:
