@@ -1,8 +1,14 @@
+/* components */
 @import url("./components/button.css");
 @import url("./components/dropdown.css");
+@import url("./components/table.css");
+@import url("./containers/horizontal.css");
+
+/* layouts */
 @import url("./layouts/navbar.css");
 @import url("./layouts/forms.css");
-@import url("./containers/horizontal.css");
+
+/* pages specific */
 @import url("./pages/organization.css");
 @import url("./pages/index.css");
 @import url("./pages/study.css");
@@ -25,6 +31,9 @@
     --accent-strong: #107347;
     --accent-soft: #e1f5eb;
     --shadow: 0 20px 60px rgba(13, 94, 60, 0.12);
+    --bg-submit: #146141;
+    --bg-reset: #9C1F1FFF;
+    --accent-reset: #731010FF;
 }
 
 *,
@@ -74,17 +83,15 @@ p {
     color: var(--text-muted);
 }
 
-table,
-th,
-td {
 .l-spacer {
     height: 3vh;
 }
+
+.inline {
+    display: flex;
+    flex-direction: row;
 }
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding-left: 0.5vw;
-    padding-right: 0.5vw;
-    text-align: center;
+
+.horizontal-spacer {
+ width: 2vw
 }
