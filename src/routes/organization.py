@@ -124,7 +124,7 @@ def organization_study_page_render(oid, sid):
             "organization_id": int(oid),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
-            "name": profile["first_name"] + "   " + profile["last_name"],
+            "name": profile["first_name"] + " " + profile["last_name"],
             "phonenr": profile["phone"],
             "email": user["email"],
             "contact-preference": profile["contact_preference"],
