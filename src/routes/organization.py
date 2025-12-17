@@ -124,6 +124,7 @@ def organization_study_page_render(oid, sid):
             "organization_id": int(oid),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
+            "user_id": user["id"],
             "name": profile["first_name"] + " " + profile["last_name"],
             "phonenr": profile["phone"],
             "email": user["email"],
@@ -145,10 +146,10 @@ def organization_study_page_render(oid, sid):
 
     table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
     table.add_column(
-        "view_profile", "button", ["Bekijk Profiel", ".expert-profile/<profile_id>"]
+        "view_profile", "button", ["Bekijk Profiel", ".expert-profile/<user_id>"]
     )
     table.add_column(
-        "unlist", "button", ["Uitschrijven", ".organization/<organization_id>/study/<id>/<profile_id>/unlist"]
+        "unlist", "button", ["Uitschrijven", ".organization/<organization_id>/study/<study_id>/<profile_id>/unlist"]
     )
     table.whitelist_data(table_header)
     table.set_order(table_header)
@@ -160,3 +161,13 @@ def organization_study_page_render(oid, sid):
         return abort(403)
 
     return render("study-org.html", organization=org, study=study, table_data=table_data)
+
+@org_bp.route("<organization_id>/study/<study_id>/<profile_id>/unlist")
+def organization_unlist(organization_id, study_id, profile_id):
+    organization_id = int(organization_id)
+    study_id = int(study_id)
+    profile_id = int(profile_id)
+
+    enrolments.delete_enrollment(study_id, profile_id)
+
+    return render("study-org-unlist.html", oid=organization_id, sid=study_id)

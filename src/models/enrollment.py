@@ -27,3 +27,9 @@ class Enrollment:
                 new_enrollment_list.append(enrollment_dict)
 
             return new_enrollment_list
+
+    def delete_enrollment(self, study_id: int, profile_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("DELETE FROM enrollments WHERE study_id = ? AND profile_id = ?", (study_id, profile_id))
+            con.commit()
