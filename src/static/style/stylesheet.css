@@ -87,31 +87,6 @@ p {
     height: 3vh;
 }
 
-table,
-th,
-td {
-.l-spacer {
-    height: 3vh;
-}
-
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding-left: 0.5vw;
-    padding-right: 0.5vw;
-    text-align: center;
-}
-
-table.t-classic,
-table.t-classic th,
-table.t-classic td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding-left: 0.5vw;
-    padding-right: 0.5vw;
-    text-align: center;
-}
-
 .inline {
     display: flex;
     flex-direction: row;
