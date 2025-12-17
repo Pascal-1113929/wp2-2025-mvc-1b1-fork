@@ -9,11 +9,13 @@ from flask import request, redirect
 from i18n.locale import list_locales
 from utils.table import Table
 from models.disabilities import Disablity
+from models.enrollment import Enrollment
 
 organizations = Organization(DB_PATH)
 users = User(DB_PATH)
 studies = Study(DB_PATH)
 disabilities = Disablity(DB_PATH)
+enrolments = Enrollment(DB_PATH)
 
 org_bp = Blueprint("organization", __name__)
 
@@ -28,7 +30,7 @@ def organization_list():
 def organization_dashboard_render(id):
     user_id = session.get("user_id")
     verified_org_id = users.get_organization_id_by_userid(user_id)['organization_id']
-    if verified_org_id != id:
+    if verified_org_id != int(id):
         return abort(403)
     org = organizations.get_organization_by_id(id)
 
@@ -48,7 +50,7 @@ def organization_dashboard_render(id):
         ]
         table = Table(study_list)
 
-        table.set_type("title", "link", [".organization/study/<id>"])
+        table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
         table.add_column(
             "modify", "button", ["delete", ".organization/study/<id>/delete"]
         )
@@ -107,13 +109,13 @@ def organization_study_page_render(oid, sid):
     if verified_org_id != int(oid):
         print(f"forbidden id mismatch {verified_org_id} {oid}")
         return abort(403)
+
     org = organizations.get_organization_by_id(oid)
     study = studies.get_study_by_id(sid)
-    disability_list = disabilities.get_disability_list_by_studyid(study["id"])
-    study["disabilities"] = disability_list
+    new_enrolment_list = enrolments.get_enrolment_list(sid)
 
     if int(oid) != study['organization_id']:
         print("forbidden study_orgid mismatch")
         return abort(403)
 
-    return render("study-org.html", organization=org, study=study)
+    return render("study-org.html", organization=org, study=study, table_data=table_data)

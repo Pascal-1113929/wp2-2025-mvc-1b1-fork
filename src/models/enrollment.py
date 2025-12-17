@@ -12,10 +12,10 @@ class Enrollment:
             con.commit()
             return cur.fetchone()
 
-    def get_new_enrolment_by_study_id(self, study_id: int):
+    def get_enrolments_by_study_id(self, study_id: int, status_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM enrollments WHERE study_id = %s and status = 'nieuw'", (study_id,))# QUESTIONS: Do we want this with an id?
+            cur.execute("SELECT * FROM enrollments WHERE study_id = ? and status_id = ?", (study_id, status_id))# QUESTIONS: Do we want this with an id?
             con.commit()
 
             enrollment_list = cur.fetchall()

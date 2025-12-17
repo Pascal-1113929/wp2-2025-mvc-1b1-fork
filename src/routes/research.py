@@ -84,6 +84,5 @@ def study_dashboard_render(study_id):
     table.set_order(table_header)
 
     table_data = table.export_to_macro()
-    print(study)
 
     return render("study.html", study=study, organization=organization, table_data=table_data)
