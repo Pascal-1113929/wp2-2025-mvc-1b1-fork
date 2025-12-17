@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, request, session
 
 from data.database import DB_PATH
@@ -7,6 +9,8 @@ from models.profile import Profile
 from i18n.locale import list_locales
 from view import render, redirect_page
 from utils.dropdown import Dropdown
+from utils.table import Table
+from werkzeug.exceptions import NotFound
 
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)
@@ -98,3 +102,42 @@ def account_register():
         success=success,
         error=error,
     )
+
+
+@account_bp.route("/expert-profile/<id>")
+def expert_profile(id):
+    userid = session.get("user_id")
+    allow_delete = False
+
+    if userid == int(id):
+        allow_delete = True
+
+    dbuser = users.get_user_by_id(id)
+    profile = profiles.get_profile_by_userid(id)
+    if not profile:
+        raise NotFound()
+
+    disability_list = disabilities.get_disability_list_by_profileid(profile["id"])
+    user = {
+        **dbuser,
+        **profile,
+        "disability_list": [disability for disability in disability_list]
+    }
+    table_header = [
+        "category",
+        "name",
+    ]
+    table = Table(user["disability_list"])
+    table.whitelist_data(table_header)
+    table.set_order(table_header)
+
+    table_data = table.export_to_macro()
+    print(allow_delete)
+
+    return render("expert-profile.html", user=user, table_data=table_data, allow_delete=allow_delete)
+
+
+@account_bp.route("/expert-delete")
+def expert_delete():
+    userid = session.get("user_id")
+    return render("expert-delete.html")

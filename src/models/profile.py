@@ -9,7 +9,12 @@ class Profile:
             cur = con.cursor()
             cur.execute("SELECT * FROM profiles WHERE user_id = ?", (userid,))
             con.commit()
-            return cur.fetchone()
+            try:
+                profile = dict(cur.fetchone())
+            except TypeError:
+                profile = None
+
+            return profile
 
     def create(self, userid: int, firstname, lastname, gender, postal, intro, phone, birthdate, atools,
                contact, researchtype, availability, aterms):
