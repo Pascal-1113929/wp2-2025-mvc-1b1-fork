@@ -1,0 +1,66 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+<main class="home">
+    <section class="sectioncard">
+
+        {% if success %}
+            <div class="alert alert-success">
+                {{ success }}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% endif %}
+        
+        <form class="cm-form" action="{{ url_for('organization.research_register_save', language=base.locale)}}" method="post">
+            <div class="form-group">
+                <label>Onderzoekstitel</label>
+                <input type="text" name="title" maxlength="255" required placeholder="vul hier uw onderzoekstitel in">
+            </div>
+
+            <div class="form-group">
+                <label>Beschrijving</label>
+                <textarea name="description" rows="4" aria-setsize="false" required placeholder="vul hier de bescrijving in van het onderzoek"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Onderzoeks type</label>
+                <input type="text" name="type" maxlength="255" required placeholder="vul hier uw onderzoekstype in zoals online enquete, interview, etc.">
+            </div>
+
+            <div class="form-group-wrap-2">
+                <div class="form-group">
+                    <label>Minimale leeftijd</label>
+                    <input type="number" name="age_min" value="8" min="1" placeholder="Minimum leeftijd voor dit onderzoek">
+                </div>
+                <div class="form-group">
+                    <label>Maximale leeftijd</label>
+                    <input type="number" name="age_max" value="50" max="200" placeholder="Maximum leeftijd voor dit onderzoek">
+                </div>
+            </div>
+
+            <div class="form-group-wrap-2">
+                <div class="form-group">
+                    <label>Start datum</label>
+                    <input type="date" name="start_date" placeholder="Start datum van het onderzoek">
+                </div>
+                <div class="form-group">
+                    <label>Eind datum</label>
+                    <input type="date" name="end_date" placeholder="Eind datum van het onderzoek">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Beloning</label>
+                <input type="text" name="reward" placeholder="vul hier uw beloning in voor deelname aan het onderzoek (optioneel)">
+            </div>
+
+            <button class="submit-btn" type="submit">Opslaan</button>
+        </form>
+    </section>
+</main>
+{% endblock %}
