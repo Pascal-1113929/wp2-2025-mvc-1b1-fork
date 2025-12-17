@@ -69,3 +69,17 @@ def study_dashboard_render(study_id):
     print(study)
 
     return render("study.html", study=study, organization=organization)
+
+@research_bp.route('/<study_id>/enroll', methods=['GET'])
+def study_enroll_render(study_id):
+    userid = 3  # TODO: get userid from session after login has been completed
+    user = users.get_user_by_id(userid)
+    profile = profiles.get_profile_by_userid(userid)
+    study = studies.get_study_by_id(study_id)
+    
+    return render("enroll.html", user=user, profile=profile, study=study)
+@research_bp.route('/<study_id>/enroll', methods=['POST'])
+def study_enroll_confirm(study_id):
+    userid = 3  # TODO: get userid from session after login has been completed
+    studies.enroll_user_in_study(userid, study_id)
+    return render("enroll_success.html")

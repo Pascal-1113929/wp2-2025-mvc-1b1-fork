@@ -9,3 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = window.location.origin + path_parts.join("/");
     });
 });
+
+let toggle = document.querySelector(".nav-toggle");
+let navLeft = document.querySelector(".nav-links");
+
+toggle?.addEventListener("click", () => {
+    navLeft.classList.toggle("nav-open");
+});
