@@ -35,6 +35,17 @@
     z-index: 2;
 }
 
+.form-group-wrap-2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.form-group-wrap-2 > * {
+    width: calc(50% - 0.5rem);
+    box-sizing: border-box;
+}
+
 .form-check {
     display: flex;
     flex-direction: row;

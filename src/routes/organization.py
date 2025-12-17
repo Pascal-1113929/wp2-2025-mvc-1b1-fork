@@ -1,4 +1,4 @@
-from flask import Blueprint, session, abort
+from flask import Blueprint
 
 from data.database import DB_PATH
 from models.organization import Organization
@@ -70,7 +70,6 @@ def org_register():
     error = request.args.get("error")
     return render("organization-register.html", success=success, error=error)
 
-
 @org_bp.route("/register/save", methods=["POST"])
 def org_register_save():
     email = request.form.get("email")
@@ -98,7 +97,7 @@ def org_register_save():
         )
 
         message = "Organisatie succesvol aangemaakt!"
-        return redirect_page("organization/register?success=1")
+        return redirect_page(f"organization/register?success={message}")
     except Exception as e:
         message = f"Er is iets fout gegaan: {str(e)}"
         return redirect_page(f"organization/register?error={message}")
@@ -171,3 +170,42 @@ def organization_unlist(organization_id, study_id, profile_id):
     enrolments.delete_enrollment(study_id, profile_id)
 
     return render("study-org-unlist.html", oid=organization_id, sid=study_id)
+
+@org_bp.route("/research/add", methods=["GET", "POST"])
+def research_register():
+    if request.method == "GET":
+        success = request.args.get("success")
+        error = request.args.get("error")
+        return render("organization-research.html", success=success, error=error)
+
+    title = request.form.get("title")
+    description = request.form.get("description")
+    type = request.form.get("type")
+    age_min = request.form.get("age_min")
+    age_max = request.form.get("age_max")
+    reward = request.form.get("reward")
+    start_date = request.form.get("start_date")
+    end_date = request.form.get("end_date")
+
+    user = users.get_user_by_id(2)  # TODO: replace with session user id
+
+    try:
+        StudyId = studies.create_with_organisation(
+            organization_id=user["organization_id"],
+            data={
+                "title": title,
+                "description": description,
+                "type": type,
+                "min_age": age_min,
+                "max_age": age_max,
+                "reward": reward,
+                "start_date": start_date,
+                "end_date": end_date
+            }
+        )
+
+        message = "Onderzoek succesvol aangemaakt!"
+        return redirect_page(f"organization/research/add?success={message}")
+    except Exception as e:
+        message = f"Er is iets fout gegaan: {str(e)}"
+        return redirect_page(f"organization/research/add?error={message}")
