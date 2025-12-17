@@ -93,14 +93,13 @@ def org_register_save():
         message = f"Er is iets fout gegaan: {str(e)}"
         return redirect_page(f"organization/register?error={message}")
 
-@org_bp.route("/research/register")
+@org_bp.route("/research/add", methods=["GET", "POST"])
 def research_register():
-    success = request.args.get("success")
-    error = request.args.get("error")
-    return render("organization-research.html", success=success, error=error)
-
-@org_bp.route("/research/register/save", methods=["POST"])
-def research_register_save():
+    if request.method == "GET":
+        success = request.args.get("success")
+        error = request.args.get("error")
+        return render("organization-research.html", success=success, error=error)
+    
     title = request.form.get("title")
     description = request.form.get("description")
     type = request.form.get("type")
@@ -128,7 +127,7 @@ def research_register_save():
         )
 
         message = "Onderzoek succesvol aangemaakt!"
-        return redirect_page(f"organization/research/register?success={message}")
+        return redirect_page(f"organization/research/add?success={message}")
     except Exception as e:
         message = f"Er is iets fout gegaan: {str(e)}"
-        return redirect_page(f"organization/research/register?error={message}")
+        return redirect_page(f"organization/research/add?error={message}")

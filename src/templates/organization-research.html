@@ -16,7 +16,7 @@
             </div>
         {% endif %}
         
-        <form class="cm-form" action="{{ url_for('organization.research_register_save', language=base.locale)}}" method="post">
+        <form class="cm-form" action="{{ url_for('organization.research_register', language=base.locale)}}" method="post">
             <div class="form-group">
                 <label>Onderzoekstitel</label>
                 <input type="text" name="title" maxlength="255" required placeholder="vul hier uw onderzoekstitel in">
