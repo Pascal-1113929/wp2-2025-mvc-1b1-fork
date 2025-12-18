@@ -62,6 +62,7 @@
     <section>
         <h2>Opties</h2>
         {{ button(text=lang.delete_account, href=url_for('account.expert_profile_delete', uid=user.user_id, language=base.locale), class_name="s-button") }}
+        {{ button(text=lang.edit_profile, href=url_for('account.expert_profile_edit', uid=user.user_id, language=base.locale), class_name="small-button") }}
     </section>
     {% endif %}
 </main>

@@ -159,10 +159,57 @@ def expert_profile_delete(uid):
         raise NotFound()
 
     if request.method == "POST":
-        print("boom export gone")
         users.delete_expert(userid, profiles)  # Need to provide the profiles instance
         session.pop("user_id")
         session.pop("role")
         return redirect_page()
 
     return render("expert-delete.html", profile=profile, uid=uid)
+
+
+@account_bp.route("/expert-profile/<uid>/edit", methods=["GET", "POST"])
+def expert_profile_edit(uid):
+    success = request.args.get("success")
+    error = request.args.get("error")
+    userid = session.get("user_id")
+    role = session.get("role")
+    id = int(uid)
+
+    verified_role = users.get_user_role_by_id(userid)
+    if verified_role != role:
+        print(f"role forbidden {verified_role} {role}")
+        raise Forbidden()
+
+    if int(id) != int(userid):
+        print(f"id forbidden {id} {userid} {role}")
+        raise Forbidden()
+
+    profile = profiles.get_profile_by_userid(id)
+    if not profile:
+        raise NotFound()
+
+    if request.method == "POST":
+        users.delete_expert(userid, profiles)
+        return redirect_page()
+
+    dbuser = users.get_user_by_id(id)
+    disability_list = disabilities.get_disability_list_by_profileid(profile["id"])
+
+    user = {
+        **dbuser,
+        **profile,
+        "disability_list": [disability for disability in disability_list]
+    }
+
+    disability_dropdown = Dropdown(disabilities.get_all_disabilities())
+    disability_dropdown.set("value", "<id>")
+    disability_dropdown.set("text", "<name> - <category>")
+
+    print(user)
+
+    return render("expert-profile-edit.html",
+                  disabilities=disability_dropdown.export_to_macro(),
+                  user=user,
+                  success=success,
+                  error=error,
+                  )
