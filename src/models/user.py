@@ -59,3 +59,13 @@ class User:
             con.commit()
             row = dict(cur.fetchone())
             return row["role"]
+
+    def delete_expert(self, user_id: int, profile_class):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            profile = profile_class.get_profile_by_userid(user_id)
+            profile_id = int(profile["id"])
+            print(profile_id, type(profile_id))
+            cur.execute("DELETE FROM profile_disabilities WHERE profile_id = ?", (profile_id,))
+            cur.execute("DELETE FROM profiles WHERE id = ?", (profile_id,))
+            cur.execute("DELETE FROM users WHERE id = ?", (user_id,))

@@ -147,9 +147,11 @@ def expert_profile_delete(uid):
 
     verified_role = users.get_user_role_by_id(userid)
     if verified_role != role:
+        print(f"role forbidden {verified_role} {role}")
         raise Forbidden()
 
-    if id != userid or role != "admin":
+    if int(id) != int(userid):
+        print(f"id forbidden {id} {userid} {role}")
         raise Forbidden()
 
     profile = profiles.get_profile_by_userid(id)
@@ -158,6 +160,9 @@ def expert_profile_delete(uid):
 
     if request.method == "POST":
         print("boom export gone")
-        # TODO: add delete
+        users.delete_expert(userid, profiles)  # Need to provide the profiles instance
+        session.pop("user_id")
+        session.pop("role")
+        return redirect_page()
 
-    return render("expert-delete.html", profile=profile)
+    return render("expert-delete.html", profile=profile, uid=uid)

@@ -61,7 +61,7 @@
     {% if allow_delete %}
     <section>
         <h2>Opties</h2>
-        {{ button(text=lang.delete_account, href=url_for('account.account_register', language=base.locale), class_name="s-button") }}
+        {{ button(text=lang.delete_account, href=url_for('account.expert_profile_delete', uid=user.user_id, language=base.locale), class_name="s-button") }}
     </section>
     {% endif %}
 </main>
