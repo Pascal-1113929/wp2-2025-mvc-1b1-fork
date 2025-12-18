@@ -189,8 +189,46 @@ def expert_profile_edit(uid):
         raise NotFound()
 
     if request.method == "POST":
-        users.delete_expert(userid, profiles)
-        return redirect_page()
+        email = request.form.get("email")
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        gender = request.form.get("gender")
+        disability = request.form.get("disability")
+        postal = request.form.get("postal")
+        intro = request.form.get("intro")
+        phone = request.form.get("phone")
+        birthdate = request.form.get("birthdate")
+        atools = request.form.get("atools")
+        contact = request.form.get("contact")
+        researchtype = request.form.get("researchtype")
+        availability = request.form.get("availability")
+        aterms = request.form.get("aterms")
+
+        try:
+            users.update_email(id, email)
+
+            profiles.update_profile(
+                userid,
+                firstname,
+                lastname,
+                gender,
+                postal,
+                intro,
+                phone,
+                birthdate,
+                atools,
+                contact,
+                researchtype,
+                availability,
+                aterms,
+            )
+            disabilities.update_profile_disabilities(profile['id'], disability)
+
+            return redirect_page(f"/expert-profile/{uid}/edit?success=1")
+        except Exception as e:
+            message = f"Er is iets fout gegaan"
+            print(e)
+            return redirect_page(f"/expert-profile/{uid}/edit?error={message}")
 
     dbuser = users.get_user_by_id(id)
     disability_list = disabilities.get_disability_list_by_profileid(profile["id"])
@@ -204,8 +242,6 @@ def expert_profile_edit(uid):
     disability_dropdown = Dropdown(disabilities.get_all_disabilities())
     disability_dropdown.set("value", "<id>")
     disability_dropdown.set("text", "<name> - <category>")
-
-    print(user)
 
     return render("expert-profile-edit.html",
                   disabilities=disability_dropdown.export_to_macro(),

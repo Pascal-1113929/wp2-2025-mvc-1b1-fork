@@ -69,3 +69,10 @@ class User:
             cur.execute("DELETE FROM profile_disabilities WHERE profile_id = ?", (profile_id,))
             cur.execute("DELETE FROM profiles WHERE id = ?", (profile_id,))
             cur.execute("DELETE FROM users WHERE id = ?", (user_id,))
+
+    def update_email(self, user_id: int, email: str):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("UPDATE users SET email = ? WHERE id = ?", (email, user_id))
+            con.commit()
+            return cur.lastrowid
