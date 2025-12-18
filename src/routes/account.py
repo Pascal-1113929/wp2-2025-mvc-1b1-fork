@@ -10,7 +10,9 @@ from i18n.locale import list_locales
 from view import render, redirect_page
 from utils.dropdown import Dropdown
 from utils.table import Table
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, Forbidden
+
+from src.models import user
 
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)
@@ -137,7 +139,25 @@ def expert_profile(id):
     return render("expert-profile.html", user=user, table_data=table_data, allow_delete=allow_delete)
 
 
-@account_bp.route("/expert-delete")
-def expert_delete():
+@account_bp.route("/expert-profile/<uid>/delete", methods=["GET", "POST"])
+def expert_profile_delete(uid):
     userid = session.get("user_id")
-    return render("expert-delete.html")
+    role = session.get("role")
+    id = int(uid)
+
+    verified_role = users.get_user_role_by_id(userid)
+    if verified_role != role:
+        raise Forbidden()
+
+    if id != userid or role != "admin":
+        raise Forbidden()
+
+    profile = profiles.get_profile_by_userid(id)
+    if not profile:
+        raise NotFound()
+
+    if request.method == "POST":
+        print("boom export gone")
+        # TODO: add delete
+
+    return render("expert-delete.html", profile=profile)
