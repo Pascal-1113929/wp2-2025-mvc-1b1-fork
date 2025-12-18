@@ -11,8 +11,8 @@ def page_not_found(e):
 
 
 @error_bp.app_errorhandler(403)
-def page_not_found(e):
-    return render("error/forbidden.html"), 404
+def page_forbidden(e):
+    return render("error/forbidden.html"), 403
 
 
 @error_bp.app_errorhandler(405)

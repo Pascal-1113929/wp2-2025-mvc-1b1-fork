@@ -14,7 +14,7 @@
             {% endif %}
         {% endif %}
         {% for option in options %}
-        <option value="{{ option.value }}" {% if option.selected or option.value == value %}selected{% endif %}>
+        <option value="{{ option.value }}" {% if option.selected %}selected{% endif %}>
             {{ option.text }}
         </option>
         {% endfor %}

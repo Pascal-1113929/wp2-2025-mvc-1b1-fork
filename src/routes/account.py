@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from flask import Blueprint, request, session
 
 from data.database import DB_PATH
@@ -11,8 +9,6 @@ from view import render, redirect_page
 from utils.dropdown import Dropdown
 from utils.table import Table
 from werkzeug.exceptions import NotFound, Forbidden
-
-from src.models import user
 
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)

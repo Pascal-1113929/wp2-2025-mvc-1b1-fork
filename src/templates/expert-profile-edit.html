@@ -33,10 +33,10 @@
             <div class="form-group">
                 <label for="prf-gender">Gender</label>
                 {{ dropdown(options=[
-                    {"value": "M", "text": "Man"},
-                    {"value": "V", "text": "Vrouw"},
-                    {"value": "X", "text": "Anders"}
-                ], name="gender", id="", class="", required=true, placeholder="Selecteer uw geslacht", value=user.gender) }}
+                    {"value": "M", "text": "Man", "selected": user.gender == "M"},
+                    {"value": "V", "text": "Vrouw", "selected": user.gender == "V"},
+                    {"value": "X", "text": "Anders", "selected": user.gender == "X"}
+                ], name="gender", id="", class="", required=true, placeholder="Selecteer uw geslacht") }}
             </div>
 
             <div class="form-group">
@@ -73,18 +73,18 @@
             <div class="form-group">
                 <label for="prf-contact">Contact preferentie</label>
                 {{ dropdown(options=[
-                    {"value": "telefoon", "text": "Telefoon"},
-                    {"value": "e-mail", "text": "E-mail"},
-                ], name="contact", id="", class="", required=true, placeholder="Selecteer uw contact preferentie", value=user.contact_preference) }}
+                    {"value": "telefoon", "text": "Telefoon", "selected": user.contact_preference == "telefoon"},
+                    {"value": "e-mail", "text": "E-mail", "selected": user.contact_preference == "e-mail"},
+                ], name="contact", id="", class="", required=true, placeholder="Selecteer uw contact preferentie") }}
             </div>
 
             <div class="form-group">
                 <label for="prf-researchtype">Onderzoek type preferentie</label>
                 {{ dropdown(options=[
-                    {"value": "telefonisch", "text": "Telefonisch"},
-                    {"value": "online", "text": "Online"},
-                    {"value": "locatie", "text": "Op locatie"},
-                ], name="researchtype", id="", class="", required=true, placeholder="Selecteer uw onderzoek type preferentie", value=user.preferred_study_type) }}
+                    {"value": "telefonisch", "text": "Telefonisch", "selected": user.preferred_study_type == "telefonisch"},
+                    {"value": "online", "text": "Online", "selected": user.preferred_study_type == "online"},
+                    {"value": "locatie", "text": "Op locatie", "selected": user.preferred_study_type == "locatie"},
+                ], name="researchtype", id="", class="", required=true, placeholder="Selecteer uw onderzoek type preferentie") }}
             </div>
 
             <div class="form-group">
