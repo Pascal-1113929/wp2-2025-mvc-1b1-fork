@@ -135,7 +135,7 @@ def expert_profile(id):
     return render("expert-profile.html", user=user, table_data=table_data, allow_delete=allow_delete)
 
 
-@account_bp.route("/expert-profile/<uid>/delete", methods=["GET", "POST"])
+@account_bp.route("/expert-profile/<uid>/delete", methods=["GET", "DELETE"])
 def expert_profile_delete(uid):
     userid = session.get("user_id")
     role = session.get("role")
@@ -164,6 +164,7 @@ def expert_profile_delete(uid):
 
 
 @account_bp.route("/expert-profile/<uid>/edit", methods=["GET", "POST"])
+# Using Post as this is the only way to avoid using Javascript
 def expert_profile_edit(uid):
     success = request.args.get("success")
     error = request.args.get("error")
@@ -184,6 +185,7 @@ def expert_profile_edit(uid):
     if not profile:
         raise NotFound()
 
+    # Using Post as this is the only way to avoid using Javascript
     if request.method == "POST":
         email = request.form.get("email")
         firstname = request.form.get("firstname")
