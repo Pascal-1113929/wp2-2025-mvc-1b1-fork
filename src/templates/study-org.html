@@ -13,7 +13,12 @@
         </h1>
     </header>
         <section>
-            {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data) }}
+            <h2>Lijst van inschrijvingen met status nieuw</h2>
+            {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_new) }}
+        </section>
+            <section>
+            <h2>Lijst van inschrijvingen met status goedgekeurd</h2>
+            {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_verified) }}
         </section>
     </main>
 

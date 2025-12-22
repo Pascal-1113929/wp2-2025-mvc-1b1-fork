@@ -1,11 +1,9 @@
-from flask import Blueprint
-
+from flask import Blueprint, abort, session, request
 from data.database import DB_PATH
 from models.organization import Organization
 from models.user import User
 from models.study import Study
 from view import redirect_page, render
-from flask import request, redirect
 from i18n.locale import list_locales
 from utils.table import Table
 from models.disabilities import Disablity
@@ -114,6 +112,7 @@ def organization_study_page_render(oid, sid):
     org = organizations.get_organization_by_id(oid)
     study = studies.get_study_by_id(sid)
     raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(sid, "nieuw")
+    raw_verified_enrolment_list = enrolments.get_enrolments_by_study_id(sid, "goedgekeurd")
 
     new_enrolment_list = []
     for enrolment in raw_new_enrolment_list:
@@ -132,6 +131,23 @@ def organization_study_page_render(oid, sid):
         }
         new_enrolment_list.append(new_enrolment)
 
+    verified_enrolment_list = []
+    for enrolment in raw_verified_enrolment_list:
+        profile = profiles.get_profile_by_id(enrolment["profile_id"])
+        user = users.get_user_by_id(profile["user_id"])
+        verified_enrolment = {
+            "organization_id": int(oid),
+            "study_id": enrolment["study_id"],
+            "profile_id": profile["id"],
+            "user_id": user["id"],
+            "name": profile["first_name"] + " " + profile["last_name"],
+            "phonenr": profile["phone"],
+            "email": user["email"],
+            "contact-preference": profile["contact_preference"],
+            "availability": profile["availability"],
+        }
+        verified_enrolment_list.append(verified_enrolment)
+
     table_header = [
         "name",
         "phonenr",
@@ -141,7 +157,20 @@ def organization_study_page_render(oid, sid):
         "view_profile",
         "unlist",
     ]
-    table = Table(new_enrolment_list)
+
+    table_data_new = enrolment_table_data_converter(new_enrolment_list, table_header)
+    table_data_verified = enrolment_table_data_converter(verified_enrolment_list, table_header)
+
+    if int(oid) != study['organization_id']:
+        print("forbidden study_orgid mismatch")
+        return abort(403)
+
+    return render("study-org.html", organization=org, study=study, table_data_new=table_data_new,
+                  table_data_verified=table_data_verified)
+
+
+def enrolment_table_data_converter(enrolment_list, table_header):
+    table = Table(enrolment_list)
 
     table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
     table.add_column(
@@ -154,12 +183,8 @@ def organization_study_page_render(oid, sid):
     table.set_order(table_header)
 
     table_data = table.export_to_macro()
+    return table_data
 
-    if int(oid) != study['organization_id']:
-        print("forbidden study_orgid mismatch")
-        return abort(403)
-
-    return render("study-org.html", organization=org, study=study, table_data=table_data)
 
 @org_bp.route("<organization_id>/study/<study_id>/<profile_id>/unlist")
 def organization_unlist(organization_id, study_id, profile_id):
@@ -170,6 +195,7 @@ def organization_unlist(organization_id, study_id, profile_id):
     enrolments.delete_enrollment(study_id, profile_id)
 
     return render("study-org-unlist.html", oid=organization_id, sid=study_id)
+
 
 @org_bp.route("/research/add", methods=["GET", "POST"])
 def research_register():
