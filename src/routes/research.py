@@ -107,14 +107,14 @@ def enroll_page(study_id):
 @research_bp.route("/<study_id>/enroll", methods=["POST"])
 def enroll_confirm(study_id):
     user_id = session.get("user_id")
-    
+    profile = profiles.get_profile_by_userid(user_id)
     enrollment = Enrollment(DB_PATH)
     enrollment.create(
-        user_id=user_id,
+        profile_id=profile["id"],
         study_id=study_id,
         status = "nieuw"
     )
     
-    return render("enroll_success.html")
+    return render("enroll_succes.html")
     
 

@@ -12,12 +12,12 @@ class Enrollment:
             con.commit()
             return cur.fetchone()
     
-    def create(self, study_id, user_id, status):
+    def create(self, study_id, profile_id, status):
         with self.db.connect () as con:
             cur = con.cursor()
             cur.execute(
-                "INSERT INTO enrollments (study_id, user_id, status) VALUES (?, ?, ?)",
-                (study_id, user_id, status)
+                "INSERT INTO enrollments (study_id, profile_id, status) VALUES (?, ?, ?)",
+                (study_id, profile_id, status)
             )
             con.commit()
         
