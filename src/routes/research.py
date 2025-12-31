@@ -9,7 +9,7 @@ from models.organization import Organization
 from models.profile import Profile
 from models.study import Study
 from models.user import User
-from view import render
+from view import render , redirect_page
 from werkzeug.exceptions import NotFound
 from utils.table import Table
 
@@ -96,6 +96,7 @@ def enroll_page(study_id):
     study = studies.get_study_by_id(study_id)
     user = users.get_user_by_id(user_id)
     profile = profiles.get_profile_by_userid(user_id)
+
     
     return render(
         "enroll.html",
@@ -108,6 +109,7 @@ def enroll_page(study_id):
 def enroll_confirm(study_id):
     user_id = session.get("user_id")
     profile = profiles.get_profile_by_userid(user_id)
+    
     enrollment = Enrollment(DB_PATH)
     enrollment.create(
         profile_id=profile["id"],
@@ -115,6 +117,10 @@ def enroll_confirm(study_id):
         status = "nieuw"
     )
     
+    return redirect_page(f"research/{study_id}/enroll/success")
+
+@research_bp.route("/<study_id>/enroll/success")
+def enroll_success(study_id):
     return render("enroll_succes.html")
     
 
