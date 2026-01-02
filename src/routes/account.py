@@ -6,6 +6,7 @@ from data.database import DB_PATH
 from models.user import User
 from models.disabilities import Disablity
 from models.profile import Profile
+from models.status import Status
 from i18n.locale import list_locales
 from view import render, redirect_page
 from utils.dropdown import Dropdown
@@ -15,6 +16,7 @@ from werkzeug.exceptions import NotFound
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)
 disabilities = Disablity(DB_PATH)
+statuses = Status(DB_PATH)
 
 account_bp = Blueprint("account", __name__)
 
@@ -29,6 +31,9 @@ def account_login():
         if user:
             session["user_id"] = user["id"]
             session["role"] = user["role"]
+            user_dict = dict(user)
+            if user_dict["status_id"] != 2:
+                return redirect_page("/status")
             return redirect_page("/dashboard")
         else:
             return render("login.html", post_status=1)
@@ -141,3 +146,14 @@ def expert_profile(id):
 def expert_delete():
     userid = session.get("user_id")
     return render("expert-delete.html")
+
+
+@account_bp.route("/status")
+def account_status():
+    userid = session.get("user_id")
+    user = users.get_user_by_id(userid)
+    status = statuses.get_status_name(int(user["status_id"]))
+    user["status"] = status
+    user["name"] = profiles.get_user_name(userid)
+
+    return render("status-page.html", user=user)
