@@ -134,7 +134,7 @@ def research_register():
                 "start_date": start_date,
                 "end_date": end_date
             }
-        ) #Waar gebeurt dit? Is niet mijn code -Pascal
+        )
 
         message = "Onderzoek succesvol aangemaakt!"
         return redirect_page(f"organization/research/add?success={message}")
