@@ -224,3 +224,54 @@ def enrolment_table_data_converter(enrolment_list, table_header):
 
         table_data = table.export_to_macro()
         return table_data
+
+@org_bp.route("<organization_id>/study/<study_id>/<profile_id>/unlist")
+def organization_unlist(organization_id, study_id, profile_id):
+    organization_id = int(organization_id)
+    study_id = int(study_id)
+    profile_id = int(profile_id)
+
+    enrolments.delete_enrollment(study_id, profile_id)
+
+    return render("study-org-unlist.html", oid=organization_id, sid=study_id)
+
+@org_bp.route("/research/add", methods=["GET", "POST"])
+def research_register():
+    if request.method == "GET":
+        success = request.args.get("success")
+        error = request.args.get("error")
+        return render("organization-research.html", success=success, error=error)
+
+    title = request.form.get("title")
+    description = request.form.get("description")
+    type = request.form.get("type")
+    age_min = request.form.get("age_min")
+    age_max = request.form.get("age_max")
+    reward = request.form.get("reward")
+    start_date = request.form.get("start_date")
+    end_date = request.form.get("end_date")
+
+    user = users.get_user_by_id(2)  # TODO: replace with session user id
+
+    try:
+        StudyId = studies.create_with_organisation(
+            organization_id=user["organization_id"],
+            data={
+                "title": title,
+                "description": description,
+                "type": type,
+                "min_age": age_min,
+                "max_age": age_max,
+                "reward": reward,
+                "start_date": start_date,
+                "end_date": end_date
+            }
+        )
+
+        message = "Onderzoek succesvol aangemaakt!"
+        return redirect_page(f"organization/research/add?success={message}")
+    except Exception as e:
+        message = f"Er is iets fout gegaan: {str(e)}"
+        return redirect_page(f"organization/research/add?error={message}")
+
+
