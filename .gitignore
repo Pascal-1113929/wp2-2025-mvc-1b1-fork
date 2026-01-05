@@ -4,3 +4,4 @@ venv
 # Disable db changes because its annoying for development
 # Change it back later when something needs to be changed
 src/data/app.db
+src/data/app.db
