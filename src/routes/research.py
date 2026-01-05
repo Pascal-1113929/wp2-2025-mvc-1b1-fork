@@ -113,7 +113,7 @@ def enroll_confirm(study_id):
     enrollment.create(
         profile_id=profile["id"],
         study_id=study_id,
-        status = "nieuw"
+        status = 1
     )
     
     return redirect_page(f"research/{study_id}/enroll/success")
