@@ -3,12 +3,13 @@ from datetime import datetime
 from flask import Blueprint, session
 
 from data.database import DB_PATH
+from models.enrollment import Enrollment
 from models.disabilities import Disablity
 from models.organization import Organization
 from models.profile import Profile
 from models.study import Study
 from models.user import User
-from view import render
+from view import render , redirect_page
 from werkzeug.exceptions import NotFound
 from utils.table import Table
 
@@ -86,3 +87,39 @@ def study_dashboard_render(study_id):
     table_data = table.export_to_macro()
 
     return render("study.html", study=study, organization=organization, table_data=table_data)
+
+@research_bp.route("/<study_id>/enroll")
+def enroll_page(study_id):
+    user_id = session.get("user_id")
+    
+    study = studies.get_study_by_id(study_id)
+    user = users.get_user_by_id(user_id)
+    profile = profiles.get_profile_by_userid(user_id)
+
+    
+    return render(
+        "enroll.html",
+        study=study,
+        user=user,
+        profile=profile
+    )
+
+@research_bp.route("/<study_id>/enroll", methods=["POST"])
+def enroll_confirm(study_id):
+    user_id = session.get("user_id")
+    profile = profiles.get_profile_by_userid(user_id)
+    
+    enrollment = Enrollment(DB_PATH)
+    enrollment.create(
+        profile_id=profile["id"],
+        study_id=study_id,
+        status = "nieuw"
+    )
+    
+    return redirect_page(f"research/{study_id}/enroll/success")
+
+@research_bp.route("/<study_id>/enroll/success")
+def enroll_success(study_id):
+    return render("enroll_succes.html")
+    
+

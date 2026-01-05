@@ -2,18 +2,35 @@
 
 {% block content %}
 
+
 <main>
     <h1>Inschrijven voor: {{ study.title }}</h1>
-    <form action="/{{ study.id }}/enroll" method="post">
+    <form class="en-form" method="post">
 
-         <label>E-mail:</label>
-         <input type="email" name="email" value="{{ user.email }}" readonly>
+        <label for="name">Naam:</label>
+        <input type="text" name="name" value="{{ profile.first_name}}" readonly>
 
-            <label>Telefoonnummer:</label>
-            <input type="number" name="phone" value="{{ profile.phone }}" readonly>
+        <label for="surname">Achternaam:</label>
+        <input type="text" name="surname" value="{{ profile.last_name }}" readonly>
+
+        <label for="email">E-mail:</label>
+        <input type="email" name="email" value="{{ user.email }}" readonly>
+
+        <label for="phone">Telefoonnummer:</label>
+        <input type="text" name="phone" value="{{ profile.phone }}" readonly>
+
+        <label for="postcode">Postcode:</label>
+        <input type="text" name="postcode" value="{{ profile.postcode }}" readonly>
+
+        <label for="motivation">Motivatie:</label>
+        <input type="text" name="intro" value="{{ profile.intro }}" readonly>
+
+        <label for="availability">Beschikbaarheid:</label>
+        <input type="text" name="availability" value="{{ profile.availability }}" readonly>
             
             <div class="button-group" >
                 <button type="submit" class="button">Bevestigen</button>
-                <a href="/{{study.id}}" class="button">Annuleren</a>
+                <a href="/{{ base.locale }}/research/{{ study.id }}" class="button">Annuleren</a>
             </div>
 </main>
+{% endblock %}
