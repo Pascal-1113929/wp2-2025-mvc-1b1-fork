@@ -8,6 +8,7 @@ from view import redirect_page, render
 from flask import request, redirect
 from i18n.locale import list_locales
 from utils.table import Table
+from utils.dropdown import Dropdown
 from models.disabilities import Disablity
 from models.enrollment import Enrollment
 from models.profile import Profile
@@ -103,12 +104,22 @@ def org_register_save():
         message = f"Er is iets fout gegaan: {str(e)}"
         return redirect_page(f"organization/register?error={message}")
 
+# Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
+# Is aangepast door Pascal na verdere inspectie
 @org_bp.route("/research/add", methods=["GET", "POST"])
 def research_register():
     if request.method == "GET":
         success = request.args.get("success")
         error = request.args.get("error")
-        return render("organization-research.html", success=success, error=error)
+        disability_dropdown = Dropdown(disabilities.get_all_disabilities())
+        disability_dropdown.set("value", "<id>")
+        disability_dropdown.set("text", "<name> - <category>")
+
+        return render("organization-research.html",
+                      success=success,
+                      error=error,
+                      disabilities=disability_dropdown.export_to_macro()
+                      )
 
     title = request.form.get("title")
     description = request.form.get("description")
@@ -116,18 +127,20 @@ def research_register():
     age_min = request.form.get("age_min")
     age_max = request.form.get("age_max")
     reward = request.form.get("reward")
+    disability = request.form.get("disability")
     start_date = request.form.get("start_date")
     end_date = request.form.get("end_date")
 
     user = users.get_user_by_id(2)  # TODO: replace with session user id
 
     try:
-        StudyId = studies.create_with_organisation(
+        study_id = studies.create_with_organisation(
             organization_id=user["organization_id"],
             data={
                 "title": title,
                 "description": description,
                 "type": type,
+                "disability": disability,
                 "min_age": age_min,
                 "max_age": age_max,
                 "reward": reward,
@@ -135,6 +148,8 @@ def research_register():
                 "end_date": end_date
             }
         )
+        print(study_id)
+        disabilities.create_study_disabilities(study_id, disability)
 
         message = "Onderzoek succesvol aangemaakt!"
         return redirect_page(f"organization/research/add?success={message}")
