@@ -16,7 +16,7 @@ class Enrollment:
         with self.db.connect () as con:
             cur = con.cursor()
             cur.execute(
-                "INSERT INTO enrollments (study_id, profile_id, status) VALUES (?, ?, ?)",
+                "INSERT INTO enrollments (study_id, profile_id, status_id) VALUES (?, ?, ?)",
                 (study_id, profile_id, status)
             )
             con.commit()
