@@ -39,17 +39,22 @@ class Study:
             con.commit()
             return cur.fetchall()
 
-    def get_study_id_by_disability_id(self, disability_id: list):
+    def get_study_id_by_disability_id(self, disability_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
+            print("SELECT study_id FROM study_disabilities WHERE disability_id= " + str(disability_id))
             cur.execute("SELECT study_id FROM study_disabilities WHERE disability_id=?", (disability_id,))
             con.commit()
-            row = cur.fetchone()
-            try:
-                study_id = row["study_id"]
-            except TypeError:
-                study_id = None
-            return study_id
+            study_id_list = cur.fetchall()
+
+            new_study_id_list = []
+            for study_id in study_id_list:
+                study_id_dict = dict(study_id)
+                study_id = study_id_dict["study_id"]
+                # This is needed fo the narrator pronounces the date correctly
+                new_study_id_list.append(study_id)
+
+            return new_study_id_list
 
     def get_available_study_by_id(self, study_id: int):
         with self.db.connect() as con:
