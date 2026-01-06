@@ -21,11 +21,10 @@ class Enrollment:
             )
             con.commit()
 
-    def get_enrolments_by_study_id(self, study_id: int, status):
-        #TODO: change status to staus id after enrolment create is done
+    def get_enrolments_by_study_id(self, study_id: int, status_id):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM enrollments WHERE study_id = ? and status = ?", (study_id, status))# QUESTIONS: Do we want this with an id?
+            cur.execute("SELECT * FROM enrollments WHERE study_id = ? and status_id = ?", (study_id, status_id))
             con.commit()
 
             enrollment_list = cur.fetchall()

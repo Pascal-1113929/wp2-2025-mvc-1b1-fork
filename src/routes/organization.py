@@ -167,8 +167,8 @@ def organization_study_page_render(oid, sid):
 
     org = organizations.get_organization_by_id(oid)
     study = studies.get_study_by_id(sid)
-    raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(sid, "nieuw")
-    raw_verified_enrolment_list = enrolments.get_enrolments_by_study_id(sid, "goedgekeurd")
+    raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(sid, 1)
+    raw_verified_enrolment_list = enrolments.get_enrolments_by_study_id(sid, 2)
 
     new_enrolment_list = []
     for enrolment in raw_new_enrolment_list:
