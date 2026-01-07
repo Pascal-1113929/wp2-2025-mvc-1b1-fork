@@ -1,10 +1,12 @@
 from data.database import Database
 from datetime import datetime
+from models.status import Status
 
 
 class Study:
     def __init__(self, db_path: str):
         self.db = Database(db_path)
+        self.statuses = Status(db_path)
 
     def count_all(self):
         with self.db.connect() as con:
@@ -28,6 +30,7 @@ class Study:
                 study_dict["end_date"] = datetime.strptime(study_dict["end_date"], "%Y-%m-%d")
                 study_dict["start_date"] = study_dict["start_date"].strftime("%d-%m-%Y")
                 study_dict["end_date"] = study_dict["end_date"].strftime("%d-%m-%Y")
+                study_dict["status"] = self.statuses.get_status_name(study_dict["status_id"])
                 new_study_list.append(study_dict)
 
             return new_study_list
@@ -59,9 +62,30 @@ class Study:
     def get_available_study_by_id(self, study_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM studies WHERE available=1 AND id=?", (study_id,))
+            cur.execute("SELECT * FROM studies "
+                        "WHERE available=1 "
+                        "AND DATE(end_date) > DATE('now') "
+                        "AND id=? ", (study_id,))
             con.commit()
-            return dict(cur.fetchone())
+            row = cur.fetchone()
+            try:
+                return dict(row)
+            except TypeError:
+                return None
+
+    def get_available_enrolled_study_by_id(self, study_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM studies "
+                        "WHERE available=1 "
+                        "AND DATE(end_date) > DATE('now') "
+                        "AND id=? ", (study_id,))
+            con.commit()
+            row = cur.fetchone()
+            try:
+                return dict(row)
+            except TypeError:
+                return None
 
     def get_study_by_id(self, study_id: int):
         with self.db.connect() as con:

@@ -50,7 +50,11 @@ class User:
             cur = con.cursor()
             cur.execute("SELECT * FROM users WHERE id = ?", (user_id,))
             con.commit()
-            return dict(cur.fetchone())
+            row = cur.fetchone()
+            try:
+                return dict(row)
+            except TypeError:
+                return None
 
     def get_user_role_by_id(self, user_id: int):
         with self.db.connect() as con:

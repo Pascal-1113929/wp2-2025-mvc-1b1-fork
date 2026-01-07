@@ -95,3 +95,9 @@ p {
 .horizontal-spacer {
  width: 2vw
 }
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
