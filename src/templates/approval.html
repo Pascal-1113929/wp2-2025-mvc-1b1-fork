@@ -1,0 +1,15 @@
+{% from "macros/components/table.html" import table %}
+
+{% extends 'layouts/default.html' %} {% block content %}
+
+<main>
+    <header>
+        <h1>Gebruikers lijst</h1>
+    </header>
+    <div class="seperator"></div>
+    <section>
+        {{ table(['Email', 'Notes', 'Options'], user_table) }}
+    </section>
+</main>
+
+{% endblock %}
