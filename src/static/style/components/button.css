@@ -59,6 +59,21 @@
     transition: 0.25s ease;
     width: 10vw;
     font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+.s-green-button {
+    background: var(--bg-submit);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 0.9rem 1.3rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    width: 10vw;
+    font-size: 1rem;
 }
 
 small-button {

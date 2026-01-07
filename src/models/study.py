@@ -62,9 +62,30 @@ class Study:
     def get_available_study_by_id(self, study_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM studies WHERE available=1 AND id=?", (study_id,))
+            cur.execute("SELECT * FROM studies "
+                        "WHERE available=1 "
+                        "AND DATE(end_date) > DATE('now') "
+                        "AND id=? ", (study_id,))
             con.commit()
-            return dict(cur.fetchone())
+            row = cur.fetchone()
+            try:
+                return dict(row)
+            except TypeError:
+                return None
+
+    def get_available_enrolled_study_by_id(self, study_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM studies "
+                        "WHERE available=1 "
+                        "AND DATE(end_date) > DATE('now') "
+                        "AND id=? ", (study_id,))
+            con.commit()
+            row = cur.fetchone()
+            try:
+                return dict(row)
+            except TypeError:
+                return None
 
     def get_study_by_id(self, study_id: int):
         with self.db.connect() as con:

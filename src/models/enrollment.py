@@ -36,8 +36,34 @@ class Enrollment:
 
             return new_enrollment_list
 
+    def get_enrolments_by_profile_id(self, profile_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM enrollments WHERE profile_id = ?", (profile_id,))
+            con.commit()
+
+            enrollment_list = cur.fetchall()
+
+            new_enrollment_list = []
+            for enrollment in enrollment_list:
+                enrollment_dict = dict(enrollment)
+                new_enrollment_list.append(enrollment_dict)
+
+            return new_enrollment_list
+
     def delete_enrollment(self, study_id: int, profile_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute("DELETE FROM enrollments WHERE study_id = ? AND profile_id = ?", (study_id, profile_id))
             con.commit()
+
+    def enrolment_check(self, study_id: int, profile_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM enrollments WHERE study_id = ? and profile_id = ?", (study_id, profile_id))
+            con.commit()
+            enrolment = cur.fetchone()
+            if enrolment:
+                return True
+            else:
+                return False

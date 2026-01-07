@@ -1,0 +1,27 @@
+{% from "macros/components/table.html" import table %}
+
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+
+
+    <main>
+<!--        Dit zit in main vanwege styling redenen-->
+    <header>
+        <h1>
+            {{ lang.unlist_confirm }}
+        </h1>
+    </header>
+    <div class="button-group">
+        <form
+            method="post"
+            action="{{ url_for('research.unlist_confirm', study_id=study.id, language=base.locale) }}"
+        >
+            <button class="s-green-button">{{ lang.yes }}</button>
+        </form>
+
+        <a href="/{{ base.locale }}/research/" class="s-button" type="button">{{ lang.no }}</a>
+    </div>
+    </main>
+
+{% endblock %}
