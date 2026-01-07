@@ -29,7 +29,20 @@ class User:
                 "SELECT * FROM users INNER JOIN profiles ON users.id = profiles.user_id WHERE users.status_id = 1"
             )
             con.commit()
-            return dict(cur.fetchone())
+            result = cur.fetchone()
+            if result is None:
+                return {}
+            return dict(result)
+
+    def set_user_status(self, user_id, status):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "UPDATE users SET status_id = ? WHERE id = ?",
+                (status, user_id),
+            )
+            con.commit()
+            return cur.lastrowid
 
     def create(
         self, email, password, organization_id=None, role="organization", status=1
