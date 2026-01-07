@@ -37,9 +37,44 @@ nav {
     display: flex;
     gap: 8px;
 }
+.nav-toggle{
+    display: none;
+}
 
 .nav-right {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .nav-left{
+        order: 3;
+    }
+    .nav-toggle{
+        display: block;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .nav-inner{
+        flex-wrap: wrap;
+    }
+    .nav-links {
+        display: none;
+        order: 2;
+        width: 100%;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 12px;
+    }
+    .nav-links.nav-open {
+        display: flex;
+    }
+    .nav-right {
+        order: 1;
+        width: 100%;
+        justify-content: space-between;
+    }
 }

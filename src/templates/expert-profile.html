@@ -1,0 +1,69 @@
+{% from "macros/components/table.html" import table %}
+
+{% extends 'layouts/default.html' %} {% block content %}
+<main class="home">
+    <h1>Dit is het profiel van: {{ user.first_name }} {{ user.last_name }}</h1>
+    <section>
+        <h2>
+            Introductie
+        </h2>
+        <p>
+            {{ user.intro }}
+        </p>
+        <p>
+            Beschikbaar: {{ user.availability }}
+        </p>
+    </section>
+    <section>
+        <h2>
+            Informatie
+        </h2>
+        <div class="grid-section">
+            <article class="grid-article1">
+                <h3>Beperkingen</h3>
+                {{ table(['Categorie', 'Naam'], table_data, class="t-small") }}
+            </article>
+            <article class="grid-article2">
+                <h3>Tools</h3>
+                <p>Ik maak gebruik van <spa>{{user.assistive_tools}}</spa></p>
+            </article>
+        </div>
+    </section>
+    <section>
+        <h2>
+            Contact Informatie
+        </h2>
+        <h3>Contact preferentie: {{user.contact_preference}}</h3>
+        <p>
+            E-mail: {{user.email}}
+        </p>
+        <p>
+            Telefoon: {{user.phone}}
+        </p>
+    </section>
+    {% if user.has_guardian == 1 %}
+    <section>
+        <h2>Toezichthouder Informatie</h2>
+        <article>
+            <h3>Toezichthouder Naam</h3>
+            <p>{{ user.guardian_name }}</p>
+        </article>
+        <article>
+            <h3>Toezichthouder E-mail</h3>
+            <p>{{ user.guardian_email }}</p>
+        </article>
+        <article>
+            <h3>Toezichthouder Telefoonnummer</h3>
+            <p>{{ user.guardian_phone }}</p>
+        </article>
+    </section>
+    {% endif %}
+    {% if allow_delete %}
+    <section>
+        <h2>Opties</h2>
+        {{ button(text=lang.delete_account, href=url_for('account.expert_profile_delete', uid=user.user_id, language=base.locale), class_name="s-button") }}
+        {{ button(text=lang.edit_profile, href=url_for('account.expert_profile_edit', uid=user.user_id, language=base.locale), class_name="small-button") }}
+    </section>
+    {% endif %}
+</main>
+{% endblock %}

@@ -1,3 +1,5 @@
+{% from "macros/components/table.html" import table %}
+
 {% extends 'layouts/default.html' %}
 
 {% block content %}
@@ -17,26 +19,7 @@
             <h2>
                 De volgende beperkingen zijn hierbij betrokken:
             </h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Categorie
-                        </th>
-                        <th>
-                            Beperking
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for disability in study.disabilities %}
-                <tr>
-                    <td>{{ disability.category }}</td>
-                    <td>{{ disability.name }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                {{ table(['Categorie', 'Naam'], table_data) }}
         </section>
         <div class="l-spacer"></div>
         <div class="seperator"></div>
@@ -75,9 +58,11 @@
             </div>
         </section>
         <section>
-            <button class="button">
-                Schrijf in op dit onderzoek
-            </button>
+            {% if enrolled == False %}
+                <a href="/{{ base.locale }}/research/{{ study.id }}/enroll" class="button">Schrijf in op dit onderzoek</a>
+            {% else %}
+                <a href="/{{ base.locale }}/research/{{ study.id }}/unlist" class="button">Uitschrijven uit dit onderzoek</a>
+            {% endif %}
         </section>
     </main>
 

@@ -77,4 +77,40 @@ class User:
             cur = con.cursor()
             cur.execute("SELECT * FROM users WHERE id = ?", (user_id,))
             con.commit()
-            return cur.fetchone()
+            row = cur.fetchone()
+            try:
+                return dict(row)
+            except TypeError:
+                return None
+
+    def get_user_role_by_id(self, user_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT role FROM users WHERE id = ?", (user_id,))
+            con.commit()
+            row = dict(cur.fetchone())
+            return row["role"]
+
+    def delete_expert(self, user_id: int, profile_class):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            profile = profile_class.get_profile_by_userid(user_id)
+            profile_id = int(profile["id"])
+            print(profile_id, type(profile_id))
+            cur.execute("DELETE FROM profile_disabilities WHERE profile_id = ?", (profile_id,))
+            cur.execute("DELETE FROM profiles WHERE id = ?", (profile_id,))
+            cur.execute("DELETE FROM users WHERE id = ?", (user_id,))
+
+    def update_email(self, user_id: int, email: str):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("UPDATE users SET email = ? WHERE id = ?", (email, user_id))
+            con.commit()
+            return cur.lastrowid
+
+    def get_organization_id_by_userid(self, id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT organization_id FROM users WHERE id = ?", (id,))
+            con.commit()
+            return dict(cur.fetchone())

@@ -273,21 +273,7 @@ class Database:
                             TEXT
                             NOT
                             NULL,
-                            status
-                            TEXT
-                            NOT
-                            NULL
-                            DEFAULT
-                            'nieuw'
-                            CHECK (
-                            status
-                            IN
-                        (
-                            'nieuw',
-                            'goedgekeurd',
-                            'afgekeurd',
-                            'gesloten'
-                        )),
+                            status_id INTEGER NOT NULL,
                             available INTEGER NOT NULL DEFAULT 1, -- 0/1
                             description TEXT,
                             start_date TEXT, -- ISO yyyy-mm-dd
@@ -310,6 +296,13 @@ class Database:
                         (
                             organization_id
                         ) REFERENCES organizations
+                        (
+                            id
+                        ),
+                        FOREIGN KEY
+                        (
+                            status_id
+                        ) REFERENCES status
                         (
                             id
                         )
@@ -379,20 +372,10 @@ class Database:
                             INTEGER
                             NOT
                             NULL,
-                            status
-                            TEXT
+                            status_id
+                            INTEGER
                             NOT
-                            NULL
-                            DEFAULT
-                            'nieuw'
-                            CHECK (
-                            status
-                            IN
-                        (
-                            'nieuw',
-                            'goedgekeurd',
-                            'afgekeurd'
-                        )),
+                            NULL,
                             created_at TEXT DEFAULT
                         (
                             DATE
@@ -404,6 +387,16 @@ class Database:
                             study_id,
                             profile_id
                         ),
+                        FOREIGN
+                        KEY
+                        (
+                            status_id
+                        )
+                        REFERENCES
+                        status
+                        (
+                            id
+                        )
                             FOREIGN KEY
                         (
                             study_id
@@ -679,7 +672,7 @@ class Database:
                     """
                                 INSERT
                                 OR IGNORE INTO studies
-                    (organization_id, title, status, available, description, start_date, end_date, study_type,
+                    (organization_id, title, status_id, available, description, start_date, end_date, study_type,
                      location, has_reward, reward, age_min, age_max)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                                 """,
@@ -761,8 +754,8 @@ class Database:
                 # Enrollments for seeded studies
                 cur.execute("""
                             INSERT
-                            OR IGNORE INTO enrollments (study_id, profile_id, status)
-                            SELECT s.id, p.id, 'nieuw'
+                            OR IGNORE INTO enrollments (study_id, profile_id, status_id)
+                            SELECT s.id, p.id, 1
                             FROM studies s
                                      JOIN profiles p ON 1 = 1
                                      JOIN users u ON u.id = p.user_id

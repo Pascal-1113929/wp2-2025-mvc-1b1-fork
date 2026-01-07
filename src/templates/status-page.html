@@ -1,0 +1,19 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+<main class="home">
+    <section class="sectioncard">
+        <h1>{{ lang.status_header1 }} {{ user.name }}</h1>
+        <h2>{{ lang.status_header }}</h2>
+        <p>{{ lang.status_prefix }} {{ user.status }}</p>
+        {% if user.status_id == 1 %}
+        <p>{{ lang.new_explanation }}</p>
+        {% elif user.status_id == 3 %}
+        <p>{{ lang.rejected_explanation }}</p>
+        {% endif %}
+    </section>
+    <section>
+        {{ lang.admin_contact }}
+    </section>
+</main>
+{% endblock %}
