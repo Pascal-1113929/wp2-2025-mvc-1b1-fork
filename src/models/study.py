@@ -1,10 +1,12 @@
 from data.database import Database
 from datetime import datetime
+from models.status import Status
 
 
 class Study:
     def __init__(self, db_path: str):
         self.db = Database(db_path)
+        self.statuses = Status(db_path)
 
     def count_all(self):
         with self.db.connect() as con:
@@ -28,6 +30,7 @@ class Study:
                 study_dict["end_date"] = datetime.strptime(study_dict["end_date"], "%Y-%m-%d")
                 study_dict["start_date"] = study_dict["start_date"].strftime("%d-%m-%Y")
                 study_dict["end_date"] = study_dict["end_date"].strftime("%d-%m-%Y")
+                study_dict["status"] = self.statuses.get_status_name(study_dict["status_id"])
                 new_study_list.append(study_dict)
 
             return new_study_list

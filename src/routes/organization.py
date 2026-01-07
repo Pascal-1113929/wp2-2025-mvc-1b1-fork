@@ -12,6 +12,7 @@ from utils.dropdown import Dropdown
 from models.disabilities import Disablity
 from models.enrollment import Enrollment
 from models.profile import Profile
+from models.status import Status
 
 organizations = Organization(DB_PATH)
 users = User(DB_PATH)
@@ -19,6 +20,7 @@ studies = Study(DB_PATH)
 disabilities = Disablity(DB_PATH)
 enrolments = Enrollment(DB_PATH)
 profiles = Profile(DB_PATH)
+statuses = Status(DB_PATH)
 
 org_bp = Blueprint("organization", __name__)
 
@@ -40,6 +42,9 @@ def organization_dashboard_render(id):
     study_table_data = []
     if org is not None:
         study_list = studies.get_study_by_organization_id(id)
+        # study_w_status_list = []
+        # for study in study_list:
+        #     study["status"] = statuses.get_status_name(study["id"])
         table_header = [
             "title",
             "status",
@@ -86,14 +91,14 @@ def org_register_save():
     phone = request.form.get("phone")
 
     try:
-        orgId = organizations.create(
+        org_id = organizations.create(
             name, type, website, description, contact_person, email, phone
         )
 
         users.create(
             email,
             password,
-            organization_id=orgId,
+            organization_id=org_id,
             role="organization",
             status=2,
         )
