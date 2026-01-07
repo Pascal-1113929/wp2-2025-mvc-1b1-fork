@@ -1,20 +1,20 @@
 from flask import Blueprint, request, session
 
-from data.database import DB_PATH
-from models.user import User
 from models.disabilities import Disablity
 from models.profile import Profile
+from models.user import User
 from models.status import Status
 from i18n.locale import list_locales
 from view import render, redirect_page
 from utils.dropdown import Dropdown
 from utils.table import Table
+from utils.authorization import is_authenticated
 from werkzeug.exceptions import NotFound, Forbidden
 
-users = User(DB_PATH)
-profiles = Profile(DB_PATH)
-disabilities = Disablity(DB_PATH)
-statuses = Status(DB_PATH)
+users = User()
+profiles = Profile()
+disabilities = Disablity()
+statuses = Status()
 
 account_bp = Blueprint("account", __name__)
 
@@ -40,8 +40,15 @@ def account_login():
 
 @account_bp.route("/dashboard")
 def expert_dashboard_render():
-    print(session["user_id"], session["role"])
+    if not is_authenticated():
+        return redirect_page("/login")
     return render("dashboard.html")
+
+
+@account_bp.route("/logout")
+def account_logout():
+    session.clear()
+    return render("logout.html")
 
 
 @account_bp.route("/register", methods=["GET", "POST"])
@@ -49,8 +56,6 @@ def account_register():
     success = request.args.get("success")
     error = request.args.get("error")
     if request.method == "POST":
-        language = request.accept_languages.best_match(list_locales())
-
         email = request.form.get("email")
         password = request.form.get("password")
 
@@ -91,7 +96,7 @@ def account_register():
             return redirect_page("register?success=1")
 
         except Exception as e:
-            message = f"Er is iets fout gegaan"
+            message = "Er is iets fout gegaan"
             print(e)
             return redirect_page(f"register?error={message}")
 
@@ -100,7 +105,7 @@ def account_register():
     disability_dropdown.set("text", "<name> - <category>")
 
     return render(
-        "expert-register.html",
+        "register.html",
         disabilities=disability_dropdown.export_to_macro(),
         success=success,
         error=error,
@@ -132,7 +137,7 @@ def expert_profile(id):
     user = {
         **dbuser,
         **profile,
-        "disability_list": [disability for disability in disability_list]
+        "disability_list": [disability for disability in disability_list],
     }
     table_header = [
         "category",
@@ -145,10 +150,17 @@ def expert_profile(id):
     table_data = table.export_to_macro()
     print(allow_delete)
 
-    return render("expert-profile.html", user=user, table_data=table_data, allow_delete=allow_delete)
+    return render(
+        "expert-profile.html",
+        user=user,
+        table_data=table_data,
+        allow_delete=allow_delete,
+    )
 
 
-@account_bp.route("/expert-profile/<uid>/delete", methods=["GET", "DELETE", "POST"]) #form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
+@account_bp.route(
+    "/expert-profile/<uid>/delete", methods=["GET", "DELETE", "POST"]
+)  # form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
 def expert_profile_delete(uid):
     userid = session.get("user_id")
     role = session.get("role")
@@ -167,7 +179,9 @@ def expert_profile_delete(uid):
     if not profile:
         raise NotFound()
 
-    if request.method == "POST" or request.method == "DELETE": #form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
+    if (
+        request.method == "POST" or request.method == "DELETE"
+    ):  # form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
         users.delete_expert(userid, profiles)  # Need to provide the profiles instance
         session.pop("user_id")
         session.pop("role")
@@ -233,7 +247,7 @@ def expert_profile_edit(uid):
                 availability,
                 aterms,
             )
-            disabilities.update_profile_disabilities(profile['id'], disability)
+            disabilities.update_profile_disabilities(profile["id"], disability)
 
             return redirect_page(f"/expert-profile/{uid}/edit?success=1")
         except Exception as e:
@@ -247,19 +261,20 @@ def expert_profile_edit(uid):
     user = {
         **dbuser,
         **profile,
-        "disability_list": [disability for disability in disability_list]
+        "disability_list": [disability for disability in disability_list],
     }
 
     disability_dropdown = Dropdown(disabilities.get_all_disabilities())
     disability_dropdown.set("value", "<id>")
     disability_dropdown.set("text", "<name> - <category>")
 
-    return render("expert-profile-edit.html",
-                  disabilities=disability_dropdown.export_to_macro(),
-                  user=user,
-                  success=success,
-                  error=error,
-                  )
+    return render(
+        "expert-profile-edit.html",
+        disabilities=disability_dropdown.export_to_macro(),
+        user=user,
+        success=success,
+        error=error,
+    )
 
 
 @account_bp.route("/status")

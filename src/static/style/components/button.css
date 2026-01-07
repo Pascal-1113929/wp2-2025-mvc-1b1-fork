@@ -27,10 +27,22 @@
     border-color: #178f5c;
 }
 
-.button.delete {
-    background: linear-gradient(135deg, #9c1f1f, #881616);
+.button.danger {
+    background: linear-gradient(135deg, #ff6b6b, #ff4747);
     color: #ffffff;
-    border-color: #8f1717;
+    border-color: #ff4747;
+}
+
+.button.warning {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #ffffff;
+    border-color: #ff9800;
+}
+
+.button.info {
+    background: linear-gradient(135deg, #6b6bff, #4747ff);
+    color: #ffffff;
+    border-color: #4747ff;
 }
 
 .button.ghost {

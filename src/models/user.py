@@ -2,7 +2,7 @@ from data.database import Database
 
 
 class User:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str = None):
         self.db = Database(db_path)
 
     def count_all(self):
@@ -22,7 +22,35 @@ class User:
             con.commit()
             return dict(cur.fetchone())
 
-    def create(self, email, password, organization_id=None, role="organization", status=1):
+    def get_new_users(self):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "SELECT * FROM users INNER JOIN profiles ON users.id = profiles.user_id WHERE users.status_id = 1"
+            )
+            con.commit()
+            result = cur.fetchall()
+
+            users = []
+            for row in result:
+                user = dict(row)
+                users.append(user)
+
+            return users
+
+    def set_user_status(self, user_id, status):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "UPDATE users SET status_id = ? WHERE id = ?",
+                (status, user_id),
+            )
+            con.commit()
+            return cur.lastrowid
+
+    def create(
+        self, email, password, organization_id=None, role="organization", status=1
+    ):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
@@ -38,10 +66,13 @@ class User:
     def create_new_expert(self, email, password, role="expert", status=1):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO users (email, password, role, status_id)
                 VALUES (?, ?, ?, ?)
-            """, (email, password, role, status))
+            """,
+                (email, password, role, status),
+            )
             con.commit()
             return cur.lastrowid
 

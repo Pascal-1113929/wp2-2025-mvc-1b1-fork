@@ -2,6 +2,7 @@
     <a
         {% if href.startswith('.') %}
             href="/{{ request.path.split('/')[1] }}/{{ href[1:] }}"
+            role="button"
         {% else %}
             href="{{ href }}"
         {% endif %}

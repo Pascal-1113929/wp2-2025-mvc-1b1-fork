@@ -3,7 +3,7 @@
 {% block content %}
 <main class="home">
     <section class="sectioncard">
-        <form class="cm-form" action="{{ url_for('organization.org_register_save', language=base.locale)}}" method="post">
+        <form class="cm-form" action="{{ url_for('organization.org_register_add', language=base.locale)}}" method="post">
             <div class="form-group">
                 <label for="usr-email">Email</label>
                 <input id="usr-email" type="email" name="email" required placeholder="Voer hier uw naam in">

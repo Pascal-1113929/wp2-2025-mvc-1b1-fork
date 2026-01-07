@@ -2,7 +2,7 @@ from data.database import Database
 
 
 class Disablity:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str = None):
         self.db = Database(db_path)
 
     def get_all_disabilities(self):
@@ -20,7 +20,10 @@ class Disablity:
     def get_disability_ids_by_profileid(self, profileid):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT disability_id FROM profile_disabilities WHERE profile_id = ?", (profileid,))
+            cur.execute(
+                "SELECT disability_id FROM profile_disabilities WHERE profile_id = ?",
+                (profileid,),
+            )
             con.commit()
             rows = cur.fetchall()
             disability_ids = [row["disability_id"] for row in rows]
@@ -38,10 +41,13 @@ class Disablity:
     def get_disability_list_by_studyid(self, studyid):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT disabilities.id as id, disabilities.category as category, disabilities.name as name "
-                        "FROM disabilities "
-                        "INNER JOIN study_disabilities ON disabilities.id = study_disabilities.disability_id "
-                        "WHERE study_disabilities.study_id = ?", (studyid,))
+            cur.execute(
+                "SELECT disabilities.id as id, disabilities.category as category, disabilities.name as name "
+                "FROM disabilities "
+                "INNER JOIN study_disabilities ON disabilities.id = study_disabilities.disability_id "
+                "WHERE study_disabilities.study_id = ?",
+                (studyid,),
+            )
             con.commit()
             result = cur.fetchall()
 
@@ -54,17 +60,23 @@ class Disablity:
     def create_profile_disabilities(self, profileid, disability_id):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("""
+            cur.execute(
+                """
             INSERT INTO profile_disabilities (profile_id, disability_id)
                         Values (?, ?)
-                        """, (profileid, disability_id))
+                        """,
+                (profileid, disability_id),
+            )
             con.commit()
             return cur.lastrowid
 
     def update_profile_disabilities(self, profileid, disability_id):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("UPDATE profile_disabilities SET disability_id = ? WHERE profile_id = ?", (disability_id, profileid))
+            cur.execute(
+                "UPDATE profile_disabilities SET disability_id = ? WHERE profile_id = ?",
+                (disability_id, profileid),
+            )
             con.commit()
             return cur.lastrowid
 
@@ -75,20 +87,26 @@ class Disablity:
             INSERT INTO profile_disabilities (profile_id, disability_id)
                         Values ({study_id}, {disability_id})
             """)
-            cur.execute("""
+            cur.execute(
+                """
             INSERT INTO study_disabilities (study_id, disability_id)
                         Values (?, ?)
-                        """, (study_id, disability_id))
+                        """,
+                (study_id, disability_id),
+            )
             con.commit()
             return cur.lastrowid
 
     def get_disability_list_by_profileid(self, profileid):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT disabilities.id as id, disabilities.category as category, disabilities.name as name "
-                        "FROM disabilities "
-                        "INNER JOIN profile_disabilities ON disabilities.id = profile_disabilities.disability_id "
-                        "WHERE profile_disabilities.profile_id = ?", (profileid,))
+            cur.execute(
+                "SELECT disabilities.id as id, disabilities.category as category, disabilities.name as name "
+                "FROM disabilities "
+                "INNER JOIN profile_disabilities ON disabilities.id = profile_disabilities.disability_id "
+                "WHERE profile_disabilities.profile_id = ?",
+                (profileid,),
+            )
             con.commit()
             result = cur.fetchall()
 

@@ -1,26 +1,23 @@
-from flask import Blueprint, session, abort
+from flask import Blueprint, session, abort, request
 
-from data.database import DB_PATH
 from models.organization import Organization
-from models.user import User
 from models.study import Study
-from view import redirect_page, render
-from flask import request, redirect
-from i18n.locale import list_locales
+from models.user import User
 from utils.table import Table
 from utils.dropdown import Dropdown
 from models.disabilities import Disablity
 from models.enrollment import Enrollment
 from models.profile import Profile
 from models.status import Status
+from view import redirect_page, render
 
-organizations = Organization(DB_PATH)
-users = User(DB_PATH)
-studies = Study(DB_PATH)
-disabilities = Disablity(DB_PATH)
-enrolments = Enrollment(DB_PATH)
-profiles = Profile(DB_PATH)
-statuses = Status(DB_PATH)
+organizations = Organization()
+users = User()
+studies = Study()
+disabilities = Disablity()
+enrolments = Enrollment()
+profiles = Profile()
+statuses = Status()
 
 org_bp = Blueprint("organization", __name__)
 
@@ -34,7 +31,7 @@ def organization_redirect():
 @org_bp.route("/<id>/")
 def organization_dashboard_render(id):
     user_id = session.get("user_id")
-    verified_org_id = users.get_organization_id_by_userid(user_id)['organization_id']
+    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
     if verified_org_id != int(id):
         return abort(403)
     org = organizations.get_organization_by_id(id)
@@ -57,7 +54,18 @@ def organization_dashboard_render(id):
 
         table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
         table.add_column(
-            "modify", "button", ["delete", ".organization/study/<id>/delete"]
+            "modify",
+            [
+                [
+                    "button",
+                    [
+                        "delete",
+                        ".organization/study/<id>/delete",
+                        "fa-solid fa-trash",
+                        "danger",
+                    ],
+                ],
+            ],
         )
         table.whitelist_data(table_header)
         table.set_order(table_header)
@@ -67,44 +75,40 @@ def organization_dashboard_render(id):
     return render("organization.html", organization=org, study_list=study_table_data)
 
 
-@org_bp.route("/register")
-def org_register():
+@org_bp.route("/add", methods=["GET", "POST"])
+def org_register_add():
     success = request.args.get("success")
     error = request.args.get("error")
-    return render("organization-register.html", success=success, error=error)
+    if request.method == "POST":
+        password = request.form.get("password")
+        name = request.form.get("name")
+        type = request.form.get("type")
+        website = request.form.get("website")
+        description = request.form.get("description")
+        contact_person = request.form.get("contact_person")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
 
+        try:
+            org_id = organizations.create(
+                name, type, website, description, contact_person, email, phone
+            )
 
-@org_bp.route("/register/save", methods=["POST"])
-def org_register_save():
-    email = request.form.get("email")
-    password = request.form.get("password")
+            users.create(
+                email,
+                password,
+                organization_id=org_id,
+                role="organization",
+                status=2,
+            )
 
-    name = request.form.get("name")
-    type = request.form.get("type")
-    website = request.form.get("website")
-    description = request.form.get("description")
-    contact_person = request.form.get("contact_person")
-    email = request.form.get("email")
-    phone = request.form.get("phone")
+            message = "Organisatie succesvol aangemaakt!"
+            return redirect_page("organization/add?success=1")
+        except Exception as e:
+            message = f"Er is iets fout gegaan: {str(e)}"
+            return redirect_page(f"organization/add?error={message}")
 
-    try:
-        org_id = organizations.create(
-            name, type, website, description, contact_person, email, phone
-        )
-
-        users.create(
-            email,
-            password,
-            organization_id=org_id,
-            role="organization",
-            status=2,
-        )
-
-        message = "Organisatie succesvol aangemaakt!"
-        return redirect_page("organization/register?success=1")
-    except Exception as e:
-        message = f"Er is iets fout gegaan: {str(e)}"
-        return redirect_page(f"organization/register?error={message}")
+    return render("organization-add.html", success=success, error=error)
 
 
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
@@ -118,11 +122,12 @@ def research_register():
         disability_dropdown.set("value", "<id>")
         disability_dropdown.set("text", "<name> - <category>")
 
-        return render("organization-research.html",
-                      success=success,
-                      error=error,
-                      disabilities=disability_dropdown.export_to_macro()
-                      )
+        return render(
+            "organization-research.html",
+            success=success,
+            error=error,
+            disabilities=disability_dropdown.export_to_macro(),
+        )
 
     title = request.form.get("title")
     description = request.form.get("description")
@@ -134,7 +139,7 @@ def research_register():
     start_date = request.form.get("start_date")
     end_date = request.form.get("end_date")
 
-    user = users.get_user_by_id(2)  # TODO: replace with session user id
+    user = users.get_user_by_id(session.get("user_id"))
 
     try:
         study_id = studies.create_with_organisation(
@@ -148,8 +153,8 @@ def research_register():
                 "max_age": age_max,
                 "reward": reward,
                 "start_date": start_date,
-                "end_date": end_date
-            }
+                "end_date": end_date,
+            },
         )
         print(study_id)
         disabilities.create_study_disabilities(study_id, disability)
@@ -164,7 +169,7 @@ def research_register():
 @org_bp.route("/<organization_id>/study/<study_id>/")
 def organization_study_page_render(organization_id, study_id):
     user_id = session.get("user_id")
-    verified_org_id = users.get_organization_id_by_userid(user_id)['organization_id']
+    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
     if verified_org_id != int(organization_id):
         print(f"forbidden id mismatch {verified_org_id} {organization_id}")
         return abort(403)
@@ -219,14 +224,21 @@ def organization_study_page_render(organization_id, study_id):
     ]
 
     table_data_new = enrolment_table_data_converter(new_enrolment_list, table_header)
-    table_data_verified = enrolment_table_data_converter(verified_enrolment_list, table_header)
+    table_data_verified = enrolment_table_data_converter(
+        verified_enrolment_list, table_header
+    )
 
-    if int(organization_id) != study['organization_id']:
+    if int(organization_id) != study["organization_id"]:
         print("forbidden study_orgid mismatch")
         return abort(403)
 
-    return render("study-org.html", organization=org, study=study, table_data_new=table_data_new,
-                  table_data_verified=table_data_verified)
+    return render(
+        "study-org.html",
+        organization=org,
+        study=study,
+        table_data_new=table_data_new,
+        table_data_verified=table_data_verified,
+    )
 
 
 def enrolment_table_data_converter(enrolment_list, table_header):
@@ -237,7 +249,12 @@ def enrolment_table_data_converter(enrolment_list, table_header):
         "view_profile", "button", ["Bekijk Profiel", ".expert-profile/<user_id>"]
     )
     table.add_column(
-        "unlist", "button", ["Uitschrijven", ".organization/<organization_id>/study/<study_id>/<profile_id>/unlist"]
+        "unlist",
+        "button",
+        [
+            "Uitschrijven",
+            ".organization/<organization_id>/study/<study_id>/<profile_id>/unlist",
+        ],
     )
     table.whitelist_data(table_header)
     table.set_order(table_header)

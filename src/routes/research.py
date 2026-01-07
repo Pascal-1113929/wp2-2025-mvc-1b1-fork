@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Blueprint, session
 
-from data.database import DB_PATH
+
 from models.enrollment import Enrollment
 from models.disabilities import Disablity
 from models.organization import Organization
@@ -12,13 +12,14 @@ from models.user import User
 from view import render, redirect_page
 from werkzeug.exceptions import NotFound
 from utils.table import Table
+from utils.authorization import in_roles
 
-users = User(DB_PATH)
-organizations = Organization(DB_PATH)
-studies = Study(DB_PATH)
-profiles = Profile(DB_PATH)
-disabilities = Disablity(DB_PATH)
-enrolments = Enrollment(DB_PATH)
+users = User()
+organizations = Organization()
+studies = Study()
+profiles = Profile()
+disabilities = Disablity()
+enrolments = Enrollment()
 
 research_bp = Blueprint("research", __name__)
 
@@ -105,39 +106,36 @@ def research_dashboard_render():
     ]
 
     available_table = Table(available_studies)
-    available_table.set_type(
-        "title",
-        "link",
-        [".research/<id>"]
-    )
+    available_table.set_type("title", "link", [".research/<id>"])
     available_table.whitelist_data(table_header)
     available_table.set_order(table_header)
     available_study_table_data = available_table.export_to_macro()
 
     enrolled_table = Table(enrolled_studies)
-    enrolled_table.set_type(
-        "title",
-        "link",
-        [".research/<id>"]
-    )
+    enrolled_table.set_type("title", "link", [".research/<id>"])
     enrolled_table.whitelist_data(table_header)
     enrolled_table.set_order(table_header)
     enrolled_study_table_data = enrolled_table.export_to_macro()
 
-    return render("research_list.html",
-                  expert=expert,
-                  available_study_table_data=available_study_table_data,
-                  enrolled_study_table_data=enrolled_study_table_data)
+    return render(
+        "research_list.html",
+        expert=expert,
+        available_study_table_data=available_study_table_data,
+        enrolled_study_table_data=enrolled_study_table_data,
+    )
 
 
 @research_bp.route("/<study_id>")
 def study_dashboard_render(study_id):
-    user_id = session["user_id"]
+    if in_roles("expert"):
+        user_id = session["user_id"]
+
     study = studies.get_study_by_id(study_id)
     organization = organizations.get_organization_by_id(study["organization_id"])
     disability_list = disabilities.get_disability_list_by_studyid(study["id"])
-    profile = profiles.get_profile_by_userid(user_id)
-    enrolled = enrolments.enrolment_check(study["id"], profile["id"])
+    if not in_roles("admin"):
+        profile = profiles.get_profile_by_userid(user_id)
+        enrolled = enrolments.enrolment_check(study["id"], profile["id"])
     study["disabilities"] = disability_list
     table_header = [
         "category",
@@ -149,7 +147,13 @@ def study_dashboard_render(study_id):
 
     table_data = table.export_to_macro()
 
-    return render("study.html", study=study, organization=organization, table_data=table_data, enrolled=enrolled)
+    return render(
+        "study.html",
+        study=study,
+        organization=organization,
+        table_data=table_data,
+        enrolled=enrolled if in_roles("expert") else None,
+    )
 
 
 @research_bp.route("/<study_id>/enroll")
@@ -160,12 +164,7 @@ def enroll_page(study_id):
     user = users.get_user_by_id(user_id)
     profile = profiles.get_profile_by_userid(user_id)
 
-    return render(
-        "enroll.html",
-        study=study,
-        user=user,
-        profile=profile
-    )
+    return render("enroll.html", study=study, user=user, profile=profile)
 
 
 @research_bp.route("/<study_id>/enroll", methods=["POST"])
@@ -173,11 +172,7 @@ def enroll_confirm(study_id):
     user_id = session.get("user_id")
     profile = profiles.get_profile_by_userid(user_id)
 
-    enrolments.create(
-        profile_id=profile["id"],
-        study_id=study_id,
-        status=1
-    )
+    enrolments.create(profile_id=profile["id"], study_id=study_id, status=1)
 
     return redirect_page(f"research/{study_id}/enroll/success")
 
@@ -195,12 +190,7 @@ def unlist_page(study_id):
     user = users.get_user_by_id(user_id)
     profile = profiles.get_profile_by_userid(user_id)
 
-    return render(
-        "unlist.html",
-        study=study,
-        user=user,
-        profile=profile
-    )
+    return render("unlist.html", study=study, user=user, profile=profile)
 
 
 @research_bp.route("/<study_id>/unlist", methods=["POST"])

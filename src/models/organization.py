@@ -2,7 +2,7 @@ from data.database import Database
 
 
 class Organization:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str = None):
         self.db = Database(db_path)
 
     def count_all(self):
@@ -11,14 +11,17 @@ class Organization:
             cur.execute("SELECT COUNT() FROM organizations")
             con.commit()
             return cur.fetchone()
-        
+
     def create(self, name, type, website, description, contact_person, email, phone):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO organizations (name, type, website, description, contact_person, email, phone)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (name, type, website, description, contact_person, email, phone))
+            """,
+                (name, type, website, description, contact_person, email, phone),
+            )
             con.commit()
             return cur.lastrowid
 

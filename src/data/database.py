@@ -6,14 +6,14 @@ DB_PATH = os.path.join(BASE_DIR, "app.db")
 
 
 class Database:
-    def __init__(self, path: str):
-        self.path = path
+    def __init__(self, path: str = None):
+        self.path = path or DB_PATH
         self._setup_tables()
 
     def connect(self):
         con = sqlite3.connect(self.path)
         con.row_factory = sqlite3.Row
-        con.execute('PRAGMA foreign_keys = ON')
+        con.execute("PRAGMA foreign_keys = ON")
         return con
 
     def _setup_tables(self):
@@ -21,7 +21,7 @@ class Database:
             cur = con.cursor()
 
             # Status (nieuw, goedgekeurd, afgekeurd)
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS status
                         (
                             id
@@ -34,10 +34,10 @@ class Database:
                             NOT
                             NULL
                         )
-                        ''')
+                        """)
 
             # ORGANIZATIONS
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS organizations
                         (
                             id
@@ -65,10 +65,10 @@ class Database:
                             phone TEXT,
                             details TEXT
                             )
-                        ''')
+                        """)
 
             # USERS
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS users
                         (
                             id
@@ -114,10 +114,10 @@ class Database:
                             id
                         )
                             )
-                        ''')
+                        """)
 
             # DISABILITIES
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS disabilities
                         (
                             id
@@ -139,10 +139,10 @@ class Database:
                             name
                         )
                             )
-                        ''')
+                        """)
 
             # PROFILES (Ervaringsdeskundigen)
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS profiles
                         (
                             id
@@ -218,10 +218,10 @@ class Database:
                             id
                         )
                             )
-                        ''')
+                        """)
 
             # PROFILE ↔ DISABILITY
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS profile_disabilities
                         (
                             profile_id
@@ -254,10 +254,10 @@ class Database:
                         )
                           ON DELETE CASCADE
                             )
-                        ''')
+                        """)
 
             # STUDIES (Onderzoeken)
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS studies
                         (
                             id
@@ -307,18 +307,20 @@ class Database:
                             id
                         )
                             )
-                        ''')
+                        """)
 
             # Ensure uniqueness for study seeds (idempotency)
             try:
-                cur.execute('CREATE UNIQUE INDEX IF NOT EXISTS ux_studies_org_title_start ON '
-                            'studies(organization_id, title, start_date)')
+                cur.execute(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS ux_studies_org_title_start ON "
+                    "studies(organization_id, title, start_date)"
+                )
             except sqlite3.OperationalError:
                 # If duplicates already exist, the index creation can fail; keep going.
                 pass
 
             # STUDY ↔ DISABILITY (doelgroep)
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS study_disabilities
                         (
                             study_id
@@ -351,10 +353,10 @@ class Database:
                         )
                           ON DELETE CASCADE
                             )
-                        ''')
+                        """)
 
             # ENROLLMENTS (Inschrijvingen)
-            cur.execute('''
+            cur.execute("""
                         CREATE TABLE IF NOT EXISTS enrollments
                         (
                             id
@@ -411,98 +413,144 @@ class Database:
                         )
                           ON DELETE CASCADE
                             )
-                        ''')
+                        """)
 
             # Indexes
-            cur.execute('CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)')
-            cur.execute('CREATE INDEX IF NOT EXISTS idx_users_status ON users(status_id)')
-            cur.execute('CREATE INDEX IF NOT EXISTS idx_profiles_birthdate ON profiles(birth_date)')
-            cur.execute('CREATE INDEX IF NOT EXISTS idx_studies_status_dates ON studies(status_id, start_date, end_date)')
-            cur.execute('CREATE INDEX IF NOT EXISTS idx_enrollments_study ON enrollments(study_id)')
-            cur.execute('CREATE INDEX IF NOT EXISTS idx_enrollments_profile ON enrollments(profile_id)')
+            cur.execute("CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)")
+            cur.execute(
+                "CREATE INDEX IF NOT EXISTS idx_users_status ON users(status_id)"
+            )
+            cur.execute(
+                "CREATE INDEX IF NOT EXISTS idx_profiles_birthdate ON profiles(birth_date)"
+            )
+            cur.execute(
+                "CREATE INDEX IF NOT EXISTS idx_studies_status_dates ON studies(status_id, start_date, end_date)"
+            )
+            cur.execute(
+                "CREATE INDEX IF NOT EXISTS idx_enrollments_study ON enrollments(study_id)"
+            )
+            cur.execute(
+                "CREATE INDEX IF NOT EXISTS idx_enrollments_profile ON enrollments(profile_id)"
+            )
 
             # ---------- SEED DATA ----------
             # Status
-            cur.executemany('''
+            cur.executemany(
+                """
                             INSERT
                             OR IGNORE INTO status
             (id, status)
             VALUES (?, ?)
-                            ''', [
-                                (1, 'nieuw'),
-                                (2, 'goedgekeurd'),
-                                (3, 'afgekeurd'),
-                            ])
+                            """,
+                [
+                    (1, "nieuw"),
+                    (2, "goedgekeurd"),
+                    (3, "afgekeurd"),
+                ],
+            )
 
             # Organizations
-            cur.executemany('''
+            cur.executemany(
+                """
                             INSERT
                             OR IGNORE INTO organizations
                 (id, name, type, website, description, contact_person, email, phone, details)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                            ''', [
-                                (1, 'Stichting Accessibility', 'non-profit', 'https://www.accessibility.nl',
-                                 'Stichting voor digitale toegankelijkheid.', 'Team Onderzoek',
-                                 'info@accessibility.nl', '+31 20 123 4567', None),
-                                (2, 'Albert Heijn', 'commercieel', 'https://www.ah.nl',
-                                 'Supermarktketen, UX research.', 'Research Team',
-                                 'onderzoek@ah.nl', '+31 88 659 2222', None),
-                                (3, 'VGZ', 'commercieel', 'https://www.vgz.nl',
-                                 'Zorgverzekeraar, klantonderzoek.', 'Onderzoeksteam',
-                                 'onderzoek@vgz.nl', '+31 24 123 4567', None),
-                            ])
+                            """,
+                [
+                    (
+                        1,
+                        "Stichting Accessibility",
+                        "non-profit",
+                        "https://www.accessibility.nl",
+                        "Stichting voor digitale toegankelijkheid.",
+                        "Team Onderzoek",
+                        "info@accessibility.nl",
+                        "+31 20 123 4567",
+                        None,
+                    ),
+                    (
+                        2,
+                        "Albert Heijn",
+                        "commercieel",
+                        "https://www.ah.nl",
+                        "Supermarktketen, UX research.",
+                        "Research Team",
+                        "onderzoek@ah.nl",
+                        "+31 88 659 2222",
+                        None,
+                    ),
+                    (
+                        3,
+                        "VGZ",
+                        "commercieel",
+                        "https://www.vgz.nl",
+                        "Zorgverzekeraar, klantonderzoek.",
+                        "Onderzoeksteam",
+                        "onderzoek@vgz.nl",
+                        "+31 24 123 4567",
+                        None,
+                    ),
+                ],
+            )
 
             # Users
-            cur.executemany('''
+            cur.executemany(
+                """
                             INSERT
                             OR IGNORE INTO users (email, password, role, status_id, organization_id)
                 VALUES (?, ?, ?, ?, ?)
-                            ''', [
-                                ("admin@hub.com", "admin", "admin", 2, None),
-                                ("org-ah@hub.com", "secret", "organization", 2, 2),
-                                ("sanne@example.com", "secret", "expert", 2, None),
-                                ("jamal@example.com", "secret", "expert", 2, None),
-                                ("lotte@example.com", "secret", "expert", 1, None),
-                            ])
+                            """,
+                [
+                    ("admin@hub.com", "admin", "admin", 2, None),
+                    ("org-ah@hub.com", "secret", "organization", 2, 2),
+                    ("sanne@example.com", "secret", "expert", 2, None),
+                    ("jamal@example.com", "secret", "expert", 2, None),
+                    ("lotte@example.com", "secret", "expert", 1, None),
+                ],
+            )
 
             # Disabilities (complete list from spec)
-            cur.executemany('''
+            cur.executemany(
+                """
                             INSERT
                             OR IGNORE INTO disabilities (category, name) VALUES (?, ?)
-                            ''', [
-                                # Auditief
-                                ('Auditief', 'Doof'),
-                                ('Auditief', 'Slechthorend'),
-                                ('Auditief', 'Doofblind'),
-                                # Visueel
-                                ('Visueel', 'Blind'),
-                                ('Visueel', 'Slechtziend'),
-                                ('Visueel', 'Kleurenblind'),
-                                ('Visueel', 'Doofblind'),
-                                # Motorisch/lichamelijk
-                                ('Motorisch/lichamelijk', 'Amputatie en mismaaktheid'),
-                                ('Motorisch/lichamelijk', 'Artritis'),
-                                ('Motorisch/lichamelijk', 'Fibromyalgie'),
-                                ('Motorisch/lichamelijk', 'Reuma'),
-                                ('Motorisch/lichamelijk', 'Verminderde handvaardigheid'),
-                                ('Motorisch/lichamelijk', 'Spierdystrofie'),
-                                ('Motorisch/lichamelijk', 'RSI'),
-                                ('Motorisch/lichamelijk', 'Tremor en Spasmen'),
-                                ('Motorisch/lichamelijk', 'Quadriplegie/tetraplegie'),
-                                # Cognitief/neurologisch
-                                ('Cognitief/neurologisch', 'ADHD'),
-                                ('Cognitief/neurologisch', 'Autisme'),
-                                ('Cognitief/neurologisch', 'Dyslexie'),
-                                ('Cognitief/neurologisch', 'Dyscalculie'),
-                                ('Cognitief/neurologisch', 'Leerstoornis'),
-                                ('Cognitief/neurologisch', 'Geheugenbeperking'),
-                                ('Cognitief/neurologisch', 'Multiple Sclerose'),
-                                ('Cognitief/neurologisch', 'Epilepsie'),
-                                ('Cognitief/neurologisch', 'Migraine'),
-                            ])
+                            """,
+                [
+                    # Auditief
+                    ("Auditief", "Doof"),
+                    ("Auditief", "Slechthorend"),
+                    ("Auditief", "Doofblind"),
+                    # Visueel
+                    ("Visueel", "Blind"),
+                    ("Visueel", "Slechtziend"),
+                    ("Visueel", "Kleurenblind"),
+                    ("Visueel", "Doofblind"),
+                    # Motorisch/lichamelijk
+                    ("Motorisch/lichamelijk", "Amputatie en mismaaktheid"),
+                    ("Motorisch/lichamelijk", "Artritis"),
+                    ("Motorisch/lichamelijk", "Fibromyalgie"),
+                    ("Motorisch/lichamelijk", "Reuma"),
+                    ("Motorisch/lichamelijk", "Verminderde handvaardigheid"),
+                    ("Motorisch/lichamelijk", "Spierdystrofie"),
+                    ("Motorisch/lichamelijk", "RSI"),
+                    ("Motorisch/lichamelijk", "Tremor en Spasmen"),
+                    ("Motorisch/lichamelijk", "Quadriplegie/tetraplegie"),
+                    # Cognitief/neurologisch
+                    ("Cognitief/neurologisch", "ADHD"),
+                    ("Cognitief/neurologisch", "Autisme"),
+                    ("Cognitief/neurologisch", "Dyslexie"),
+                    ("Cognitief/neurologisch", "Dyscalculie"),
+                    ("Cognitief/neurologisch", "Leerstoornis"),
+                    ("Cognitief/neurologisch", "Geheugenbeperking"),
+                    ("Cognitief/neurologisch", "Multiple Sclerose"),
+                    ("Cognitief/neurologisch", "Epilepsie"),
+                    ("Cognitief/neurologisch", "Migraine"),
+                ],
+            )
 
             # Profiles
-            cur.execute('''
+            cur.execute("""
                         INSERT
                         OR IGNORE INTO profiles
                 (user_id, first_name, last_name, postcode, gender, phone, birth_date,
@@ -529,8 +577,8 @@ class Database:
                                'Ma-Wo overdag'
                         FROM users
                         WHERE email = 'sanne@example.com'
-                        ''')
-            cur.execute('''
+                        """)
+            cur.execute("""
                         INSERT
                         OR IGNORE INTO profiles
                 (user_id, first_name, last_name, postcode, gender, phone, birth_date,
@@ -557,8 +605,8 @@ class Database:
                                'Do-Vr middag'
                         FROM users
                         WHERE email = 'jamal@example.com'
-                        ''')
-            cur.execute('''
+                        """)
+            cur.execute("""
                         INSERT
                         OR IGNORE INTO profiles
                 (user_id, first_name, last_name, postcode, gender, phone, birth_date,
@@ -585,10 +633,10 @@ class Database:
                                'Avonden en weekend'
                         FROM users
                         WHERE email = 'lotte@example.com'
-                        ''')
+                        """)
 
             # Profile ↔ Disabilities
-            cur.execute('''
+            cur.execute("""
                         INSERT
                         OR IGNORE INTO profile_disabilities (profile_id, disability_id)
                         SELECT p.id, d.id
@@ -596,8 +644,8 @@ class Database:
                                  JOIN users u ON u.id = p.user_id
                                  JOIN disabilities d ON d.name = 'Blind'
                         WHERE u.email = 'sanne@example.com'
-                        ''')
-            cur.execute('''
+                        """)
+            cur.execute("""
                         INSERT
                         OR IGNORE INTO profile_disabilities (profile_id, disability_id)
                         SELECT p.id, d.id
@@ -605,8 +653,8 @@ class Database:
                                  JOIN users u ON u.id = p.user_id
                                  JOIN disabilities d ON d.name = 'Verminderde handvaardigheid'
                         WHERE u.email = 'jamal@example.com'
-                        ''')
-            cur.execute('''
+                        """)
+            cur.execute("""
                         INSERT
                         OR IGNORE INTO profile_disabilities (profile_id, disability_id)
                         SELECT p.id, d.id
@@ -614,61 +662,97 @@ class Database:
                                  JOIN users u ON u.id = p.user_id
                                  JOIN disabilities d ON d.name = 'Dyslexie'
                         WHERE u.email = 'lotte@example.com'
-                        ''')
+                        """)
 
             # ---- Seed studies only if table empty (prevents duplicates) ----
-            cur.execute('SELECT COUNT(*) AS c FROM studies')
-            if cur.fetchone()['c'] == 0:
+            cur.execute("SELECT COUNT(*) AS c FROM studies")
+            if cur.fetchone()["c"] == 0:
                 # Studies
-                cur.executemany('''
+                cur.executemany(
+                    """
                                 INSERT
                                 OR IGNORE INTO studies
                     (organization_id, title, status_id, available, description, start_date, end_date, study_type,
                      location, has_reward, reward, age_min, age_max)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                                ''', [
-                                    (2, 'Gebruikersonderzoek AH app', 2, 1,
-                                     'Test de toegankelijkheid van de boodschappen-app.',
-                                     '2025-11-15', '2025-12-15', 'online',
-                                     None, 1, '€25 cadeaubon', 18, 75),
-                                    (1, 'Toegankelijkheid gemeentelijke website', 1, 1,
-                                     'Toptaken testen met screenreader.',
-                                     '2025-12-01', '2026-01-15', 'op locatie',
-                                     'Amsterdam', 1, '€50 vergoeding + reiskosten', 18, 99),
-                                    (3, 'Zorgportaal formulierenreview', 2, 1,
-                                     'Formulieren doorlopen met motorische beperking.',
-                                     '2025-11-20', '2025-12-20', 'telefonisch',
-                                     None, 1, "€50 vergoeding", 21, 80),
-                                ])
+                                """,
+                    [
+                        (
+                            2,
+                            "Gebruikersonderzoek AH app",
+                            2,
+                            1,
+                            "Test de toegankelijkheid van de boodschappen-app.",
+                            "2025-11-15",
+                            "2025-12-15",
+                            "online",
+                            None,
+                            1,
+                            "€25 cadeaubon",
+                            18,
+                            75,
+                        ),
+                        (
+                            1,
+                            "Toegankelijkheid gemeentelijke website",
+                            2,
+                            1,
+                            "Toptaken testen met screenreader.",
+                            "2025-12-01",
+                            "2026-01-15",
+                            "op locatie",
+                            "Amsterdam",
+                            1,
+                            "€50 vergoeding + reiskosten",
+                            18,
+                            99,
+                        ),
+                        (
+                            3,
+                            "Zorgportaal formulierenreview",
+                            2,
+                            1,
+                            "Formulieren doorlopen met motorische beperking.",
+                            "2025-11-20",
+                            "2025-12-20",
+                            "telefonisch",
+                            None,
+                            1,
+                            "€50 vergoeding",
+                            21,
+                            80,
+                        ),
+                    ],
+                )
 
                 # Study ↔ Disabilities
-                cur.execute('''
+                cur.execute("""
                             INSERT
                             OR IGNORE INTO study_disabilities (study_id, disability_id)
                             SELECT s.id, d.id
                             FROM studies s
                                      JOIN disabilities d ON d.name IN ('Slechtziend', 'Kleurenblind')
                             WHERE s.title = 'Gebruikersonderzoek AH app'
-                            ''')
-                cur.execute('''
+                            """)
+                cur.execute("""
                             INSERT
                             OR IGNORE INTO study_disabilities (study_id, disability_id)
                             SELECT s.id, d.id
                             FROM studies s
                                      JOIN disabilities d ON d.name IN ('Blind', 'Slechtziend')
                             WHERE s.title = 'Toegankelijkheid gemeentelijke website'
-                            ''')
-                cur.execute('''
+                            """)
+                cur.execute("""
                             INSERT
                             OR IGNORE INTO study_disabilities (study_id, disability_id)
                             SELECT s.id, d.id
                             FROM studies s
                                      JOIN disabilities d ON d.name IN ('Verminderde handvaardigheid', 'RSI')
                             WHERE s.title = 'Zorgportaal formulierenreview'
-                            ''')
+                            """)
 
                 # Enrollments for seeded studies
-                cur.execute('''
+                cur.execute("""
                             INSERT
                             OR IGNORE INTO enrollments (study_id, profile_id, status_id)
                             SELECT s.id, p.id, 1
@@ -677,6 +761,6 @@ class Database:
                                      JOIN users u ON u.id = p.user_id
                             WHERE s.title = 'Gebruikersonderzoek AH app'
                               AND u.email = 'sanne@example.com'
-                            ''')
+                            """)
 
             con.commit()

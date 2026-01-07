@@ -2,7 +2,7 @@ from data.database import Database
 
 
 class Status:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str = None):
         self.db = Database(db_path)
 
     def get_status_name(self, status_id):
@@ -14,4 +14,3 @@ class Status:
             row = dict(row)
             print(row)
             return row["status"]
-

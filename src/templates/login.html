@@ -1,4 +1,7 @@
+{% from "macros/components/link.html" import link %}
+
 {% extends 'layouts/default.html' %}
+
 {% block content %}
 <main class="home">
     <form
@@ -31,6 +34,8 @@
         </div>
         <div class="form-group">
             <button class="submit-btn" type="submit">Login</button>
+            {{ link(href=".register", text="Geen account? Register hier") }}
+
     </form>
 </main>
 {% endblock %}
