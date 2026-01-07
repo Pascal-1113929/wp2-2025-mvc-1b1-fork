@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class Study:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str = None):
         self.db = Database(db_path)
 
     def count_all(self):
@@ -16,7 +16,9 @@ class Study:
     def get_study_by_organization_id(self, organization_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM studies WHERE organization_id=?", (organization_id,))
+            cur.execute(
+                "SELECT * FROM studies WHERE organization_id=?", (organization_id,)
+            )
             con.commit()
             study_list = cur.fetchall()
 
@@ -24,8 +26,12 @@ class Study:
             for study in study_list:
                 study_dict = dict(study)
                 # This is needed fo the narrator pronounces the date correctly
-                study_dict["start_date"] = datetime.strptime(study_dict["start_date"], "%Y-%m-%d")
-                study_dict["end_date"] = datetime.strptime(study_dict["end_date"], "%Y-%m-%d")
+                study_dict["start_date"] = datetime.strptime(
+                    study_dict["start_date"], "%Y-%m-%d"
+                )
+                study_dict["end_date"] = datetime.strptime(
+                    study_dict["end_date"], "%Y-%m-%d"
+                )
                 study_dict["start_date"] = study_dict["start_date"].strftime("%d-%m-%Y")
                 study_dict["end_date"] = study_dict["end_date"].strftime("%d-%m-%Y")
                 new_study_list.append(study_dict)
@@ -42,7 +48,10 @@ class Study:
     def get_study_id_by_disability_id(self, disability_id: list):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT study_id FROM study_disabilities WHERE disability_id=?", (disability_id,))
+            cur.execute(
+                "SELECT study_id FROM study_disabilities WHERE disability_id=?",
+                (disability_id,),
+            )
             con.commit()
             row = cur.fetchone()
             try:

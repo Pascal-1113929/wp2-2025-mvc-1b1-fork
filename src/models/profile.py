@@ -1,7 +1,8 @@
 from data.database import Database
 
+
 class Profile:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str = None):
         self.db = Database(db_path)
 
     def get_profile_by_userid(self, userid: int):
@@ -11,14 +12,44 @@ class Profile:
             con.commit()
             return cur.fetchone()
 
-    def create(self, userid: int, firstname, lastname, gender, postal, intro, phone, birthdate, atools,
-               contact, researchtype, availability, aterms):
+    def create(
+        self,
+        userid: int,
+        firstname,
+        lastname,
+        gender,
+        postal,
+        intro,
+        phone,
+        birthdate,
+        atools,
+        contact,
+        researchtype,
+        availability,
+        aterms,
+    ):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("""
-            INSERT INTO profiles (user_id, first_name, last_name, postcode, gender, phone, birth_date, assistive_tools, 
+            cur.execute(
+                """
+            INSERT INTO profiles (user_id, first_name, last_name, postcode, gender, phone, birth_date, assistive_tools,
                                   intro, agreed_terms, contact_preference, preferred_study_type, availability)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""", (userid, firstname, lastname, postal, gender, phone,
-                        birthdate, atools, intro, aterms, contact, researchtype, availability))
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (
+                    userid,
+                    firstname,
+                    lastname,
+                    postal,
+                    gender,
+                    phone,
+                    birthdate,
+                    atools,
+                    intro,
+                    aterms,
+                    contact,
+                    researchtype,
+                    availability,
+                ),
+            )
             con.commit()
             return cur.lastrowid

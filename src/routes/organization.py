@@ -1,15 +1,14 @@
 from flask import Blueprint, request
 
-from data.database import DB_PATH
 from models.organization import Organization
 from models.study import Study
 from models.user import User
 from utils.table import Table
 from view import redirect_page, render
 
-organizations = Organization(DB_PATH)
-users = User(DB_PATH)
-studies = Study(DB_PATH)
+organizations = Organization()
+users = User()
+studies = Study()
 
 org_bp = Blueprint("organization", __name__)
 

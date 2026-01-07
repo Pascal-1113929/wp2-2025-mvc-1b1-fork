@@ -2,7 +2,7 @@ from data.database import Database
 
 
 class Enrollment:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str = None):
         self.db = Database(db_path)
 
     def count_all(self):

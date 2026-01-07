@@ -1,6 +1,5 @@
 from flask import Blueprint, request, session
 
-from data.database import DB_PATH
 from models.disabilities import Disablity
 from models.profile import Profile
 from models.user import User
@@ -8,9 +7,9 @@ from utils.authorization import is_authenticated
 from utils.dropdown import Dropdown
 from view import redirect_page, render
 
-users = User(DB_PATH)
-profiles = Profile(DB_PATH)
-disabilities = Disablity(DB_PATH)
+users = User()
+profiles = Profile()
+disabilities = Disablity()
 
 account_bp = Blueprint("account", __name__)
 
