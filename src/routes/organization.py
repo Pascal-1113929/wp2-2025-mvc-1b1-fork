@@ -1,4 +1,4 @@
-from flask import Blueprint, session, abort
+from flask import Blueprint, session, abort, request
 
 from models.organization import Organization
 from models.study import Study
@@ -80,9 +80,7 @@ def org_register_add():
     success = request.args.get("success")
     error = request.args.get("error")
     if request.method == "POST":
-        email = request.form.get("email")
         password = request.form.get("password")
-
         name = request.form.get("name")
         type = request.form.get("type")
         website = request.form.get("website")
@@ -105,10 +103,12 @@ def org_register_add():
             )
 
             message = "Organisatie succesvol aangemaakt!"
-            return redirect_page("organization/register?success=1")
+            return redirect_page("organization/add?success=1")
         except Exception as e:
             message = f"Er is iets fout gegaan: {str(e)}"
-            return redirect_page(f"organization/register?error={message}")
+            return redirect_page(f"organization/add?error={message}")
+
+    return render("organization-add.html", success=success, error=error)
 
 
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
@@ -139,7 +139,7 @@ def research_register():
     start_date = request.form.get("start_date")
     end_date = request.form.get("end_date")
 
-    user = users.get_user_by_id(2)  # TODO: replace with session user id
+    user = users.get_user_by_id(session.get("user_id"))
 
     try:
         study_id = studies.create_with_organisation(
