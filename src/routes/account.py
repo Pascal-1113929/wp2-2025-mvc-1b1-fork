@@ -1,13 +1,12 @@
 from flask import Blueprint, request, session
 
 from data.database import DB_PATH
-from models.user import User
 from models.disabilities import Disablity
 from models.profile import Profile
-from i18n.locale import list_locales
-from view import render, redirect_page
-from utils.dropdown import Dropdown
+from models.user import User
 from utils.authorization import is_authenticated
+from utils.dropdown import Dropdown
+from view import redirect_page, render
 
 users = User(DB_PATH)
 profiles = Profile(DB_PATH)
@@ -90,7 +89,7 @@ def account_register():
             return redirect_page("register?success=1")
 
         except Exception as e:
-            message = f"Er is iets fout gegaan"
+            message = "Er is iets fout gegaan"
             print(e)
             return redirect_page(f"register?error={message}")
 
@@ -99,7 +98,7 @@ def account_register():
     disability_dropdown.set("text", "<name> - <category>")
 
     return render(
-        "expert-register.html",
+        "register.html",
         disabilities=disability_dropdown.export_to_macro(),
         success=success,
         error=error,

@@ -1,13 +1,11 @@
-from flask import Blueprint
+from flask import Blueprint, request
 
 from data.database import DB_PATH
 from models.organization import Organization
-from models.user import User
 from models.study import Study
-from view import redirect_page, render
-from flask import request, redirect
-from i18n.locale import list_locales
+from models.user import User
 from utils.table import Table
+from view import redirect_page, render
 
 organizations = Organization(DB_PATH)
 users = User(DB_PATH)
@@ -55,41 +53,38 @@ def organization_dashboard_render(id):
     return render("organization.html", organization=org, study_list=study_table_data)
 
 
-@org_bp.route("/register")
-def org_register():
+@org_bp.route("/add", methods=["GET", "POST"])
+def org_register_add():
     success = request.args.get("success")
     error = request.args.get("error")
-    return render("organization-register.html", success=success, error=error)
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
 
+        name = request.form.get("name")
+        type = request.form.get("type")
+        website = request.form.get("website")
+        description = request.form.get("description")
+        contact_person = request.form.get("contact_person")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
 
-@org_bp.route("/register/save", methods=["POST"])
-def org_register_save():
-    email = request.form.get("email")
-    password = request.form.get("password")
+        try:
+            orgId = organizations.create(
+                name, type, website, description, contact_person, email, phone
+            )
 
-    name = request.form.get("name")
-    type = request.form.get("type")
-    website = request.form.get("website")
-    description = request.form.get("description")
-    contact_person = request.form.get("contact_person")
-    email = request.form.get("email")
-    phone = request.form.get("phone")
+            users.create(
+                email,
+                password,
+                organization_id=orgId,
+                role="organization",
+                status=2,
+            )
 
-    try:
-        orgId = organizations.create(
-            name, type, website, description, contact_person, email, phone
-        )
-
-        users.create(
-            email,
-            password,
-            organization_id=orgId,
-            role="organization",
-            status=2,
-        )
-
-        message = "Organisatie succesvol aangemaakt!"
-        return redirect_page("organization/register?success=1")
-    except Exception as e:
-        message = f"Er is iets fout gegaan: {str(e)}"
-        return redirect_page(f"organization/register?error={message}")
+            message = "Organisatie succesvol aangemaakt!"
+            return redirect_page("organization/register?success=1")
+        except Exception as e:
+            message = f"Er is iets fout gegaan: {str(e)}"
+            return redirect_page(f"organization/register?error={message}")
+    return render("organization-add.html", success=success, error=error)
