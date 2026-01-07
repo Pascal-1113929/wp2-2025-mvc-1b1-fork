@@ -2,13 +2,38 @@
 
 {% extends 'layouts/default.html' %} {% block content %}
 
-<main>
+<main class="home">
     <header>
-        <h1>Gebruikers lijst</h1>
+        <h1>Approval</h1>
     </header>
-    <div class="seperator"></div>
-    <section>
-        {{ table(['Email', 'Notes', 'Options'], user_table) }}
+
+    <section class="sectioncard">
+        <h2>Gebruikers</h2>
+        {% if user_table_count > 0 %}
+            {{ table(['Email', 'Notes', 'Options'], user_table) }}
+        {% else %}
+            <p>Alle gebruikers zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+        {% endif %}
+    </section>
+
+    <section class="sectioncard">
+        <h2>Onderzoeken</h2>
+        {% if user_table_count > 0 %}
+            {{ table(['Email', 'Notes', 'Options'], user_table) }}
+        {% else %}
+            <p>Alle onderzoeken zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+        {% endif %}
+
+    </section>
+
+    <section class="sectioncard">
+        <h2>Inschrijvingen</h2>
+        {% if user_table_count > 0 %}
+            {{ table(['Email', 'Notes', 'Options'], user_table) }}
+        {% else %}
+            <p>Alle inschrijvingen zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+        {% endif %}
+
     </section>
 </main>
 
