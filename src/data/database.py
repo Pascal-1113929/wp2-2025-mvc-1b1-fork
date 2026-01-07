@@ -273,21 +273,7 @@ class Database:
                             TEXT
                             NOT
                             NULL,
-                            status
-                            TEXT
-                            NOT
-                            NULL
-                            DEFAULT
-                            'nieuw'
-                            CHECK (
-                            status
-                            IN
-                        (
-                            'nieuw',
-                            'goedgekeurd',
-                            'afgekeurd',
-                            'gesloten'
-                        )),
+                            status_id INTEGER NOT NULL,
                             available INTEGER NOT NULL DEFAULT 1, -- 0/1
                             description TEXT,
                             start_date TEXT, -- ISO yyyy-mm-dd
@@ -310,6 +296,13 @@ class Database:
                         (
                             organization_id
                         ) REFERENCES organizations
+                        (
+                            id
+                        ),
+                        FOREIGN KEY
+                        (
+                            status_id
+                        ) REFERENCES status
                         (
                             id
                         )
@@ -377,20 +370,10 @@ class Database:
                             INTEGER
                             NOT
                             NULL,
-                            status
-                            TEXT
+                            status_id
+                            INTEGER
                             NOT
-                            NULL
-                            DEFAULT
-                            'nieuw'
-                            CHECK (
-                            status
-                            IN
-                        (
-                            'nieuw',
-                            'goedgekeurd',
-                            'afgekeurd'
-                        )),
+                            NULL,
                             created_at TEXT DEFAULT
                         (
                             DATE
@@ -402,6 +385,16 @@ class Database:
                             study_id,
                             profile_id
                         ),
+                        FOREIGN
+                        KEY
+                        (
+                            status_id
+                        )
+                        REFERENCES
+                        status
+                        (
+                            id
+                        )
                             FOREIGN KEY
                         (
                             study_id
@@ -424,7 +417,7 @@ class Database:
             cur.execute('CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)')
             cur.execute('CREATE INDEX IF NOT EXISTS idx_users_status ON users(status_id)')
             cur.execute('CREATE INDEX IF NOT EXISTS idx_profiles_birthdate ON profiles(birth_date)')
-            cur.execute('CREATE INDEX IF NOT EXISTS idx_studies_status_dates ON studies(status, start_date, end_date)')
+            cur.execute('CREATE INDEX IF NOT EXISTS idx_studies_status_dates ON studies(status_id, start_date, end_date)')
             cur.execute('CREATE INDEX IF NOT EXISTS idx_enrollments_study ON enrollments(study_id)')
             cur.execute('CREATE INDEX IF NOT EXISTS idx_enrollments_profile ON enrollments(profile_id)')
 
@@ -630,19 +623,19 @@ class Database:
                 cur.executemany('''
                                 INSERT
                                 OR IGNORE INTO studies
-                    (organization_id, title, status, available, description, start_date, end_date, study_type,
+                    (organization_id, title, status_id, available, description, start_date, end_date, study_type,
                      location, has_reward, reward, age_min, age_max)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                                 ''', [
-                                    (2, 'Gebruikersonderzoek AH app', 'goedgekeurd', 1,
+                                    (2, 'Gebruikersonderzoek AH app', 2, 1,
                                      'Test de toegankelijkheid van de boodschappen-app.',
                                      '2025-11-15', '2025-12-15', 'online',
                                      None, 1, '€25 cadeaubon', 18, 75),
-                                    (1, 'Toegankelijkheid gemeentelijke website', 'nieuw', 1,
+                                    (1, 'Toegankelijkheid gemeentelijke website', 1, 1,
                                      'Toptaken testen met screenreader.',
                                      '2025-12-01', '2026-01-15', 'op locatie',
                                      'Amsterdam', 1, '€50 vergoeding + reiskosten', 18, 99),
-                                    (3, 'Zorgportaal formulierenreview', 'goedgekeurd', 1,
+                                    (3, 'Zorgportaal formulierenreview', 2, 1,
                                      'Formulieren doorlopen met motorische beperking.',
                                      '2025-11-20', '2025-12-20', 'telefonisch',
                                      None, 1, "€50 vergoeding", 21, 80),
@@ -677,8 +670,8 @@ class Database:
                 # Enrollments for seeded studies
                 cur.execute('''
                             INSERT
-                            OR IGNORE INTO enrollments (study_id, profile_id, status)
-                            SELECT s.id, p.id, 'nieuw'
+                            OR IGNORE INTO enrollments (study_id, profile_id, status_id)
+                            SELECT s.id, p.id, 1
                             FROM studies s
                                      JOIN profiles p ON 1 = 1
                                      JOIN users u ON u.id = p.user_id

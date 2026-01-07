@@ -1,5 +1,6 @@
 from data.database import Database
 
+
 class Organization:
     def __init__(self, db_path: str):
         self.db = Database(db_path)

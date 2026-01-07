@@ -49,8 +49,8 @@ def research_dashboard_render():
 
     study_ids = []
     for disability_id in disability_ids:
-        study_id = studies.get_study_id_by_disability_id(disability_id)
-        if study_id is not None:
+        study_id_list = studies.get_study_id_by_disability_id(disability_id)
+        for study_id in study_id_list:
             study_ids.append(study_id)
 
     available_studies = []
@@ -85,7 +85,6 @@ def study_dashboard_render(study_id):
     table.set_order(table_header)
 
     table_data = table.export_to_macro()
-    print(study)
 
     return render("study.html", study=study, organization=organization, table_data=table_data)
 
@@ -114,7 +113,7 @@ def enroll_confirm(study_id):
     enrollment.create(
         profile_id=profile["id"],
         study_id=study_id,
-        status = "nieuw"
+        status = 1
     )
     
     return redirect_page(f"research/{study_id}/enroll/success")
