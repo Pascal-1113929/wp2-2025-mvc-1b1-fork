@@ -50,4 +50,4 @@ class User:
             cur = con.cursor()
             cur.execute("SELECT * FROM users WHERE id = ?", (user_id,))
             con.commit()
-            return cur.fetchone()
+            return dict(cur.fetchone())

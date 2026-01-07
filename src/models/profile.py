@@ -1,5 +1,6 @@
 from data.database import Database
 
+
 class Profile:
     def __init__(self, db_path: str):
         self.db = Database(db_path)
@@ -27,3 +28,15 @@ class Profile:
                         birthdate, atools, intro, aterms, contact, researchtype, availability))
             con.commit()
             return cur.lastrowid
+
+    def get_user_name(self, userid):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM profiles WHERE user_id = ?", (userid,))
+            con.commit()
+            try:
+                profile = dict(cur.fetchone())
+                return profile["first_name"] + " " + profile["last_name"]
+
+            except TypeError:
+                return None
