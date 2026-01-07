@@ -3,6 +3,8 @@ import re
 
 class Table:
     def __init__(self, data):
+        if not isinstance(data, list):
+            data = [data]
         self.table_data = data
 
     def export_to_macro(self):
