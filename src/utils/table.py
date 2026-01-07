@@ -54,14 +54,42 @@ class Table:
                                         }
                                     )
                                 else:
-                                    elements.append(
-                                        {
-                                            "type": "text",
-                                            "value": str(element_def)
-                                            if element_def is not None
-                                            else "",
-                                        }
-                                    )
+                                    if (
+                                        isinstance(element_def, list)
+                                        and len(element_def) >= 2
+                                        and element_def[0] == "text"
+                                    ):
+                                        value_list = (
+                                            element_def[1]
+                                            if len(element_def) > 1
+                                            else []
+                                        )
+                                        if (
+                                            isinstance(value_list, list)
+                                            and len(value_list) > 0
+                                        ):
+                                            text_value = " ".join(
+                                                str(v) for v in value_list
+                                            )
+                                        else:
+                                            text_value = str(value_list)
+                                        elements.append(
+                                            {
+                                                "type": "text",
+                                                "value": text_value
+                                                if text_value is not None
+                                                else "",
+                                            }
+                                        )
+                                    else:
+                                        elements.append(
+                                            {
+                                                "type": "text",
+                                                "value": str(element_def)
+                                                if element_def is not None
+                                                else "",
+                                            }
+                                        )
                             else:
                                 elements.append(
                                     {
