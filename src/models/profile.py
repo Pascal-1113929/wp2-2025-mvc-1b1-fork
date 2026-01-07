@@ -12,6 +12,14 @@ class Profile:
             con.commit()
             return cur.fetchone()
 
+    def update_note(self, userid: int, note: str):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "UPDATE profiles SET notes = ? WHERE user_id = ?", (note, userid)
+            )
+            con.commit()
+
     def create(
         self,
         userid: int,
