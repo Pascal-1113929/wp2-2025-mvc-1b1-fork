@@ -424,7 +424,7 @@ class Database:
                 "CREATE INDEX IF NOT EXISTS idx_profiles_birthdate ON profiles(birth_date)"
             )
             cur.execute(
-                "CREATE INDEX IF NOT EXISTS idx_studies_status_dates ON studies(status, start_date, end_date)"
+                "CREATE INDEX IF NOT EXISTS idx_studies_status_dates ON studies(status_id, start_date, end_date)"
             )
             cur.execute(
                 "CREATE INDEX IF NOT EXISTS idx_enrollments_study ON enrollments(study_id)"
@@ -680,7 +680,7 @@ class Database:
                         (
                             2,
                             "Gebruikersonderzoek AH app",
-                            "goedgekeurd",
+                            2,
                             1,
                             "Test de toegankelijkheid van de boodschappen-app.",
                             "2025-11-15",
@@ -695,7 +695,7 @@ class Database:
                         (
                             1,
                             "Toegankelijkheid gemeentelijke website",
-                            "nieuw",
+                            2,
                             1,
                             "Toptaken testen met screenreader.",
                             "2025-12-01",
@@ -710,7 +710,7 @@ class Database:
                         (
                             3,
                             "Zorgportaal formulierenreview",
-                            "goedgekeurd",
+                            2,
                             1,
                             "Formulieren doorlopen met motorische beperking.",
                             "2025-11-20",
