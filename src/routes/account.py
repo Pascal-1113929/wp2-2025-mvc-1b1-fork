@@ -116,6 +116,8 @@ def expert_profile(id):
         allow_delete = True
 
     dbuser = users.get_user_by_id(id)
+    if not dbuser:
+        raise NotFound()
     profile = profiles.get_profile_by_userid(id)
     if not profile:
         raise NotFound()
