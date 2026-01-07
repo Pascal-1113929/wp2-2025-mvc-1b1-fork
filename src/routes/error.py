@@ -10,6 +10,11 @@ def page_not_found(e):
     return render("error/not_found.html"), 404
 
 
+@error_bp.app_errorhandler(403)
+def page_forbidden(e):
+    return render("error/forbidden.html"), 403
+
+
 @error_bp.app_errorhandler(405)
 def method_not_allowed(e):
     return render("error/method_not_allowed.html"), 405

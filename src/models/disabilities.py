@@ -61,6 +61,13 @@ class Disablity:
             con.commit()
             return cur.lastrowid
 
+    def update_profile_disabilities(self, profileid, disability_id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("UPDATE profile_disabilities SET disability_id = ? WHERE profile_id = ?", (disability_id, profileid))
+            con.commit()
+            return cur.lastrowid
+
     def create_study_disabilities(self, study_id, disability_id):
         with self.db.connect() as con:
             cur = con.cursor()
