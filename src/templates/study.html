@@ -57,13 +57,17 @@
                 </article>
             </div>
         </section>
-        <section>
-            {% if enrolled == False %}
-                <a href="/{{ base.locale }}/research/{{ study.id }}/enroll" class="button">Schrijf in op dit onderzoek</a>
-            {% else %}
-                <a href="/{{ base.locale }}/research/{{ study.id }}/unlist" class="button">Uitschrijven uit dit onderzoek</a>
-            {% endif %}
-        </section>
+        {% if enrolled is not none %}
+            <section>
+
+                {% if enrolled == False %}
+                    <a href="/{{ base.locale }}/research/{{ study.id }}/enroll" class="button">Schrijf in op dit onderzoek</a>
+                {% else %}
+                    <a href="/{{ base.locale }}/research/{{ study.id }}/unlist" class="button">Uitschrijven uit dit onderzoek</a>
+                {% endif %}
+
+            </section>
+        {% endif %}
     </main>
 
 {% endblock %}

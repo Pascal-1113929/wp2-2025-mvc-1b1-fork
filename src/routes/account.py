@@ -8,7 +8,7 @@ from i18n.locale import list_locales
 from view import render, redirect_page
 from utils.dropdown import Dropdown
 from utils.table import Table
-from utils.authorizations import is_authenticated
+from utils.authorization import is_authenticated
 from werkzeug.exceptions import NotFound, Forbidden
 
 users = User()

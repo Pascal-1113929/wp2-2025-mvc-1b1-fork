@@ -15,6 +15,16 @@ class Study:
             con.commit()
             return cur.fetchone()
 
+    def set_research_status(self, user_id, status):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "UPDATE studies SET status_id = ? WHERE id = ?",
+                (status, user_id),
+            )
+            con.commit()
+            return cur.lastrowid
+
     def get_study_by_organization_id(self, organization_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
@@ -113,9 +123,15 @@ class Study:
     def get_study_by_status(self, status_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM studies WHERE status_id=?", (status_id))
+            cur.execute("SELECT * FROM studies WHERE status_id=?", (status_id,))
             con.commit()
-            return cur.fetchall()
+            study_status_id_list = cur.fetchall()
+
+            new_study_status_id_list = []
+            for study_status_id in study_status_id_list:
+                new_study_status_id_list.append(dict(study_status_id))
+
+            return new_study_status_id_list
 
     def create(self, org_id, data):
         with self.db.connect() as con:

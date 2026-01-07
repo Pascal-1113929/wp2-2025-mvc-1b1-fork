@@ -12,6 +12,7 @@ from models.user import User
 from view import render, redirect_page
 from werkzeug.exceptions import NotFound
 from utils.table import Table
+from utils.authorization import in_roles
 
 users = User()
 organizations = Organization()
@@ -126,12 +127,15 @@ def research_dashboard_render():
 
 @research_bp.route("/<study_id>")
 def study_dashboard_render(study_id):
-    user_id = session["user_id"]
+    if in_roles("expert"):
+        user_id = session["user_id"]
+
     study = studies.get_study_by_id(study_id)
     organization = organizations.get_organization_by_id(study["organization_id"])
     disability_list = disabilities.get_disability_list_by_studyid(study["id"])
-    profile = profiles.get_profile_by_userid(user_id)
-    enrolled = enrolments.enrolment_check(study["id"], profile["id"])
+    if not in_roles("admin"):
+        profile = profiles.get_profile_by_userid(user_id)
+        enrolled = enrolments.enrolment_check(study["id"], profile["id"])
     study["disabilities"] = disability_list
     table_header = [
         "category",
@@ -148,7 +152,7 @@ def study_dashboard_render(study_id):
         study=study,
         organization=organization,
         table_data=table_data,
-        enrolled=enrolled,
+        enrolled=enrolled if in_roles("expert") else None,
     )
 
 

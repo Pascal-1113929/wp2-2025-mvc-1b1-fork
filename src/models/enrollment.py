@@ -13,18 +13,55 @@ class Enrollment:
             return cur.fetchone()
 
     def create(self, study_id, profile_id, status):
-        with self.db.connect () as con:
+        with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
                 "INSERT INTO enrollments (study_id, profile_id, status_id) VALUES (?, ?, ?)",
-                (study_id, profile_id, status)
+                (study_id, profile_id, status),
             )
             con.commit()
 
     def get_enrolments_by_study_id(self, study_id: int, status_id):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM enrollments WHERE study_id = ? and status_id = ?", (study_id, status_id))
+            cur.execute(
+                "SELECT * FROM enrollments WHERE study_id = ? and status_id = ?",
+                (study_id, status_id),
+            )
+            con.commit()
+
+            enrollment_list = cur.fetchall()
+
+            new_enrollment_list = []
+            for enrollment in enrollment_list:
+                enrollment_dict = dict(enrollment)
+                new_enrollment_list.append(enrollment_dict)
+
+            return new_enrollment_list
+
+    def set_enrollment_status(self, enrollment_id, status):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "UPDATE enrollments SET status_id = ? WHERE id = ?",
+                (status, enrollment_id),
+            )
+            con.commit()
+            return cur.lastrowid
+
+    def get_enrolments_by_status_id(self, status_id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                """
+                SELECT enrollments.*, studies.title as study_title, profiles.first_name as first_name, profiles.last_name as last_name
+                FROM enrollments
+                INNER JOIN studies ON enrollments.study_id = studies.id
+                INNER JOIN profiles ON enrollments.profile_id = profiles.id
+                WHERE enrollments.status_id = ?
+            """,
+                (status_id,),
+            )
             con.commit()
 
             enrollment_list = cur.fetchall()
@@ -54,13 +91,19 @@ class Enrollment:
     def delete_enrollment(self, study_id: int, profile_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("DELETE FROM enrollments WHERE study_id = ? AND profile_id = ?", (study_id, profile_id))
+            cur.execute(
+                "DELETE FROM enrollments WHERE study_id = ? AND profile_id = ?",
+                (study_id, profile_id),
+            )
             con.commit()
 
     def enrolment_check(self, study_id: int, profile_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM enrollments WHERE study_id = ? and profile_id = ?", (study_id, profile_id))
+            cur.execute(
+                "SELECT * FROM enrollments WHERE study_id = ? and profile_id = ?",
+                (study_id, profile_id),
+            )
             con.commit()
             enrolment = cur.fetchone()
             if enrolment:
