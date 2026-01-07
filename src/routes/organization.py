@@ -9,6 +9,7 @@ from models.disabilities import Disablity
 from models.enrollment import Enrollment
 from models.profile import Profile
 from models.status import Status
+from view import redirect_page, render
 
 organizations = Organization()
 users = User()
@@ -53,7 +54,18 @@ def organization_dashboard_render(id):
 
         table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
         table.add_column(
-            "modify", "button", ["delete", ".organization/study/<id>/delete"]
+            "modify",
+            [
+                [
+                    "button",
+                    [
+                        "delete",
+                        ".organization/study/<id>/delete",
+                        "fa-solid fa-trash",
+                        "danger",
+                    ],
+                ],
+            ],
         )
         table.whitelist_data(table_header)
         table.set_order(table_header)

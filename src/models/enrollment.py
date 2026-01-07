@@ -54,7 +54,8 @@ class Enrollment:
             cur = con.cursor()
             cur.execute(
                 """
-                SELECT enrollments.*, studies.title as study_title, profiles.first_name as first_name, profiles.last_name as last_name
+                SELECT enrollments.*, studies.title as study_title, profiles.first_name as first_name, 
+                       profiles.last_name as last_name, profiles.user_id as user_id 
                 FROM enrollments
                 INNER JOIN studies ON enrollments.study_id = studies.id
                 INNER JOIN profiles ON enrollments.profile_id = profiles.id

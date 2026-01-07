@@ -105,7 +105,7 @@ def approval():
                 "button",
                 [
                     "View profile",
-                    ".expert-profile/<profile_id>",
+                    ".expert-profile/<user_id>",
                     "fa-solid fa-eye",
                     "info",
                 ],

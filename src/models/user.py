@@ -29,10 +29,14 @@ class User:
                 "SELECT * FROM users INNER JOIN profiles ON users.id = profiles.user_id WHERE users.status_id = 1"
             )
             con.commit()
-            result = cur.fetchone()
-            if result is None:
-                return {}
-            return dict(result)
+            result = cur.fetchall()
+
+            users = []
+            for row in result:
+                user = dict(row)
+                users.append(user)
+
+            return users
 
     def set_user_status(self, user_id, status):
         with self.db.connect() as con:
