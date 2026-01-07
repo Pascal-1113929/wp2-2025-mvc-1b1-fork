@@ -135,7 +135,7 @@ def expert_profile(id):
     return render("expert-profile.html", user=user, table_data=table_data, allow_delete=allow_delete)
 
 
-@account_bp.route("/expert-profile/<uid>/delete", methods=["GET", "DELETE"])
+@account_bp.route("/expert-profile/<uid>/delete", methods=["GET", "DELETE", "POST"]) #form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
 def expert_profile_delete(uid):
     userid = session.get("user_id")
     role = session.get("role")
@@ -154,7 +154,7 @@ def expert_profile_delete(uid):
     if not profile:
         raise NotFound()
 
-    if request.method == "POST":
+    if request.method == "POST" or request.method == "DELETE": #form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
         users.delete_expert(userid, profiles)  # Need to provide the profiles instance
         session.pop("user_id")
         session.pop("role")
