@@ -33,6 +33,18 @@
     border-color: #ff4747;
 }
 
+.button.warning {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #ffffff;
+    border-color: #ff9800;
+}
+
+.button.info {
+    background: linear-gradient(135deg, #6b6bff, #4747ff);
+    color: #ffffff;
+    border-color: #4747ff;
+}
+
 .button.ghost {
     background: transparent;
     color: #168856;
