@@ -11,3 +11,14 @@ class Enrollment:
             cur.execute("SELECT COUNT() FROM enrollments")
             con.commit()
             return cur.fetchone()
+    
+    def create(self, study_id, profile_id, status):
+        with self.db.connect () as con:
+            cur = con.cursor()
+            cur.execute(
+                "INSERT INTO enrollments (study_id, profile_id, status) VALUES (?, ?, ?)",
+                (study_id, profile_id, status)
+            )
+            con.commit()
+        
+

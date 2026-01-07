@@ -5,25 +5,6 @@ from datetime import datetime
 class Study:
     def __init__(self, db_path: str):
         self.db = Database(db_path)
-        
-    def create(self, org_id, data):
-        with self.db.connect() as con:
-            cur = con.cursor()
-            cur.execute("""
-                INSERT INTO studies (organization_id, title, description, study_type, age_min, age_max, reward, start_date, end_date, status, available, has_reward)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (org_id, data.get("title"), data.get("description"), data.get("type"), data.get("min_age"), data.get("max_age"), data.get("reward"), data.get("start_date"), data.get("end_date"), "nieuw", 1, 1 if data.get("reward") else 0))
-            con.commit()
-            return cur.lastrowid
-        
-    def create_with_organisation(self, organization_id, data):
-        if data.get("reward") == "":
-            data['has_reward'] = 0
-        
-        return self.create(
-            org_id=organization_id,
-            data=data
-        )
 
     def count_all(self):
         with self.db.connect() as con:

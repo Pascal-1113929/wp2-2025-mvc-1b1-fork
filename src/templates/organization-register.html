@@ -3,19 +3,6 @@
 {% block content %}
 <main class="home">
     <section class="sectioncard">
-
-        {% if success %}
-            <div class="alert alert-success">
-                {{ success }}
-            </div>
-        {% endif %}
-
-        {% if error %}
-            <div class="alert alert-error">
-                {{ error }}
-            </div>
-        {% endif %}
-
         <form class="cm-form" action="{{ url_for('organization.org_register_save', language=base.locale)}}" method="post">
             <div class="form-group">
                 <label for="usr-email">Email</label>
@@ -67,6 +54,19 @@
 
             <button class="submit-btn" type="submit">Opslaan</button>
         </form>
+
+        {% if success %}
+            <div class="alert alert-success">
+                Organisatie succesvol aangemaakt!
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
     </section>
 </main>
 {% endblock %}

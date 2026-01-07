@@ -29,6 +29,18 @@ class Profile:
             con.commit()
             return cur.lastrowid
 
+    def get_user_name(self, userid):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM profiles WHERE user_id = ?", (userid,))
+            con.commit()
+            try:
+                profile = dict(cur.fetchone())
+                return profile["first_name"] + " " + profile["last_name"]
+
+            except TypeError:
+                return None
+
     def update_profile(self, userid: int, firstname, lastname, gender, postal, intro, phone, birthdate, atools, contact,
                        researchtype, availability, aterms):
         with self.db.connect() as con:
