@@ -1,11 +1,12 @@
 import re
+import copy
 
 
 class Table:
     def __init__(self, data):
         if not isinstance(data, list):
             data = [data]
-        self.table_data = data
+        self.table_data = copy.deepcopy(data)
 
     def export_to_macro(self):
         table_data = []
