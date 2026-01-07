@@ -107,6 +107,12 @@ def account_register():
     )
 
 
+@account_bp.route("/expert-profile")
+def expert_profile_redirect():
+    userid = session.get("user_id")
+    return redirect_page(f"/expert-profile/{userid}")
+
+
 @account_bp.route("/expert-profile/<id>")
 def expert_profile(id):
     userid = session.get("user_id")

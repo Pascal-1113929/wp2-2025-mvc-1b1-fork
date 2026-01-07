@@ -5,7 +5,8 @@
     <section class="sectioncard">
                 {% if success %}
             <div class="alert alert-success">
-                Succesvol Profiel gewijzigd!
+                <p>Succesvol Profiel gewijzigd!</p>
+                <a href="/{{ base.locale }}/expert-profile/{{ user.user_id }}" class="button" type="button">{{ lang.return_expert_edit }}</a>
             </div>
         {% endif %}
 

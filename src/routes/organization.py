@@ -26,9 +26,9 @@ org_bp = Blueprint("organization", __name__)
 
 
 @org_bp.route("/")
-def organization_list():
-    # TODO: list orginisation
-    return render("temporary_placeholder.html")
+def organization_redirect():
+    userid = session.get("user_id")
+    return redirect_page(f"/organization/{userid}")
 
 
 @org_bp.route("/<id>/")
@@ -42,9 +42,6 @@ def organization_dashboard_render(id):
     study_table_data = []
     if org is not None:
         study_list = studies.get_study_by_organization_id(id)
-        # study_w_status_list = []
-        # for study in study_list:
-        #     study["status"] = statuses.get_status_name(study["id"])
         table_header = [
             "title",
             "status",
