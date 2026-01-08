@@ -133,55 +133,75 @@ def org_register_add():
 # Is aangepast door Pascal na verdere inspectie
 @org_bp.route("/research/add", methods=["GET", "POST"])
 def research_register():
-    if request.method == "GET":
-        success = request.args.get("success")
-        error = request.args.get("error")
-        disability_dropdown = Dropdown(disabilities.get_all_disabilities())
-        disability_dropdown.set("value", "<id>")
-        disability_dropdown.set("text", "<name> - <category>")
+    success = request.args.get("success")
+    error = request.args.get("error")
+    errors = {}
+    if request.method == "POST":
+        title = request.form.get("title")
+        description = request.form.get("description")
+        type = request.form.get("type")
+        age_min = request.form.get("age_min")
+        age_max = request.form.get("age_max")
+        reward = request.form.get("reward")
+        disability = request.form.get("disability")
+        start_date = request.form.get("start_date")
+        end_date = request.form.get("end_date")
 
-        return render(
-            "organization-research.html",
-            success=success,
-            error=error,
-            disabilities=disability_dropdown.export_to_macro(),
-        )
+        required_fields = {
+            "title": title,
+            "description": description,
+            "type": type,
+            "age_min": age_min,
+            "age_max": age_max,
+            "reward": reward,
+            "disability": disability,
+            "start_date": start_date,
+            "end_date": end_date,
+        }
 
-    title = request.form.get("title")
-    description = request.form.get("description")
-    type = request.form.get("type")
-    age_min = request.form.get("age_min")
-    age_max = request.form.get("age_max")
-    reward = request.form.get("reward")
-    disability = request.form.get("disability")
-    start_date = request.form.get("start_date")
-    end_date = request.form.get("end_date")
+        # Check for empty fields
+        for field, value in required_fields.items():
+            if not value:
+                errors[field] = True
 
-    user = users.get_user_by_id(session.get("user_id"))
+        if not errors:
+            user = users.get_user_by_id(session.get("user_id"))
 
-    try:
-        study_id = studies.create_with_organisation(
-            organization_id=user["organization_id"],
-            data={
-                "title": title,
-                "description": description,
-                "type": type,
-                "disability": disability,
-                "min_age": age_min,
-                "max_age": age_max,
-                "reward": reward,
-                "start_date": start_date,
-                "end_date": end_date,
-            },
-        )
-        print(study_id)
-        disabilities.create_study_disabilities(study_id, disability)
+            try:
+                study_id = studies.create_with_organisation(
+                    organization_id=user["organization_id"],
+                    data={
+                        "title": title,
+                        "description": description,
+                        "type": type,
+                        "disability": disability,
+                        "min_age": age_min,
+                        "max_age": age_max,
+                        "reward": reward,
+                        "start_date": start_date,
+                        "end_date": end_date,
+                    },
+                )
+                print(study_id)
+                disabilities.create_study_disabilities(study_id, disability)
 
-        message = "Onderzoek succesvol aangemaakt!"
-        return redirect_page(f"organization/research/add?success={message}")
-    except Exception as e:
-        message = f"Er is iets fout gegaan: {str(e)}"
-        return redirect_page(f"organization/research/add?error={message}")
+                message = "Onderzoek succesvol aangemaakt!"
+                return redirect_page(f"organization/research/add?success={message}")
+            except Exception as e:
+                message = f"Er is iets fout gegaan: {str(e)}"
+                return redirect_page(f"organization/research/add?error={message}")
+
+    disability_dropdown = Dropdown(disabilities.get_all_disabilities())
+    disability_dropdown.set("value", "<id>")
+    disability_dropdown.set("text", "<name> - <category>")
+
+    return render(
+        "organization-research.html",
+        success=success,
+        error=error,
+        disabilities=disability_dropdown.export_to_macro(),
+        errors=errors
+    )
 
 
 @org_bp.route("/<organization_id>/study/<study_id>/")
