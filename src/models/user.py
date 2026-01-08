@@ -20,7 +20,11 @@ class User:
                 (email, password),
             )
             con.commit()
-            return dict(cur.fetchone())
+            row = cur.fetchone()
+            if row:
+                return dict(row)
+            else:
+                return None
 
     def get_new_users(self):
         with self.db.connect() as con:
