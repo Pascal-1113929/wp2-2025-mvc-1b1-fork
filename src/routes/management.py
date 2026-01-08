@@ -15,7 +15,6 @@ study = Study()
 organization = Organization()
 enrollment = Enrollment()
 
-
 management_bp = Blueprint("management", __name__)
 
 
@@ -177,7 +176,7 @@ def approval():
     )
 
 
-def email_generate(subject, user_name, user_id, request_type, status):
+def email_generate(subject, user_name, user_id, request_type, status, reciever_type="User"):
     html_email_content = render_template(
         "email/email_template.html",
         subject=subject,
@@ -185,7 +184,12 @@ def email_generate(subject, user_name, user_id, request_type, status):
         request_=request_type,
         status=status
     )
-    send_mail(subject, html_email_content, users.get_email_by_id(user_id))
+    if reciever_type == "User":
+        send_mail(subject, html_email_content, users.get_email_by_id(user_id))
+    elif reciever_type == "Organization":
+        send_mail(subject, html_email_content, organization.get_email_by_id(user_id))
+    else:
+        raise Exception("Unknown reciever_type")
 
 
 @management_bp.route("/approval/<type>/<id>/reject")
@@ -196,16 +200,23 @@ def approval_user_reject(type, id):
                        profile.get_name_by_userid(id),
                        id,
                        "Account",
-                       "Afgekeurd")
+                       "Afgekeurd")  # user is default reciever_type
     elif type == "research":
         study.set_research_status(id, 3)
+        organization_id = study.get_organization_id_by_id(id)
+        email_generate("Account Goedgekeurd",
+                       organization.get_name_by_id(id),
+                       organization_id,
+                       "Account",
+                       "Goedgekeurd",
+                       reciever_type="Organization")
     elif type == "enrollment":
         enrollment.set_enrollment_status(id, 3)
         email_generate("Inschrijving Afgekeurd",
                        profile.get_name_by_userid(id),
                        id,
                        "Inschrijving",
-                       "Afgekeurd")
+                       "Afgekeurd")   # user is default reciever_type
     return redirect_page("management/approval")
 
 
@@ -217,16 +228,23 @@ def approval_user_approve(type, id):
                        profile.get_name_by_userid(id),
                        id,
                        "Account",
-                       "Goedgekeurd")
+                       "Goedgekeurd")  # user is default reciever_type
     elif type == "research":
         study.set_research_status(id, 2)
+        organization_id = study.get_organization_id_by_id(id)
+        email_generate("Account Goedgekeurd",
+                       organization.get_name_by_id(id),
+                       organization_id,
+                       "Account",
+                       "Goedgekeurd",
+                       reciever_type="Organization")
     elif type == "enrollment":
         enrollment.set_enrollment_status(id, 2)
         email_generate("Inschrijving Goedgekeurd",
                        profile.get_name_by_userid(id),
                        id,
                        "Inschrijving",
-                       "Goedgekeurd")
+                       "Goedgekeurd")  # user is default reciever_type
     return redirect_page("management/approval")
 
 

@@ -163,3 +163,12 @@ class Study:
             data["has_reward"] = 0
 
         return self.create(org_id=organization_id, data=data)
+
+    def get_organization_id_by_id(self, id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "SELECT organization_id FROM studies WHERE id=?", (id,)
+            )
+            row = dict(cur.fetchone())
+            return row["organization_id"]
