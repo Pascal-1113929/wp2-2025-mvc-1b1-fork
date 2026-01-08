@@ -177,14 +177,35 @@ def approval():
     )
 
 
+def email_generate(subject, user_name, user_id, request_type, status):
+    html_email_content = render_template(
+        "email/email_template.html",
+        subject=subject,
+        user_name=user_name,
+        request_=request_type,
+        status=status
+    )
+    send_mail(subject, html_email_content, users.get_email_by_id(user_id))
+
+
 @management_bp.route("/approval/<type>/<id>/reject")
 def approval_user_reject(type, id):
     if type == "user":
         users.set_user_status(id, 3)
+        email_generate("Account Afgekeurd",
+                       profile.get_name_by_userid(id),
+                       id,
+                       "Account",
+                       "Afgekeurd")
     elif type == "research":
         study.set_research_status(id, 3)
     elif type == "enrollment":
         enrollment.set_enrollment_status(id, 3)
+        email_generate("Inschrijving Afgekeurd",
+                       profile.get_name_by_userid(id),
+                       id,
+                       "Inschrijving",
+                       "Afgekeurd")
     return redirect_page("management/approval")
 
 
@@ -192,22 +213,20 @@ def approval_user_reject(type, id):
 def approval_user_approve(type, id):
     if type == "user":
         users.set_user_status(id, 2)
-        subject = "Account Goedgekeurd"
-        request_ = "Account"
-        profile_name = profile.get_name_by_userid(id)
-        status = "Goedgekeurd"
-        html_email_content = render_template(
-            "email/email_template.html",
-            subject=subject,
-            profile_name=profile_name,
-            request_=request_,
-            status=status
-        )
-        send_mail(subject, html_email_content, users.get_email_by_id(id))
+        email_generate("Account Goedgekeurd",
+                       profile.get_name_by_userid(id),
+                       id,
+                       "Account",
+                       "Goedgekeurd")
     elif type == "research":
         study.set_research_status(id, 2)
     elif type == "enrollment":
         enrollment.set_enrollment_status(id, 2)
+        email_generate("Inschrijving Goedgekeurd",
+                       profile.get_name_by_userid(id),
+                       id,
+                       "Inschrijving",
+                       "Goedgekeurd")
     return redirect_page("management/approval")
 
 
