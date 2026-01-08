@@ -79,6 +79,7 @@ def organization_dashboard_render(id):
 def org_register_add():
     success = request.args.get("success")
     error = request.args.get("error")
+    errors = {}
     if request.method == "POST":
         password = request.form.get("password")
         name = request.form.get("name")
@@ -89,26 +90,43 @@ def org_register_add():
         email = request.form.get("email")
         phone = request.form.get("phone")
 
-        try:
-            org_id = organizations.create(
-                name, type, website, description, contact_person, email, phone
-            )
+        # Check for empty fields
+        required_fields = {
+            "password": password,
+            "name": name,
+            "type": type,
+            "website": website,
+            "description": description,
+            "contact_person": contact_person,
+            "email": email,
+            "phone": phone,
+        }
 
-            users.create(
-                email,
-                password,
-                organization_id=org_id,
-                role="organization",
-                status=2,
-            )
+        for field, value in required_fields.items():
+            if not value:  # empty string, None, or other falsy values
+                errors[field] = True
 
-            message = "Organisatie succesvol aangemaakt!"
-            return redirect_page("organization/add?success=1")
-        except Exception as e:
-            message = f"Er is iets fout gegaan: {str(e)}"
-            return redirect_page(f"organization/add?error={message}")
+        if not errors:
+            try:
+                org_id = organizations.create(
+                    name, type, website, description, contact_person, email, phone
+                )
 
-    return render("organization-add.html", success=success, error=error)
+                users.create(
+                    email,
+                    password,
+                    organization_id=org_id,
+                    role="organization",
+                    status=2,
+                )
+
+                message = "Organisatie succesvol aangemaakt!"
+                return redirect_page("organization/add?success=1")
+            except Exception as e:
+                message = f"Er is iets fout gegaan: {str(e)}"
+                return redirect_page(f"organization/add?error={message}")
+
+    return render("organization-add.html", success=success, error=error, errors=errors)
 
 
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005

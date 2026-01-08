@@ -6,50 +6,71 @@
         <form class="cm-form" action="{{ url_for('organization.org_register_add', language=base.locale)}}" method="post">
             <div class="form-group">
                 <label for="usr-email">Email</label>
-                <input id="usr-email" type="email" name="email" required placeholder="Voer hier uw naam in">
+                <input id="usr-email" type="email" name="email" value="{{ request.form.get('email', '') }}" required placeholder="Bijv: ameren@xwms.nl">
+                {% if errors.email %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
             </div>
+
             <div class="form-group">
                 <label for="usr-pass">Wachtwoord</label>
-                <input id="usr-pass" type="password" name="password" required placeholder="Voer hier uw wachtwoord in">
+                <input id="usr-pass" type="password" name="password" value="{{ request.form.get('password', '') }}" required placeholder="Voer hier uw wachtwoord in">
+                {% if errors.password %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
             </div>
 
             <hr>
+
             <div class="form-group">
                 <label for="org-name">Organisatienaam</label>
-                <input id="org-name" type="text" name="name" required placeholder="vul hier uw organisatie naam in">
+                <input id="org-name" type="text" name="name" value="{{ request.form.get('name', '') }}" required placeholder="vul hier uw organisatie naam in">
+                {% if errors.name %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="org-type">Type organisatie</label>
                 <select id="org-type" name="type" required>
-                    <option value="commercieel">Commercieel</option>
-                    <option value="non-profit">Non-profit</option>
+                    <option value="commercieel" {% if request.form.get('type') == 'commercieel' %}selected{% endif %}>Commercieel</option>
+                    <option value="non-profit" {% if request.form.get('type') == 'non-profit' %}selected{% endif %}>Non-profit</option>
                 </select>
+                {% if errors.type %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="website">Website</label>
-                <input id="website" type="text" name="website" placeholder="Bijv: https://www.mijnorganisatie.nl">
+                <input id="website" type="text" name="website" value="{{ request.form.get('website', '') }}" required placeholder="Bijv: https://www.mijnorganisatie.nl">
+                {% if errors.website %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="description">Beschrijving</label>
-                <textarea id="description" name="description" rows="4" aria-setsize="false" placeholder="vul hier uw organisatie bescrijving in"></textarea>
+                <textarea id="description" name="description" rows="4" required placeholder="vul hier uw organisatie bescrijving in">{{ request.form.get('description', '') }}</textarea>
+                {% if errors.description %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="contact-person">Contactpersoon</label>
-                <input id="contact-person" type="text" name="contact_person" placeholder="Bijv: Mia Rhoades">
-            </div>
-
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input id="email" type="email" name="email" required placeholder="Bijv: ameren@xwms.nl">
+                <input id="contact-person" type="text" name="contact_person" value="{{ request.form.get('contact_person', '') }}" required placeholder="Bijv: Mia Rhoades">
+                {% if errors.contact_person %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
             </div>
 
             <div class="form-group">
                 <label for="phone">Telefoonnummer</label>
-                <input id="phone" type="text" name="phone" placeholder="Bijv: 067409236450">
+                <input id="phone" type="text" name="phone" value="{{ request.form.get('phone', '') }}" required placeholder="Bijv: 067409236450">
+                {% if errors.phone %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
             </div>
 
             <button class="submit-btn" type="submit">Opslaan</button>
