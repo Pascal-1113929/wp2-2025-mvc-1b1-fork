@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 
 from view import render, redirect_page
 from models.user import User
@@ -7,6 +7,7 @@ from models.study import Study
 from models.organization import Organization
 from models.enrollment import Enrollment
 from utils.table import Table
+from utils.mail import send_mail
 
 users = User()
 profile = Profile()
@@ -191,6 +192,18 @@ def approval_user_reject(type, id):
 def approval_user_approve(type, id):
     if type == "user":
         users.set_user_status(id, 2)
+        subject = "Account Goedgekeurd"
+        request_ = "Account"
+        profile_name = profile.get_name_by_userid(id)
+        status = "Goedgekeurd"
+        html_email_content = render_template(
+            "email/email_template.html",
+            subject=subject,
+            profile_name=profile_name,
+            request_=request_,
+            status=status
+        )
+        send_mail(subject, html_email_content, users.get_email_by_id(id))
     elif type == "research":
         study.set_research_status(id, 2)
     elif type == "enrollment":
