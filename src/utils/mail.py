@@ -1,9 +1,12 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
+from dotenv import load_dotenv
 
-CONNECTION = {"host": "127.0.0.1", "port": 2525}
-# using docker run -p 4999:80 -p 2525:25 -p 110:110 rnwood/smtp4dev
+load_dotenv()
+
+CONNECTION = {"host": os.getenv("smtp_host"), "port": os.getenv("smtp_port")}
 
 
 def send_mail(subject, body, reciever):
@@ -25,5 +28,8 @@ def send_mail(subject, body, reciever):
     msg.attach(part)
     print("Sending email...", CONNECTION["host"], CONNECTION["port"])
 
-    with smtplib.SMTP(CONNECTION["host"], CONNECTION["port"]) as server:
-        server.sendmail(msg["From"], [msg["To"]], msg.as_string())
+    if CONNECTION["host"] and CONNECTION["port"]:
+        with smtplib.SMTP(CONNECTION["host"], CONNECTION["port"]) as server:
+            server.sendmail(msg["From"], [msg["To"]], msg.as_string())
+    else:
+        print("Mail sending failed")
