@@ -31,3 +31,19 @@ class Organization:
             cur.execute("SELECT * FROM organizations WHERE id = ?", (organization_id,))
             con.commit()
             return cur.fetchone()
+
+    def get_email_by_id(self, id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT email FROM organizations WHERE id = ?", (id,))
+            con.commit()
+            row = dict(cur.fetchone())
+            return row["email"]
+
+    def get_name_by_id(self, id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT name FROM organizations WHERE id = ?", (id,))
+            con.commit()
+            row = dict(cur.fetchone())
+            return row["name"]

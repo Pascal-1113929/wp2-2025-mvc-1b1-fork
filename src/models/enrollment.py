@@ -111,3 +111,16 @@ class Enrollment:
                 return True
             else:
                 return False
+
+    def get_user_id_by_enrollment_id(self, enrollment_id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "SELECT user_id FROM enrollments "
+                "INNER JOIN profiles on profiles.id == enrollments.profile_id "
+                "WHERE enrollments.id = ?",
+                (enrollment_id,),
+            )
+            con.commit()
+            row = cur.fetchone()
+            return row["user_id"]

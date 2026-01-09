@@ -114,3 +114,11 @@ class Profile:
                               researchtype, availability, userid))
             con.commit()
             return cur.lastrowid
+
+    def get_name_by_userid(self, userid: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT * FROM profiles WHERE user_id = ?", (userid,))
+            con.commit()
+            row = dict(cur.fetchone())
+            return row["first_name"] + " " + row["last_name"]

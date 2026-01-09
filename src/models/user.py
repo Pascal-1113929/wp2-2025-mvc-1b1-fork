@@ -20,7 +20,11 @@ class User:
                 (email, password),
             )
             con.commit()
-            return dict(cur.fetchone())
+            row = cur.fetchone()
+            if row:
+                return dict(row)
+            else:
+                return None
 
     def get_new_users(self):
         with self.db.connect() as con:
@@ -118,3 +122,11 @@ class User:
             cur.execute("SELECT organization_id FROM users WHERE id = ?", (id,))
             con.commit()
             return dict(cur.fetchone())
+
+    def get_email_by_id(self, id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT email FROM users WHERE id = ?", (id,))
+            con.commit()
+            row = dict(cur.fetchone())
+            return row["email"]

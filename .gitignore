@@ -6,3 +6,4 @@ venv
 src/data/app.db
 
 .idea
+.env

@@ -36,9 +36,9 @@
                     <h3>
                         Locatie
                     </h3>
-                    {% if study.type == "online" %}
+                    {% if study.study_type == "online" %}
                     <p>Dit onderzoek is online.</p>
-                    {% elif study.type == "telefonisch" %}
+                    {% elif study.study_type == "telefonisch" %}
                     <p>Dit onderzoek is telefonisch en gaat dus via de telefoon</p>
                     {% else %}
                     <p>Dit onderzoek is op locatie in: {{ study.location }}</p>

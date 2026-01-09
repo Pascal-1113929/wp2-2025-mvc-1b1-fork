@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, session
-
+from flask import Blueprint, session, render_template
 
 from models.enrollment import Enrollment
 from models.disabilities import Disablity
@@ -13,6 +12,7 @@ from view import render, redirect_page
 from werkzeug.exceptions import NotFound
 from utils.table import Table
 from utils.authorization import in_roles
+from utils.mail import send_mail
 
 users = User()
 organizations = Organization()
@@ -171,8 +171,19 @@ def enroll_page(study_id):
 def enroll_confirm(study_id):
     user_id = session.get("user_id")
     profile = profiles.get_profile_by_userid(user_id)
+    user_name = profiles.get_name_by_userid(user_id)
+    study_name = studies.get_study_by_id(study_id)["title"]
 
     enrolments.create(profile_id=profile["id"], study_id=study_id, status=1)
+
+    subject = f"Inschrijving Onderzoek: {study_name}"
+    html_email_content = render_template(
+        "email/email_enroll_template.html",
+        subject=subject,
+        user_name=user_name,
+        study_name=study_name
+    )
+    send_mail(subject, html_email_content, users.get_email_by_id(user_id))
 
     return redirect_page(f"research/{study_id}/enroll/success")
 

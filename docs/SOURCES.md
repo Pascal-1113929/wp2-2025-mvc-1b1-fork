@@ -9,6 +9,8 @@ Sources used in this project:
  - https://stackoverflow.com/questions/29516093/how-to-redirect-to-a-external-404-page-python-flask
  - https://www.geeksforgeeks.org/python/flask-blueprints/
  - https://fontawesome.com/ (https://cdnjs.com/libraries/font-awesome)
+ - https://docs.python.org/3/library/email.examples.html (email)
+ - https://github.com/rnwood/smtp4dev (smtp4dev client)
 
 Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing

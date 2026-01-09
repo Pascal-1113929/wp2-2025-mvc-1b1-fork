@@ -55,6 +55,7 @@ def account_logout():
 def account_register():
     success = request.args.get("success")
     error = request.args.get("error")
+    errors = {}
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -73,32 +74,56 @@ def account_register():
         availability = request.form.get("availability")
         aterms = request.form.get("aterms")
 
-        try:
-            user_id = users.create_new_expert(email, password)
+        # Empty field checks
+        required_fields = {
+            "email": email,
+            "password": password,
+            "firstname": firstname,
+            "lastname": lastname,
+            "gender": gender,
+            "disability": disability,
+            "postal": postal,
+            "intro": intro,
+            "phone": phone,
+            "birthdate": birthdate,
+            "atools": atools,
+            "contact": contact,
+            "researchtype": researchtype,
+            "availability": availability,
+            "aterms": aterms,
+        }
 
-            profile_id = profiles.create(
-                user_id,
-                firstname,
-                lastname,
-                gender,
-                postal,
-                intro,
-                phone,
-                birthdate,
-                atools,
-                contact,
-                researchtype,
-                availability,
-                aterms,
-            )
-            disabilities.create_profile_disabilities(profile_id, disability)
+        for field, value in required_fields.items():
+            if not value:
+                errors[field] = True
 
-            return redirect_page("register?success=1")
+        if not errors:
+            try:
+                user_id = users.create_new_expert(email, password)
 
-        except Exception as e:
-            message = "Er is iets fout gegaan"
-            print(e)
-            return redirect_page(f"register?error={message}")
+                profile_id = profiles.create(
+                    user_id,
+                    firstname,
+                    lastname,
+                    gender,
+                    postal,
+                    intro,
+                    phone,
+                    birthdate,
+                    atools,
+                    contact,
+                    researchtype,
+                    availability,
+                    aterms,
+                )
+                disabilities.create_profile_disabilities(profile_id, disability)
+
+                return redirect_page("register?success=1")
+
+            except Exception as e:
+                message = "Er is iets fout gegaan"
+                print(e)
+                return redirect_page(f"register?error={message}")
 
     disability_dropdown = Dropdown(disabilities.get_all_disabilities())
     disability_dropdown.set("value", "<id>")
@@ -109,6 +134,7 @@ def account_register():
         disabilities=disability_dropdown.export_to_macro(),
         success=success,
         error=error,
+        errors=errors
     )
 
 
