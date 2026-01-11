@@ -169,7 +169,7 @@
 "account_register_field_availability_title": "Availability"
 "account_register_field_availability_placeholder": "e.g., Mon-Wed during the day"
 "account_register_field_terms_label": "I agree to the User Policy"
-"account_register_btn_submit": "Save"
+"account_register_btn_submit": "Register"
 "account_register_btn_reset": "Reset"
 "account_register_link_login": "Already have an account? Log in here"
 "account_register_success": "Successfully Registered. Awaiting Approval!"
