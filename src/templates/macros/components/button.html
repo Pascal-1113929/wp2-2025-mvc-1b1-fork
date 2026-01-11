@@ -13,7 +13,8 @@
         </a>
     {% else %}
         <button type="{{ type }}" class="button{% if class_name %} {{ class_name }}{% endif %}">
-            {{ text }}
+            {% if icon %}
+                <i class="{{ icon }}"></i> {% endif %}{{ text }}
         </button>
     {% endif %}
 {% endmacro %}
