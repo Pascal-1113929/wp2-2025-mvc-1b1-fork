@@ -117,3 +117,6 @@
 "management_approval_enrollment_option_viewresearch": "View research"
 "management_approval_enrollment_option_approve": "Approve"
 "management_approval_enrollment_option_reject": "Reject"
+"management_approval_user_editnote_title": "Edit note for profile"
+"management_approval_user_editnote_placeholder": "Fill here your note for this profile"
+"management_approval_user_editnote_save": "Save"

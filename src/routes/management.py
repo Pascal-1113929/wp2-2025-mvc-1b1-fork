@@ -286,6 +286,7 @@ def approval_user_approve(type, id):
 @management_bp.route("/approval/note/<user_id>", methods=["GET", "POST"])
 def approval_edit_note(user_id):
     user = profile.get_profile_by_userid(user_id)
+
     if request.method == "GET":
         if user.get("notes") is None:
             user["notes"] = ""
