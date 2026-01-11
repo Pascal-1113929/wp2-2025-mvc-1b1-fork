@@ -49,7 +49,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_users_option_viewprofile"],
+                    lang.get("management_approval_users_option_viewprofile"),
                     ".expert-profile/<id>",
                     "fa-solid fa-eye",
                     "info",
@@ -58,7 +58,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_users_option_editnote"],
+                    lang.get("management_approval_users_option_editnote"),
                     ".management/approval/note/<id>",
                     "fa-solid fa-pen-to-square",
                     "warning",
@@ -67,7 +67,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_users_option_approve"],
+                    lang.get("management_approval_users_option_approve"),
                     ".management/approval/user/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -76,7 +76,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_users_option_reject"],
+                    lang.get("management_approval_users_option_reject"),
                     ".management/approval/user/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
@@ -91,7 +91,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_research_option_viewresearch"],
+                    lang.get("management_approval_research_option_viewresearch"),
                     ".research/<id>",
                     "fa-solid fa-eye",
                     "info",
@@ -100,7 +100,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_research_option_approve"],
+                    lang.get("management_approval_research_option_approve"),
                     ".management/approval/research/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -109,7 +109,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_research_option_reject"],
+                    lang.get("management_approval_research_option_reject"),
                     ".management/approval/research/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
@@ -123,7 +123,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_enrollment_option_viewprofile"],
+                    lang.get("management_approval_enrollment_option_viewprofile"),
                     ".expert-profile/<user_id>",
                     "fa-solid fa-eye",
                     "info",
@@ -132,7 +132,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_enrollment_option_viewresearch"],
+                    lang.get("management_approval_enrollment_option_viewresearch"),
                     ".research/<study_id>",
                     "fa-solid fa-pen-to-square",
                     "info",
@@ -141,7 +141,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_enrollment_option_approve"],
+                    lang.get("management_approval_enrollment_option_approve"),
                     ".management/approval/enrollment/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -150,7 +150,7 @@ def approval():
             [
                 "button",
                 [
-                    lang["management_approval_enrollment_option_reject"],
+                    lang.get("management_approval_enrollment_option_reject"),
                     ".management/approval/enrollment/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
