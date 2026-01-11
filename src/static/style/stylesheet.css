@@ -54,6 +54,9 @@ body {
     color: var(--text);
     line-height: 1.6;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 a {
@@ -103,4 +106,20 @@ p {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+}
+.footer {
+    background-color: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    margin-top: auto;
+    width: 100%;
+}
+
+.footer-inner {
+    max-width: 1252px;
+    margin: 0 auto;
+    padding: 0 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
