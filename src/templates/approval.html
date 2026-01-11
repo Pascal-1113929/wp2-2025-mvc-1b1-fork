@@ -8,7 +8,7 @@
     </header>
 
     <section class="sectioncard">
-        <h2>Gebruikers</h2>
+        <h2><i class="fa-solid fa-users"></i> Gebruikers</h2>
         {% if user_table_count > 0 %}
             {{ table(['Email', 'Notes', 'Options'], user_table) }}
         {% else %}
@@ -17,7 +17,7 @@
     </section>
 
     <section class="sectioncard">
-        <h2>Onderzoeken</h2>
+        <h2><i class="fa-solid fa-book"></i> Onderzoeken</h2>
         {% if research_table_count > 0 %}
             {{ table(['Email', 'Organisatie', 'Options'], research_table) }}
         {% else %}
@@ -27,7 +27,7 @@
     </section>
 
     <section class="sectioncard">
-        <h2>Inschrijvingen</h2>
+        <h2><i class="fa-regular fa-id-card"></i> Inschrijvingen</h2>
         {% if enrollment_table_count > 0 %}
             {{ table(['Full name', 'Study', 'Options'], enrollment_table) }}
         {% else %}
