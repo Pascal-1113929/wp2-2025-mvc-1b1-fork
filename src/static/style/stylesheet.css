@@ -81,6 +81,9 @@ h4 {
 main header {
     text-align: center;
 }
+main section {
+    margin-top: 48px;
+}
 
 p {
     margin: 0 0 12px;
