@@ -8,6 +8,7 @@ from models.organization import Organization
 from models.enrollment import Enrollment
 from utils.table import Table
 from utils.mail import send_mail
+from i18n.locale import get_i18n
 
 users = User()
 profile = Profile()
@@ -25,6 +26,8 @@ def index():
 
 @management_bp.route("/approval")
 def approval():
+    lang = get_i18n()
+
     user_data = users.get_new_users()
     research_data = study.get_study_by_status(1)
     for research in research_data:
@@ -45,12 +48,17 @@ def approval():
         [
             [
                 "button",
-                ["View profile", ".expert-profile/<id>", "fa-solid fa-eye", "info"],
+                [
+                    lang["management_approval_users_option_viewprofile"],
+                    ".expert-profile/<id>",
+                    "fa-solid fa-eye",
+                    "info",
+                ],
             ],
             [
                 "button",
                 [
-                    "Edit note",
+                    lang["management_approval_users_option_editnote"],
                     ".management/approval/note/<id>",
                     "fa-solid fa-pen-to-square",
                     "warning",
@@ -59,7 +67,7 @@ def approval():
             [
                 "button",
                 [
-                    "Approve",
+                    lang["management_approval_users_option_approve"],
                     ".management/approval/user/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -68,7 +76,7 @@ def approval():
             [
                 "button",
                 [
-                    "Reject",
+                    lang["management_approval_users_option_reject"],
                     ".management/approval/user/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
@@ -80,11 +88,19 @@ def approval():
     research_table.add_column(
         "options",
         [
-            ["button", ["View onderzoek", ".research/<id>", "fa-solid fa-eye", "info"]],
             [
                 "button",
                 [
-                    "Approve",
+                    lang["management_approval_research_option_viewresearch"],
+                    ".research/<id>",
+                    "fa-solid fa-eye",
+                    "info",
+                ],
+            ],
+            [
+                "button",
+                [
+                    lang["management_approval_research_option_approve"],
                     ".management/approval/research/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -93,7 +109,7 @@ def approval():
             [
                 "button",
                 [
-                    "Reject",
+                    lang["management_approval_research_option_reject"],
                     ".management/approval/research/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
@@ -107,7 +123,7 @@ def approval():
             [
                 "button",
                 [
-                    "View profile",
+                    lang["management_approval_enrollment_option_viewprofile"],
                     ".expert-profile/<user_id>",
                     "fa-solid fa-eye",
                     "info",
@@ -116,7 +132,7 @@ def approval():
             [
                 "button",
                 [
-                    "View study",
+                    lang["management_approval_enrollment_option_viewresearch"],
                     ".research/<study_id>",
                     "fa-solid fa-pen-to-square",
                     "info",
@@ -125,7 +141,7 @@ def approval():
             [
                 "button",
                 [
-                    "Approve",
+                    lang["management_approval_enrollment_option_approve"],
                     ".management/approval/enrollment/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -134,7 +150,7 @@ def approval():
             [
                 "button",
                 [
-                    "Reject",
+                    lang["management_approval_enrollment_option_reject"],
                     ".management/approval/enrollment/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",

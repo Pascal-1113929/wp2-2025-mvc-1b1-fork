@@ -8,30 +8,30 @@
     </header>
 
     <section class="sectioncard">
-        <h2><i class="fa-solid fa-users"></i> Gebruikers</h2>
+        <h2><i class="fa-solid fa-users"></i> {{ lang.management_approval_users_title }}</h2>
         {% if user_table_count > 0 %}
-            {{ table(['Email', 'Notes', 'Options'], user_table) }}
+            {{ table([lang.management_approval_users_table_email, lang.management_approval_users_table_notes, lang.management_approval_users_table_options], user_table) }}
         {% else %}
-            <p>Alle gebruikers zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+            <p>{{ lang.management_approval_users_done }} <i class="fa-regular fa-face-smile"></i></p>
         {% endif %}
     </section>
 
     <section class="sectioncard">
-        <h2><i class="fa-solid fa-book"></i> Onderzoeken</h2>
+        <h2><i class="fa-solid fa-book"></i> {{ lang.management_approval_research_title }}</h2>
         {% if research_table_count > 0 %}
-            {{ table(['Email', 'Organisatie', 'Options'], research_table) }}
+            {{ table([lang.management_approval_research_table_name, lang.management_approval_research_table_org, lang.management_approval_research_table_options], research_table) }}
         {% else %}
-            <p>Alle onderzoeken zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+            <p>{{ lang.management_approval_research_done }} <i class="fa-regular fa-face-smile"></i></p>
         {% endif %}
 
     </section>
 
     <section class="sectioncard">
-        <h2><i class="fa-regular fa-id-card"></i> Inschrijvingen</h2>
+        <h2><i class="fa-regular fa-id-card"></i> {{ lang.management_approval_enrollment_title }}</h2>
         {% if enrollment_table_count > 0 %}
-            {{ table(['Full name', 'Study', 'Options'], enrollment_table) }}
+            {{ table([lang.management_approval_enrollment_table_fullname, lang.management_approval_enrollment_table_study, lang.management_approval_enrollment_table_options], enrollment_table) }}
         {% else %}
-            <p>Alle inschrijvingen zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+            <p>{{ lang.management_approval_enrollment_done }} <i class="fa-regular fa-face-smile"></i></p>
         {% endif %}
 
     </section>
