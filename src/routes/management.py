@@ -43,7 +43,10 @@ def approval():
     user_table.add_column(
         "options",
         [
-            ["button", ["View profile", ".profile", "fa-solid fa-eye", "info"]],
+            [
+                "button",
+                ["View profile", ".expert-profile/<id>", "fa-solid fa-eye", "info"],
+            ],
             [
                 "button",
                 [
