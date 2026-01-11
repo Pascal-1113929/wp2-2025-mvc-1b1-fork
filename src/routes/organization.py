@@ -200,7 +200,7 @@ def research_register():
         success=success,
         error=error,
         disabilities=disability_dropdown.export_to_macro(),
-        errors=errors
+        errors=errors,
     )
 
 
