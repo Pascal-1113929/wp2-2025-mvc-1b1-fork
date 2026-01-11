@@ -39,8 +39,8 @@
                 </div>
                 <div class="nav-right">
                     {{ dropdown(options=[
-                        {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL"},
-                        {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US"}
+                        {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL", "lang": "nl"},
+                        {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US", "lang": "en"}
                     ], name="", id="language-selector") }}
                     {% if base.user %}
                         {{ button(text=lang.nav_my_account, href=".dashboard", class_name="primary", icon="fa-solid fa-user") }}
