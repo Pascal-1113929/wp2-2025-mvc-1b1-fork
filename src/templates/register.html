@@ -1,4 +1,5 @@
 {% from "macros/components/link.html" import link %}
+{% from "macros/components/button.html" import button %}
 
 {% extends 'layouts/default.html' %}
 
@@ -139,9 +140,8 @@
         </div>
 
         <!-- Buttons -->
-        <div class="grid-section">
-            <button class="submit-btn" type="submit">{{ lang.account_register_btn_submit }}</button>
-            <button class="reset-btn" type="reset">{{ lang.account_register_btn_reset }}</button>
+        <div class="form-group">
+            {{ button(type="submit", text=lang.account_register_btn_submit, class_name="submit-btn", icon="fa-solid fa-user-plus") }}
         </div>
 
         {{ link(href=".login", text=lang.account_register_link_login) }}
