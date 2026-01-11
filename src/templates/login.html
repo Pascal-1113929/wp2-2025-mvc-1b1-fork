@@ -3,7 +3,13 @@
 {% extends 'layouts/default.html' %}
 
 {% block content %}
-<main class="home">
+<main>
+
+    <header>
+        <h1>{{ lang.account_login_title }}</h1>
+    </header>
+
+
     <form
         class="cm-form"
         action="{{ url_for('account.account_login', language=base.locale)}}"
@@ -13,7 +19,7 @@
         <div class="alert alert-error">{{ lang.account_login_error_invalid_credentials }}</div>
         {% endif %}
         <div class="form-group">
-            <label for="usr-email">{{ lang.account_login_field_email_title }}</label>
+            <label for="usr-email"><i class="fa-regular fa-envelope"></i> {{ lang.account_login_field_email_title }}</label>
             <input
                 id="usr-email"
                 type="email"
@@ -23,7 +29,7 @@
             />
         </div>
         <div class="form-group">
-            <label for="usr-pass">{{ lang.account_login_field_password_title }}</label>
+            <label for="usr-pass"><i class="fa-solid fa-key"></i> {{ lang.account_login_field_password_title }}</label>
             <input
                 id="usr-pass"
                 type="password"

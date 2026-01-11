@@ -124,6 +124,7 @@
 "account_logout_title": "Logged out successfully"
 "account_logout_description": "You can safely close this window."
 "account_logout_backtologin": "Back to login"
+"account_login_title": "Login"
 "account_login_field_email_title": "Email"
 "account_login_field_email_placeholder": "Enter your email"
 "account_login_field_password_title": "Password"
