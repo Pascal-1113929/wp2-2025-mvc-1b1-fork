@@ -2,26 +2,31 @@
 
 {% extends 'layouts/default.html' %} {% block content %}
 
+{% set table_header = [
+            lang.research_table_title,
+            lang.research_table_organization,
+            lang.research_table_startdate,
+            lang.research_table_enddate,
+            lang.research_table_location,
+            lang.research_table_compensation,
+            lang.research_table_minage,
+            lang.research_table_maxage
+        ]
+%}
+
 <main>
     <header>
-        <h1>
-            {% if is_expert %}
-                Onderzoeken van {{ expert.profile.first_name }} {{
-                expert.profile.last_name }}
-            {% else %}
-                Lijst van Beschikbare Onderzoeken
-            {% endif %}
-        </h1>
+        <h1>{{ lang.research_title }}</h1>
     </header>
     <div class="seperator"></div>
-    <section>
-        <h2>Lijst met beschikbare onderzoeken</h2>
-                {{ table(['Titel', 'Bedrijf', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd'], available_study_table_data) }}
+    <section class="sectioncard">
+        <h2><i class="fa-solid fa-book"></i> {{ lang.research_description }}</h2>
+                {{ table(table_header, available_study_table_data) }}
     </section>
 {% if is_expert %}
-    <section>
-        <h2>Lijst met ingeschreven onderzoeken</h2>
-                {{ table(['Titel', 'Bedrijf', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd'], enrolled_study_table_data) }}
+    <section class="sectioncard">
+        <h2><i class="fa-solid fa-signature"></i> Ingeschreven onderzoeken</h2>
+                {{ table(table_header, enrolled_study_table_data) }}
     </section>
 {% endif %}
 </main>
