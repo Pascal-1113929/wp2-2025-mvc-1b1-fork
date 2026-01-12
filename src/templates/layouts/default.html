@@ -49,7 +49,7 @@
                     ], name="", id="language-selector") }}
                     {% if base.user %}
                         {{ button(text=lang.nav_my_account, href=".dashboard", class_name="primary", icon="fa-solid fa-user") }}
-                        {{ button(text="logout", href=".logout", class_name="danger", icon="fa-solid fa-right-from-bracket") }}
+                        {{ button(text=lang.nav_logout, href=".logout", class_name="danger", icon="fa-solid fa-right-from-bracket") }}
                     {% else %}
                         {{ button(text=lang.nav_login, href=".login", class_name="primary") }}
                         {{ button(text=lang.nav_register, href=".register", class_name="primary") }}
