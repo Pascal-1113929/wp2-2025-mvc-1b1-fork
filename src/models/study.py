@@ -58,7 +58,14 @@ class Study:
             cur = con.cursor()
             cur.execute("SELECT * FROM studies WHERE available=1")
             con.commit()
-            return cur.fetchall()
+            study_list = cur.fetchall()
+
+            new_study_list = []
+            for study in study_list:
+                study_dict = dict(study)
+                new_study_list.append(study_dict)
+
+            return new_study_list
 
     def get_study_id_by_disability_id(self, disability_id: int):
         with self.db.connect() as con:

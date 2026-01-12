@@ -5,8 +5,12 @@
 <main>
     <header>
         <h1>
-            Onderzoeken van {{ expert.profile.first_name }} {{
-            expert.profile.last_name }}
+            {% if is_expert %}
+                Onderzoeken van {{ expert.profile.first_name }} {{
+                expert.profile.last_name }}
+            {% else %}
+                Lijst van Beschikbare Onderzoeken
+            {% endif %}
         </h1>
     </header>
     <div class="seperator"></div>
@@ -14,10 +18,12 @@
         <h2>Lijst met beschikbare onderzoeken</h2>
                 {{ table(['Titel', 'Bedrijf', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd'], available_study_table_data) }}
     </section>
+{% if is_expert %}
     <section>
         <h2>Lijst met ingeschreven onderzoeken</h2>
                 {{ table(['Titel', 'Bedrijf', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd'], enrolled_study_table_data) }}
     </section>
+{% endif %}
 </main>
 
 {% endblock %}

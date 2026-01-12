@@ -28,71 +28,94 @@ research_bp = Blueprint("research", __name__)
 def research_dashboard_render():
     # userid = 3  # TODO: get userid from session after login has been completed
     userid = session.get("user_id")
-    # role = session.get("role")
+    role = session.get("role")
+    is_expert = False
 
     if userid is None:
         raise NotFound()
 
-    expert_user = dict(users.get_user_by_id(userid))
-    expert_profile = dict(profiles.get_profile_by_userid(userid))
-    expert_profileid = expert_profile["id"]
-    disability_ids = disabilities.get_disability_ids_by_profileid(expert_profileid)
+    if role == "expert":
+        is_expert = True
+        expert_user = dict(users.get_user_by_id(userid))
+        expert_profile = dict(profiles.get_profile_by_userid(userid))
+        expert_profileid = expert_profile["id"]
+        disability_ids = disabilities.get_disability_ids_by_profileid(expert_profileid)
 
-    expert_disabilities = []
-    for disability_id in disability_ids:
-        disability = disabilities.get_disability_by_id(disability_id)
-        expert_disabilities.append(disability)
+        expert_disabilities = []
+        for disability_id in disability_ids:
+            disability = disabilities.get_disability_by_id(disability_id)
+            expert_disabilities.append(disability)
 
-    expert = {
-        "user": expert_user,
-        "profile": expert_profile,
-        "disabilities": expert_disabilities,
-    }
+        expert = {
+            "user": expert_user,
+            "profile": expert_profile,
+            "disabilities": expert_disabilities,
+        }
 
-    enrolment_list = enrolments.get_enrolments_by_profile_id(expert_profileid)
-    enrolment_study_ids = []
-    for enrolment in enrolment_list:
-        enrolment_study_ids.append(enrolment["study_id"])
+        enrolment_list = enrolments.get_enrolments_by_profile_id(expert_profileid)
+        enrolment_study_ids = []
+        for enrolment in enrolment_list:
+            enrolment_study_ids.append(enrolment["study_id"])
 
-    study_ids = []
-    for disability_id in disability_ids:
-        study_id_list = studies.get_study_id_by_disability_id(disability_id)
-        for study_id in study_id_list:
-            study_ids.append(study_id)
+        study_ids = []
+        for disability_id in disability_ids:
+            study_id_list = studies.get_study_id_by_disability_id(disability_id)
+            for study_id in study_id_list:
+                study_ids.append(study_id)
 
-    available_studies = []
-    for study_id in study_ids:
-        if study_id in enrolment_study_ids:
-            continue
-        study = studies.get_available_study_by_id(study_id)
-        if study is None:
-            continue
-        organization = organizations.get_organization_by_id(study["organization_id"])
-        study["organization"] = organization["name"]
-        study["location_display"] = study["location"] or study["study_type"]
+        available_studies = []
+        for study_id in study_ids:
+            if study_id in enrolment_study_ids:
+                continue
+            study = studies.get_available_study_by_id(study_id)
+            if study is None:
+                continue
+            organization = organizations.get_organization_by_id(study["organization_id"])
+            study["organization"] = organization["name"]
+            study["location_display"] = study["location"] or study["study_type"]
 
-        # This is needed fo the narrator pronounces the date correctly
-        study["start_date"] = datetime.strptime(study["start_date"], "%Y-%m-%d")
-        study["end_date"] = datetime.strptime(study["end_date"], "%Y-%m-%d")
-        study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
-        study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
-        available_studies.append(study)
+            # This is needed fo the narrator pronounces the date correctly
+            study["start_date"] = datetime.strptime(study["start_date"], "%Y-%m-%d")
+            study["end_date"] = datetime.strptime(study["end_date"], "%Y-%m-%d")
+            study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
+            study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
+            available_studies.append(study)
 
-    enrolled_studies = []
-    for study_id in enrolment_study_ids:
-        study = studies.get_available_enrolled_study_by_id(study_id)
-        if study is None:
-            continue
-        organization = organizations.get_organization_by_id(study["organization_id"])
-        study["organization"] = organization["name"]
-        study["location_display"] = study["location"] or study["study_type"]
+        enrolled_studies = []
+        for study_id in enrolment_study_ids:
+            study = studies.get_available_enrolled_study_by_id(study_id)
+            if study is None:
+                continue
+            organization = organizations.get_organization_by_id(study["organization_id"])
+            study["organization"] = organization["name"]
+            study["location_display"] = study["location"] or study["study_type"]
 
-        # This is needed fo the narrator pronounces the date correctly
-        study["start_date"] = datetime.strptime(study["start_date"], "%Y-%m-%d")
-        study["end_date"] = datetime.strptime(study["end_date"], "%Y-%m-%d")
-        study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
-        study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
-        enrolled_studies.append(study)
+            # This is needed fo the narrator pronounces the date correctly
+            study["start_date"] = datetime.strptime(study["start_date"], "%Y-%m-%d")
+            study["end_date"] = datetime.strptime(study["end_date"], "%Y-%m-%d")
+            study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
+            study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
+            enrolled_studies.append(study)
+
+    if role == "admin" or role == "organization":
+        study_list = studies.get_all_available()
+        available_studies = []
+        for study in study_list:
+            if study is None:
+                continue
+            organization = organizations.get_organization_by_id(study["organization_id"])
+            study["organization"] = organization["name"]
+            study["location_display"] = study["location"] or study["study_type"]
+
+            # This is needed fo the narrator pronounces the date correctly
+            study["start_date"] = datetime.strptime(study["start_date"], "%Y-%m-%d")
+            study["end_date"] = datetime.strptime(study["end_date"], "%Y-%m-%d")
+            study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
+            study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
+            available_studies.append(study)
+
+        enrolled_studies = []
+        expert = None
 
     table_header = [
         "title",
@@ -118,10 +141,11 @@ def research_dashboard_render():
     enrolled_study_table_data = enrolled_table.export_to_macro()
 
     return render(
-        "research_list.html",
-        expert=expert,
-        available_study_table_data=available_study_table_data,
-        enrolled_study_table_data=enrolled_study_table_data,
+            "research_list.html",
+            expert=expert,
+            is_expert=is_expert,
+            available_study_table_data=available_study_table_data,
+            enrolled_study_table_data=enrolled_study_table_data,
     )
 
 
