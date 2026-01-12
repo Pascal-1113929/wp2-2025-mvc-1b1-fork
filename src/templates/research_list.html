@@ -20,12 +20,12 @@
     </header>
     <div class="seperator"></div>
     <section class="sectioncard">
-        <h2><i class="fa-solid fa-book"></i> {{ lang.research_description }}</h2>
+        <h2><i class="fa-solid fa-book"></i> {{ lang.research_running_title }}</h2>
                 {{ table(table_header, available_study_table_data) }}
     </section>
 {% if is_expert %}
     <section class="sectioncard">
-        <h2><i class="fa-solid fa-signature"></i> Ingeschreven onderzoeken</h2>
+        <h2><i class="fa-solid fa-signature"></i> {{ lang.research_enrolled_title }}</h2>
                 {{ table(table_header, enrolled_study_table_data) }}
     </section>
 {% endif %}
