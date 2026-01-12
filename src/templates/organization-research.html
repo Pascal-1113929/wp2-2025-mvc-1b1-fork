@@ -35,8 +35,21 @@
 
             <div class="form-group">
                 <label>Onderzoeks type</label>
-                <input type="text" name="type" maxlength="255" value="{{ request.form.get('type', '') }}" required placeholder="vul hier uw onderzoekstype in zoals online enquete, interview, etc.">
+                    {{ dropdown(options=[
+                        {"value": "telefonisch", "text": "Telefonisch"},
+                        {"value": "online", "text": "Online"},
+                        {"value": "op locatie", "text": "Op locatie"},
+                    ], name="research_type", id="", class="", required=true, value=request.form.get('research_type', ''), placeholder="Selecteer uw Type onderzoek") }}
                 {% if errors.type %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>Locatie (alleen verplicht bij 'Op locatie')</label>
+                <input type="text" name="location" class="" placeholder="Vul locatie in Als u Op locatie heeft geselecteerd" value="{{ request.form.get('location', '') }}"
+                >
+                {% if errors.location %}
                     <div class="alert alert-error">{{ lang.field_empty }}</div>
                 {% endif %}
             </div>
@@ -44,7 +57,7 @@
             <div class="form-group-wrap-2">
                 <div class="form-group">
                     <label>Minimale leeftijd</label>
-                    <input type="number" name="age_min" value="{{ request.form.get('age_min', '8') }}" min="1" required placeholder="Minimum leeftijd voor dit onderzoek">
+                    <input type="number" name="age_min" value="{{ request.form.get('age_min', '18') }}" min="1" required placeholder="Minimum leeftijd voor dit onderzoek">
                     {% if errors.age_min %}
                         <div class="alert alert-error">{{ lang.field_empty }}</div>
                     {% endif %}
@@ -60,7 +73,7 @@
 
             <div class="form-group">
                 <label for="disability">Betrokken Beperkingen:</label>
-                {{ dropdown(options=disabilities, name="disability", id="", class="", required=true, placeholder="Selecteer een beperking") }}
+                {{ dropdown(options=disabilities, name="disability", id="", class="", required=true, value=request.form.get('disability', ''), placeholder="Selecteer een beperking") }}
                 {% if errors.disability %}
                     <div class="alert alert-error">{{ lang.field_empty }}</div>
                 {% endif %}
