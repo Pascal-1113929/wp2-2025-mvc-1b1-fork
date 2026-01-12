@@ -11,6 +11,7 @@ Sources used in this project:
  - https://fontawesome.com/ (https://cdnjs.com/libraries/font-awesome)
  - https://docs.python.org/3/library/email.examples.html (email)
  - https://github.com/rnwood/smtp4dev (smtp4dev client)
+ - https://stackoverflow.com/questions/6036082/call-a-python-function-from-jinja2
 
 Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing

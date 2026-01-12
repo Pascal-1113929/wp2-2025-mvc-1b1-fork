@@ -9,11 +9,14 @@ from routes.research import research_bp
 from routes.management import management_bp
 from routes.error import error_bp
 from view import redirect_page
+from utils.auth import in_roles
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "aseu4a3fh375yaw3kjsddsafa3w95uhdsf"
+app.jinja_env.globals.update(in_roles=in_roles)
+
 
 BLUEPRINTS = {
     "": [error_bp],

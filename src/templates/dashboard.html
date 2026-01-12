@@ -25,52 +25,7 @@
     </section>
 
 
-
-    {% if base.user.role == 'expert' %}
-
-    <section class="sectioncard">
-        <div class="section-heading">
-            <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_expert_title }}</h2>
-            <p class="muted">{{ lang.dashboard_statistics_expert_description }}</p>
-        </div>
-        <div class="stat-grid">
-            <article class="stat-card">
-                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_userapproval }}</p>
-                <p class="stat-value">{{ stats[0] }}</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_researchapproval }}</p>
-                <p class="stat-value">{{ stats[1] }}</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_enrollmentapproval }}</p>
-                <p class="stat-value">{{ stats[2] }}</p>
-            </article>
-        </div>
-    </section>
-    {% elif base.user.role == 'organization' %}
-    <section class="sectioncard">
-        <div class="section-heading">
-            <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_organization_title }}</h2>
-            <p class="muted">{{ lang.dashboard_statistics_organization_description }}</p>
-        </div>
-        <div class="stat-grid">
-            <article class="stat-card">
-                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_userapproval }}</p>
-                <p class="stat-value">{{ stats[0] }}</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_researchapproval }}</p>
-                <p class="stat-value">{{ stats[1] }}</p>
-            </article>
-            <article class="stat-card">
-                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_enrollmentapproval }}</p>
-                <p class="stat-value">{{ stats[2] }}</p>
-            </article>
-        </div>
-    </section>
-
-    {% elif base.user.role == 'admin' %}
+    {% if in_roles(['admin']) %}
 
     <section class="sectioncard">
         <div class="section-heading">
@@ -93,6 +48,53 @@
         </div>
     </section>
     {% endif %}
+    {% if in_roles(['expert', 'admin']) %}
+
+    <section class="sectioncard">
+        <div class="section-heading">
+            <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_expert_title }}</h2>
+            <p class="muted">{{ lang.dashboard_statistics_expert_description }}</p>
+        </div>
+        <div class="stat-grid">
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_userapproval }}</p>
+                <p class="stat-value">{{ stats[3] }}</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_researchapproval }}</p>
+                <p class="stat-value">{{ stats[4] }}</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_enrollmentapproval }}</p>
+                <p class="stat-value">{{ stats[5] }}</p>
+            </article>
+        </div>
+    </section>
+    {% endif %}
+    {% if in_roles(['organization', 'admin']) %}
+    <section class="sectioncard">
+        <div class="section-heading">
+            <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_organization_title }}</h2>
+            <p class="muted">{{ lang.dashboard_statistics_organization_description }}</p>
+        </div>
+        <div class="stat-grid">
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_userapproval }}</p>
+                <p class="stat-value">{{ stats[6] }}</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_researchapproval }}</p>
+                <p class="stat-value">{{ stats[7] }}</p>
+            </article>
+            <article class="stat-card">
+                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_enrollmentapproval }}</p>
+                <p class="stat-value">{{ stats[8] }}</p>
+            </article>
+        </div>
+    </section>
+
+    {% endif %}
+
 
 
 </main>

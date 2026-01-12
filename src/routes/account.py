@@ -46,12 +46,22 @@ def expert_dashboard_render():
     if not is_authenticated():
         return redirect_page("/login")
     profile = profiles.get_profile_by_userid(session["user_id"])
-    stats = [0, 0, 0]
+    stats = [0] * 9
 
     if in_roles("admin"):
         stats[0] = len(users.get_users_by_status(1))
         stats[1] = len(studies.get_study_by_status(1))
         stats[2] = len(enrollments.get_enrollments_by_status(1))
+
+    if in_roles(["expert", "admin"]):
+        stats[3] = len(studies.get_study_by_status(1))
+        stats[4] = len(studies.get_study_by_status(1))
+        stats[5] = len(studies.get_study_by_status(1))
+
+    if in_roles(["organization", "admin"]):
+        stats[6] = len(studies.get_study_by_status(1))
+        stats[7] = len(studies.get_study_by_status(1))
+        stats[8] = len(studies.get_study_by_status(1))
 
     return render("dashboard.html", profile=profile, stats=stats)
 
