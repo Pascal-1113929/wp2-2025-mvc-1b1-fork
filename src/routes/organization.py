@@ -34,11 +34,10 @@ def organization_dashboard_render(id):
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(403)
     user_id = session.get("user_id")
-    verified_org_id = users.get_organization_id_by_userid(id)["organization_id"]
-    if not in_roles("admin"):
-        if user_id != int(id):
-            return abort(403)
-    org = organizations.get_organization_by_id(verified_org_id)
+    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
+    if verified_org_id != id or not in_roles("admin"):
+        return abort(403)
+    org = organizations.get_organization_by_id(id)
 
     study_table_data = []
     if org is not None:
