@@ -139,7 +139,11 @@ def research_register():
     if request.method == "POST":
         title = request.form.get("title")
         description = request.form.get("description")
-        type = request.form.get("type")
+        research_type = request.form.get("research_type")
+        if research_type == "op locatie":
+            location = request.form.get("location")
+        else:
+            location = None
         age_min = request.form.get("age_min")
         age_max = request.form.get("age_max")
         reward = request.form.get("reward")
@@ -150,7 +154,7 @@ def research_register():
         required_fields = {
             "title": title,
             "description": description,
-            "type": type,
+            "type": research_type,
             "age_min": age_min,
             "age_max": age_max,
             "reward": reward,
@@ -164,6 +168,10 @@ def research_register():
             if not value:
                 errors[field] = True
 
+        if research_type == "op locatie":
+            if not location:
+                errors["location"] = True
+
         if not errors:
             user = users.get_user_by_id(session.get("user_id"))
 
@@ -173,7 +181,8 @@ def research_register():
                     data={
                         "title": title,
                         "description": description,
-                        "type": type,
+                        "type": research_type,
+                        "location": location,
                         "disability": disability,
                         "min_age": age_min,
                         "max_age": age_max,
