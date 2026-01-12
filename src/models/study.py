@@ -137,14 +137,15 @@ class Study:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                """INSERT INTO studies (organization_id, title, description, study_type, age_min, age_max, reward, start_date, end_date, status_id, available, has_reward)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """INSERT INTO studies (organization_id, title, description, study_type, location,age_min, age_max, reward, start_date, end_date, status_id, available, has_reward)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
                     org_id,
                     data.get("title"),
                     data.get("description"),
                     data.get("type"),
+                    data.get("location"),
                     data.get("min_age"),
                     data.get("max_age"),
                     data.get("reward"),
