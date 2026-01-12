@@ -35,7 +35,7 @@ def organization_dashboard_render(id):
         return abort(403)
     user_id = session.get("user_id")
     verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
-    if verified_org_id != id and not in_roles("admin"):
+    if verified_org_id != id or not in_roles("admin"):
         return abort(403)
     org = organizations.get_organization_by_id(id)
 
