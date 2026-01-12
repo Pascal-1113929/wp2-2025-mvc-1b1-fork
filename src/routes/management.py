@@ -28,12 +28,12 @@ def index():
 def approval():
     lang = get_i18n()
 
-    user_data = users.get_new_users()
+    user_data = users.get_users_by_status(1)
     research_data = study.get_study_by_status(1)
     for research in research_data:
         org = organization.get_organization_by_id(research["organization_id"])
         research["organization_name"] = org["name"]
-    enrollment_data = enrollment.get_enrolments_by_status_id(1)
+    enrollment_data = enrollment.get_enrollments_by_status(1)
 
     user_table_header = ["email", "notes", "options"]
     research_table_header = ["title", "organization_name", "options"]
