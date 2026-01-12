@@ -10,7 +10,7 @@ nav {
 }
 
 .nav-inner {
-    max-width: 1252px;
+    max-width: 1472px;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -37,7 +37,7 @@ nav {
     display: flex;
     gap: 8px;
 }
-.nav-toggle{
+.nav-toggle {
     display: none;
 }
 
@@ -48,17 +48,17 @@ nav {
 }
 
 @media (max-width: 768px) {
-    .nav-left{
+    .nav-left {
         order: 3;
     }
-    .nav-toggle{
+    .nav-toggle {
         display: block;
         background: none;
         border: none;
         font-size: 24px;
         cursor: pointer;
     }
-    .nav-inner{
+    .nav-inner {
         flex-wrap: wrap;
     }
     .nav-links {
