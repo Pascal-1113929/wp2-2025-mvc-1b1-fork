@@ -4,17 +4,20 @@ from models.disabilities import Disablity
 from models.profile import Profile
 from models.user import User
 from models.status import Status
-from i18n.locale import list_locales
+from models.study import Study
+from models.enrollment import Enrollment
 from view import render, redirect_page
 from utils.dropdown import Dropdown
 from utils.table import Table
-from utils.authorization import is_authenticated
+from utils.authorization import is_authenticated, in_roles
 from werkzeug.exceptions import NotFound, Forbidden
 
 users = User()
 profiles = Profile()
 disabilities = Disablity()
+studies = Study()
 statuses = Status()
+enrollments = Enrollment()
 
 account_bp = Blueprint("account", __name__)
 
@@ -42,7 +45,15 @@ def account_login():
 def expert_dashboard_render():
     if not is_authenticated():
         return redirect_page("/login")
-    return render("dashboard.html")
+    profile = profiles.get_profile_by_userid(session["user_id"])
+    stats = [0, 0, 0]
+
+    if in_roles("admin"):
+        stats[0] = len(users.get_users_by_status(1))
+        stats[1] = len(studies.get_study_by_status(1))
+        stats[2] = len(enrollments.get_enrollments_by_status(1))
+
+    return render("dashboard.html", profile=profile, stats=stats)
 
 
 @account_bp.route("/logout")
@@ -134,7 +145,7 @@ def account_register():
         disabilities=disability_dropdown.export_to_macro(),
         success=success,
         error=error,
-        errors=errors
+        errors=errors,
     )
 
 

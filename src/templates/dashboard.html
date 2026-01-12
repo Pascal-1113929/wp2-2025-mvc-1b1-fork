@@ -3,14 +3,25 @@
 {% extends 'layouts/default.html' %} {% block content %}
 
 <main class="home">
+    <header>
+        <h1>{{ lang.dashboard_title }}</h1>
+    </header>
 
     <section class="sectioncard">
         <div class="section-heading">
-            <h1>Dashboard</h1>
-            <p class="muted">Welcome, UID {{ base.user.user_id }}</p>
+            <h2><i class="fa-regular fa-id-card"></i> {{ lang.dashboard_profile_title }}</h2>
+            <ul class="muted">
+                <li><b>{{lang.dashboard_profile_list_uid}}:</b> {{ base.user.user_id }}</li>
+                <li><b>{{lang.dashboard_profile_list_role}}:</b> {{ base.user.role }}</li>
+                {% if profile %}
+                    <li><b>{{lang.dashboard_profile_list_fullname}}:</b> {{ profile.first_name }} {{ profile.last_name }}</li>
+                    <li><b>{{lang.dashboard_profile_list_intro}}:</b> {{ profile.intro }}</li>
+                {% endif %}
+            </ul>
         </div>
-        {{ button(text="Open Settings", href=".settings", icon="fa-solid fa-gear") }}
-
+        {% if profile %}
+            {{ button(text=lang.dashboard_profile_btn_edit, href=".settings", icon="fa-solid fa-gear") }}
+        {% endif %}
     </section>
 
 
@@ -19,74 +30,65 @@
 
     <section class="sectioncard">
         <div class="section-heading">
-            <h2>Research statistics</h2>
-            <p class="muted">TODO: only show for researches/experts</p>
+            <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_expert_title }}</h2>
+            <p class="muted">{{ lang.dashboard_statistics_expert_description }}</p>
         </div>
         <div class="stat-grid">
             <article class="stat-card">
-                <p class="stat-label">Ongoing researches</p>
-                <p class="stat-value">6</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_userapproval }}</p>
+                <p class="stat-value">{{ stats[0] }}</p>
             </article>
             <article class="stat-card">
-                <p class="stat-label">Researches from organizations</p>
-                <p class="stat-value">4</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_researchapproval }}</p>
+                <p class="stat-value">{{ stats[1] }}</p>
             </article>
             <article class="stat-card">
-                <p class="stat-label">Contributed researches</p>
-                <p class="stat-value">2</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_enrollmentapproval }}</p>
+                <p class="stat-value">{{ stats[2] }}</p>
             </article>
         </div>
     </section>
     {% elif base.user.role == 'organization' %}
-
     <section class="sectioncard">
         <div class="section-heading">
-            <h2>Organization statistics</h2>
-            <p class="muted">TODO: only show for organization members</p>
+            <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_organization_title }}</h2>
+            <p class="muted">{{ lang.dashboard_statistics_organization_description }}</p>
         </div>
         <div class="stat-grid">
             <article class="stat-card">
-                <p class="stat-label">Active members</p>
-                <p class="stat-value">42</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_userapproval }}</p>
+                <p class="stat-value">{{ stats[0] }}</p>
             </article>
             <article class="stat-card">
-                <p class="stat-label">Projects this quarter</p>
-                <p class="stat-value">9</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_researchapproval }}</p>
+                <p class="stat-value">{{ stats[1] }}</p>
             </article>
             <article class="stat-card">
-                <p class="stat-label">Pending invitations</p>
-                <p class="stat-value">5</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_organization_card_enrollmentapproval }}</p>
+                <p class="stat-value">{{ stats[2] }}</p>
             </article>
         </div>
     </section>
+
     {% elif base.user.role == 'admin' %}
 
     <section class="sectioncard">
         <div class="section-heading">
-            <h2>Admin statistics</h2>
-            <p class="muted">TODO: only show for admins</p>
+            <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_admin_title }}</h2>
+            <p class="muted">{{ lang.dashboard_statistics_admin_description }}</p>
         </div>
         <div class="stat-grid">
             <article class="stat-card">
-                <p class="stat-label">Accounts awaiting for approval</p>
-                <p class="stat-value">13</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_admin_card_userapproval }}</p>
+                <p class="stat-value">{{ stats[0] }}</p>
             </article>
             <article class="stat-card">
-                <p class="stat-label">Currently online</p>
-                <p class="stat-value">28</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_admin_card_researchapproval }}</p>
+                <p class="stat-value">{{ stats[1] }}</p>
             </article>
             <article class="stat-card">
-                <p class="stat-label">Ongoing researches</p>
-                <p class="stat-value">6</p>
-                <p class="muted"></p>
+                <p class="stat-label">{{ lang.dashboard_statistics_admin_card_enrollmentapproval }}</p>
+                <p class="stat-value">{{ stats[2] }}</p>
             </article>
         </div>
     </section>
