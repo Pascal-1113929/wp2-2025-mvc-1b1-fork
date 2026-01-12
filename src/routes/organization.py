@@ -3,12 +3,13 @@ from flask import Blueprint, session, abort, request
 from models.organization import Organization
 from models.study import Study
 from models.user import User
-from utils.table import Table
-from utils.dropdown import Dropdown
 from models.disabilities import Disablity
 from models.enrollment import Enrollment
 from models.profile import Profile
 from models.status import Status
+from utils.table import Table
+from utils.dropdown import Dropdown
+from utils.auth import is_authenticated, in_roles
 from view import redirect_page, render
 
 organizations = Organization()
@@ -30,10 +31,11 @@ def organization_redirect():
 
 @org_bp.route("/<id>/")
 def organization_dashboard_render(id):
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
+        return abort(403)
     user_id = session.get("user_id")
-    role = session.get("role")
     verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
-    if verified_org_id != int(id) or role == "admin":
+    if verified_org_id != id and not in_roles("admin"):
         return abort(403)
     org = organizations.get_organization_by_id(id)
 

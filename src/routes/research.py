@@ -11,7 +11,7 @@ from models.user import User
 from view import render, redirect_page
 from werkzeug.exceptions import NotFound
 from utils.table import Table
-from utils.authorization import in_roles
+from utils.auth import in_roles
 from utils.mail import send_mail
 
 users = User()
@@ -70,7 +70,9 @@ def research_dashboard_render():
             study = studies.get_available_study_by_id(study_id)
             if study is None:
                 continue
-            organization = organizations.get_organization_by_id(study["organization_id"])
+            organization = organizations.get_organization_by_id(
+                study["organization_id"]
+            )
             study["organization"] = organization["name"]
             study["location_display"] = study["location"] or study["study_type"]
 
@@ -86,7 +88,9 @@ def research_dashboard_render():
             study = studies.get_available_enrolled_study_by_id(study_id)
             if study is None:
                 continue
-            organization = organizations.get_organization_by_id(study["organization_id"])
+            organization = organizations.get_organization_by_id(
+                study["organization_id"]
+            )
             study["organization"] = organization["name"]
             study["location_display"] = study["location"] or study["study_type"]
 
@@ -103,7 +107,9 @@ def research_dashboard_render():
         for study in study_list:
             if study is None:
                 continue
-            organization = organizations.get_organization_by_id(study["organization_id"])
+            organization = organizations.get_organization_by_id(
+                study["organization_id"]
+            )
             study["organization"] = organization["name"]
             study["location_display"] = study["location"] or study["study_type"]
 
@@ -141,11 +147,11 @@ def research_dashboard_render():
     enrolled_study_table_data = enrolled_table.export_to_macro()
 
     return render(
-            "research_list.html",
-            expert=expert,
-            is_expert=is_expert,
-            available_study_table_data=available_study_table_data,
-            enrolled_study_table_data=enrolled_study_table_data,
+        "research_list.html",
+        expert=expert,
+        is_expert=is_expert,
+        available_study_table_data=available_study_table_data,
+        enrolled_study_table_data=enrolled_study_table_data,
     )
 
 
@@ -205,7 +211,7 @@ def enroll_confirm(study_id):
         "email/email_enroll_template.html",
         subject=subject,
         user_name=user_name,
-        study_name=study_name
+        study_name=study_name,
     )
     send_mail(subject, html_email_content, users.get_email_by_id(user_id))
 

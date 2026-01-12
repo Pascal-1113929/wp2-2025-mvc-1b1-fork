@@ -9,7 +9,7 @@ from models.enrollment import Enrollment
 from view import render, redirect_page
 from utils.dropdown import Dropdown
 from utils.table import Table
-from utils.authorization import is_authenticated, in_roles
+from utils.auth import is_authenticated, in_roles
 from werkzeug.exceptions import NotFound, Forbidden
 
 users = User()
