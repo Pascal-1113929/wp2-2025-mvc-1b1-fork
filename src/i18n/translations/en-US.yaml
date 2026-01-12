@@ -5,6 +5,8 @@
 "nav_debug": "Debug"
 "nav_research": "Research"
 "nav_management": "Management"
+"nav_approval": "Approval"
+"nav_organization": "Organization"
 "nav_login": "Login"
 "nav_register": "Register"
 "nav_my_account": "My Account"
@@ -176,3 +178,4 @@
 "account_register_link_login": "Already have an account? Log in here"
 "account_register_success": "Successfully Registered. Awaiting Approval!"
 "account_register_error": "An error occurred during registration"
+"dashboard_title": "Dashboard"
