@@ -67,3 +67,16 @@ python src/app.py
 2. navigeer naar src/app.py
 3. klik de play button in pycharm en de app start up
 <img width="1898" height="795" alt="icture1" src="https://github.com/user-attachments/assets/1d79446e-22b6-4519-b4d3-f272afc350a4" />
+
+## Inloggegevens test gebruikers
+| rol           | email             | password    |
+|---------------|-------------------|-------------|
+| admin         | admin@hub.com     | admin       |
+| expert        | sanne@example.com | secret      |
+| organization  | org-ah@hub.com    | secret      |
+
+## Screenshots
+
+## Bronnen
+De bronnen staan in 
+- [Sources](https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice/blob/main/docs/SOURCES.md)
