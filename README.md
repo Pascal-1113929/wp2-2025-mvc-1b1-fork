@@ -77,7 +77,7 @@ python src/app.py
 
 ## ERD
 <img width="973" height="769" alt="image" src="https://github.com/user-attachments/assets/89272be5-dbb1-429f-878d-836350466ab8" />
-ERD Gegenereerd met [DbVisualizer](https://www.dbvis.com/) 
+ERD Gegenereerd met DbVisualizer https://www.dbvis.com/ 
 
 ## Screenshots
 
