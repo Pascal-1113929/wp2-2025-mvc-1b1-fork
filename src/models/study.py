@@ -180,3 +180,39 @@ class Study:
             )
             row = dict(cur.fetchone())
             return row["organization_id"]
+
+    def update_study(self, study_id: int, title: str,
+                     description: str, start_date: str, end_date: str, study_type: str,
+                     location: str | None, has_reward: int, reward: str,
+                     age_min: int, age_max: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("""
+                        UPDATE studies
+                        SET title       = ?,
+                            description = ?,
+                            start_date  = ?,
+                            end_date    = ?,
+                            study_type  = ?,
+                            location    = ?,    
+                            has_reward  = ?,
+                            reward      = ?,
+                            age_min     = ?,
+                            age_max     = ?
+                        WHERE id = ?
+                        """, (
+                            title,
+                            description,
+                            start_date,
+                            end_date,
+                            study_type,
+                            location,
+                            has_reward,
+                            reward,
+                            age_min,
+                            age_max,
+                            study_id
+                        ))
+            con.commit()
+            return cur.lastrowid
+

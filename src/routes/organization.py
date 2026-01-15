@@ -70,9 +70,18 @@ def organization_dashboard_render(id):
                     "button",
                     [
                         "delete",
-                        ".organization/study/<id>/delete",
+                        ".organization/<organization_id>/study/<id>/delete",
                         "fa-solid fa-trash",
                         "danger",
+                    ],
+                ],
+                [
+                    "button",
+                    [
+                        "edit",
+                        ".organization/<organization_id>/study/<id>/edit",
+                        "fa-solid fa-trash",
+                        "warning",
                     ],
                 ],
             ],
@@ -295,6 +304,70 @@ def organization_study_page_render(organization_id, study_id):
         study=study,
         table_data_new=table_data_new,
         table_data_verified=table_data_verified,
+    )
+
+
+@org_bp.route("/<organization_id>/study/<study_id>/edit", methods=["GET", "POST"])
+def organization_study_edit_page_render(organization_id, study_id):
+    success = request.args.get("success")
+    error = request.args.get("error")
+
+    user_id = session.get("user_id")
+    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
+    if verified_org_id != int(organization_id):
+        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+        return abort(403)
+
+    db_study = studies.get_study_by_id(study_id)
+    disability_list = disabilities.get_disability_list_by_studyid(study_id)
+
+    study = {
+        **db_study,
+        "disability_list": [disability for disability in disability_list],
+    }
+
+    if request.method == "POST":
+        title = request.form.get("title")
+        description = request.form.get("description")
+        research_type = request.form.get("research_type")
+        if research_type == "op locatie":
+            location = request.form.get("location")
+        else:
+            location = None
+        age_min = request.form.get("age_min")
+        age_max = request.form.get("age_max")
+        reward = request.form.get("reward")
+        disability = request.form.get("disability")
+        start_date = request.form.get("start_date")
+        end_date = request.form.get("end_date")
+        disability_list = [disability]
+
+        try:
+            studies.update_study(study_id, title, description, start_date, end_date, research_type, location,
+                                 1 if reward else 0, reward, age_min, age_max)
+            disabilities.update_study_disabilities(study_id, disability_list)
+            return redirect_page(f"/organization/{organization_id}/study/{study_id}/edit?success=1")
+        except Exception as e:
+            message = f"Er is iets fout gegaan"
+            print(e)
+            return redirect_page(f"/organization/{organization_id}/study/{study_id}/edit?error={message}")
+
+    if success:
+        success = "Success Onderzoek gewijzigd!"
+
+    if error:
+        error = "Er is iets mis gegaan"
+
+    disability_dropdown = Dropdown(disabilities.get_all_disabilities())
+    disability_dropdown.set("value", "<id>")
+    disability_dropdown.set("text", "<name> - <category>")
+
+    return render(
+        "organization-research-edit.html",
+        study=study,
+        disabilities=disability_dropdown.export_to_macro(),
+        success=success,
+        error=error,
     )
 
 
