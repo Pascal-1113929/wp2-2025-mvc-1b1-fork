@@ -233,8 +233,9 @@ def enroll_confirm(study_id):
 @research_bp.route("/<study_id>/enroll/success")
 def enroll_success(study_id):
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
-    return render("enroll_succes.html")
+    return render("enroll_succes.html", page_translated=page_translated)
 
 
 @research_bp.route("/<study_id>/unlist")
@@ -266,5 +267,6 @@ def unlist_confirm(study_id):
 @research_bp.route("/<study_id>/unlist/success")
 def unlist_success(study_id):
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
-    return render("unlist_success.html")
+    return render("unlist_success.html", page_translated=page_translated)

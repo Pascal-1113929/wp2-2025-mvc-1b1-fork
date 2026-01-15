@@ -9,6 +9,8 @@ from models.enrollment import Enrollment
 from utils.table import Table
 from utils.mail import send_mail
 from i18n.locale import get_i18n
+from i18n.locale import get_iso_639_1
+from utils.translate import check_translation
 
 users = User()
 profile = Profile()
@@ -27,6 +29,7 @@ def index():
 @management_bp.route("/approval")
 def approval():
     page_languages = ['nl', 'en']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     lang = get_i18n()
 
@@ -188,6 +191,7 @@ def approval():
 
     return render(
         "approval.html",
+        page_languages=page_languages,
         user_table=user_table_data,
         user_table_count=len(user_data),
         research_table=research_table_data,
