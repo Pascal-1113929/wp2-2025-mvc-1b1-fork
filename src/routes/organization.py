@@ -114,6 +114,7 @@ def organization_dashboard_render(id):
                     ],
                 ],
                 [
+                    "{<status_id> != 4}",
                     "button",
                     [
                         "edit",
