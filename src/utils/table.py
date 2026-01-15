@@ -144,13 +144,13 @@ class Table:
                 if isinstance(original_value, dict) and "value" in original_value:
                     text_value = original_value["value"]
                     if element_type == "link":
-                        row[key] = [element_type, text_value] + processed_values
+                        row[key] = [element_type] + [text_value] + processed_values
                     elif element_type == "button":
                         row[key] = [element_type, text_value] + processed_values
                     else:
                         row[key] = [element_type] + processed_values + [original_value]
                 else:
-                    row[key] = [element_type] + processed_values + [original_value]
+                    row[key] = [element_type] + [original_value] + processed_values
 
     def add_column(self, key, column_def):
         for row in self.table_data:
