@@ -15,12 +15,12 @@ class Study:
             con.commit()
             return cur.fetchone()
 
-    def set_research_status(self, user_id, status):
+    def set_research_status(self, study_id, status):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
                 "UPDATE studies SET status_id = ? WHERE id = ?",
-                (status, user_id),
+                (status, study_id),
             )
             con.commit()
             return cur.lastrowid
@@ -94,6 +94,21 @@ class Study:
                 "WHERE available=1 "
                 "AND DATE(end_date) > DATE('now') "
                 "AND id=? ",
+                (study_id,),
+            )
+            con.commit()
+            row = cur.fetchone()
+            try:
+                return dict(row)
+            except TypeError:
+                return None
+
+    def get_study_by_id(self, study_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "SELECT * FROM studies "
+                "WHERE id=? ",
                 (study_id,),
             )
             con.commit()

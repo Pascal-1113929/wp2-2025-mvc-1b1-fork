@@ -9,6 +9,29 @@
     <h1>Organisatie pagina: {{ organization.name }}</h1>
         <a href="/{{ base.locale }}/organization/research/add" class="button" type="button">{{ lang.research_create }}</a>
     <div class="seperator"></div>
+        {% if close_success %}
+            <div class="alert alert-success">
+                Onderzoek "{{ study.title }}" succesvol gesloten.
+            </div>
+        {% endif %}
+
+        {% if close_error %}
+            <div class="alert alert-danger">
+                Fout bij het sluiten van onderzoek "{{ study.title }}".
+            </div>
+        {% endif %}
+
+        {% if open_success %}
+            <div class="alert alert-success">
+                Onderzoek "{{ study.title }}" succesvol geopend.
+            </div>
+        {% endif %}
+
+        {% if open_error %}
+            <div class="alert alert-danger">
+                Fout bij het openen van onderzoek "{{ study.title }}".
+            </div>
+        {% endif %}
     <section>
         <h2>Lijst met onderzoeken</h2>
         <div class="spacer"></div>

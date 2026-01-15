@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, session, abort, request
 
 from models.organization import Organization
@@ -39,6 +41,18 @@ def organization_redirect():
 def organization_dashboard_render(id):
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(403)
+
+    close_success = request.args.get("close-success")
+    close_error = request.args.get("close-error")
+    open_success = request.args.get("open-success")
+    open_error = request.args.get("open-error")
+    study_id = request.args.get("study_id")
+    study = None
+
+    if close_success == "1" or close_error == "1" or open_success == "1" or open_error == "1":
+        if study_id:
+            study = studies.get_study_by_id(study_id)
+
     user_id = session.get("user_id")
     verified_org_id = users.get_organization_id_by_userid(id)["organization_id"]
     if not in_roles("admin"):
@@ -49,12 +63,16 @@ def organization_dashboard_render(id):
     study_table_data = []
     if org is not None:
         study_list = studies.get_study_by_organization_id(verified_org_id)
+        full_study_list = []
+        for study in study_list:
+            study["location_display"] = study["location"] or study["study_type"]
+            full_study_list.append(study)
         table_header = [
             "title",
             "status",
             "start_date",
             "end_date",
-            "study_type",
+            "location_display",
             "reward",
             "age_min",
             "age_max",
@@ -76,6 +94,26 @@ def organization_dashboard_render(id):
                     ],
                 ],
                 [
+                    "{<status_id> == 2}",
+                    "button",
+                    [
+                        "close",
+                        ".organization/<organization_id>/study/<id>/close",
+                        "fa-solid fa-trash",
+                        "warning",
+                    ],
+                ],
+                [
+                    "{<status_id> == 4}",
+                    "button",
+                    [
+                        "re-open",
+                        ".organization/<organization_id>/study/<id>/open",
+                        "fa-solid fa-trash",
+                        "warning",
+                    ],
+                ],
+                [
                     "button",
                     [
                         "edit",
@@ -91,7 +129,15 @@ def organization_dashboard_render(id):
 
         study_table_data = table.export_to_macro()
 
-    return render("organization.html", organization=org, study_list=study_table_data)
+    return render("organization.html",
+                  organization=org,
+                  study_list=study_table_data,
+                  close_success=close_success,
+                  close_error=close_error,
+                  open_success=open_success,
+                  open_error=open_error,
+                  study=study
+                  )
 
 
 @org_bp.route("/add", methods=["GET", "POST"])
@@ -305,6 +351,32 @@ def organization_study_page_render(organization_id, study_id):
         table_data_new=table_data_new,
         table_data_verified=table_data_verified,
     )
+
+
+@org_bp.route("/<organization_id>/study/<study_id>/close")
+def organization_study_close(organization_id, study_id):
+    if not is_authenticated():
+        return abort(401)
+
+    try:
+        studies.set_research_status(study_id, 4)
+        return redirect_page(f"/organization/{organization_id}?close-success=1&study_id={study_id}")
+    except Exception as e:
+        print(e)
+        return redirect_page(f"/organization/{organization_id}?close-error=1&study_id={study_id}")
+
+
+@org_bp.route("/<organization_id>/study/<study_id>/open")
+def organization_study_open(organization_id, study_id):
+    if not is_authenticated():
+        return abort(401)
+
+    try:
+        studies.set_research_status(study_id, 2)
+        return redirect_page(f"/organization/{organization_id}/?open-success=1&study_id={study_id}")
+    except Exception as e:
+        print(e)
+        return redirect_page(f"/organization/{organization_id}/?open-error=1&study_id={study_id}")
 
 
 @org_bp.route("/<organization_id>/study/<study_id>/edit", methods=["GET", "POST"])
