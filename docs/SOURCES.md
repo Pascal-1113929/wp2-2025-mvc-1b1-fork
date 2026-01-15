@@ -12,6 +12,9 @@ Sources used in this project:
  - https://docs.python.org/3/library/email.examples.html (email)
  - https://github.com/rnwood/smtp4dev (smtp4dev client)
  - https://stackoverflow.com/questions/6036082/call-a-python-function-from-jinja2
+ - https://realpython.com/python-eval-function/
+ - https://stackoverflow.com/questions/2554185/match-groups-in-python
 
 Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing
+ - https://regex101.com/ gebruikt voor dynamic objects

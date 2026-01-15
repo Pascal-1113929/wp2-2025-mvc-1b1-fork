@@ -1,5 +1,5 @@
-import re
 import copy
+from .dynamic_objects import process_values, process_conditional_elements
 
 
 class Table:
@@ -164,36 +164,14 @@ class Table:
 
         self.table_data = new_data
 
-    def _process_values(self, values, row):
-        processed_values = []
-        for val in values:
-            if isinstance(val, str):
-                result = val
-                placeholders = re.findall(r"<([^>]+)>", val)
-                for field_name in placeholders:
-                    replacement = str(row.get(field_name, f"<{field_name}>"))
-                    result = result.replace(f"<{field_name}>", replacement)
-                processed_values.append(result)
-            else:
-                processed_values.append(val)
-        return processed_values
-
     def set_type(self, key, type, values):
         for row in self.table_data:
             if key in row:
                 original_value = row[key]
-                processed_values = self._process_values(values, row)
+                processed_values = process_values(values, row)
                 row[key] = [type, original_value] + processed_values
 
     def add_column(self, key, *args):
         for row in self.table_data:
-            column_value = []
-            for definition in args[0]:
-                if isinstance(definition, list) and len(definition) >= 2:
-                    element_type = definition[0]
-                    element_values = definition[1] if len(definition) > 1 else []
-                    processed_values = self._process_values(element_values, row)
-                    column_value.append([element_type] + processed_values)
-                else:
-                    column_value.append(definition)
+            column_value = process_conditional_elements(args[0], row)
             row[key] = column_value
