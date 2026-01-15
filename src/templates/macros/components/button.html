@@ -1,14 +1,16 @@
-{% macro button(href="", text="", class_name="") %}
+{% macro button(href="", text="", class_name="", icon="") %}
     {% if href %}
         <a
             {% if href.startswith('.') %}
-                href="/{{ request.path.split('/')[1] }}/{{ href[1:] }}"
+                href="/{{ request.path.split('/')[1] }}/{{ href[1:] }}" role="button"
             {% else %}
                 href="{{ href }}"
             {% endif %}
             class="button{% if class_name %} {{ class_name }}{% endif %}"
-            >{{ text }}</a
         >
+            {% if icon %}
+                <i class="{{ icon }}"></i> {% endif %}{{ text }}
+        </a>
     {% else %}
         <button type="button" class="button{% if class_name %} {{ class_name }}{% endif %}">
             {{ text }}

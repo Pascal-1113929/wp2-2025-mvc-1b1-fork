@@ -1,13 +1,11 @@
-{% extends 'layouts/default.html' %}
-
-{% block content %}
+{% extends 'layouts/default.html' %} {% block content %}
 <main class="home">
-    <section class="hero">
-        <p class="eyebrow">{{ lang.home_eyebrow }}</p>
+    <section class="sectioncard">
+        <p class="eyebrow"><i class="fa-solid fa-magnifying-glass"></i> {{ lang.home_eyebrow }}</p>
         <h1>{{ lang.home_title }}</h1>
         <p class="lede">{{ lang.home_subtitle }}</p>
         <div class="hero-actions">
-            {{ button(text=lang.home_cta_repo, href="https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice", class_name="primary") }}
+            {{ button(text=lang.home_cta_repo, href="https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice", class_name="primary", icon="fa-solid fa-arrow-up-right-from-square") }}
             {{ button(text=lang.home_cta_login, href=".login", class_name="ghost") }}
         </div>
         <div class="hero-meta">
@@ -17,9 +15,9 @@
         </div>
     </section>
 
-    <section class="stats">
+    <section class="sectioncard">
         <div class="section-heading">
-            <p class="eyebrow">{{ lang.home_section_snapshot }}</p>
+            <p class="eyebrow"><i class="fa-solid fa-chart-line"></i>{{ lang.home_section_snapshot }}</p>
             <h2>{{ lang.home_stats_title }}</h2>
             <p class="muted">{{ lang.home_stats_caption }}</p>
         </div>
@@ -47,9 +45,9 @@
         </div>
     </section>
 
-    <section class="feature-grid">
+    <section class="sectioncard">
         <div class="section-heading">
-            <p class="eyebrow">{{ lang.home_section_features }}</p>
+            <p class="eyebrow"><i class="fa-solid fa-bookmark"></i>{{ lang.home_section_features }}</p>
             <h2>{{ lang.home_features_title }}</h2>
             <p class="muted">{{ lang.home_features_caption }}</p>
         </div>
@@ -72,9 +70,9 @@
         </div>
     </section>
 
-    <section class="audiences">
+    <section class="sectioncard">
         <div class="section-heading">
-            <p class="eyebrow">{{ lang.home_section_roles }}</p>
+            <p class="eyebrow"><i class="fa-solid fa-people-group"></i>{{ lang.home_section_roles }}</p>
             <h2>{{ lang.home_roles_title }}</h2>
             <p class="muted">{{ lang.home_roles_caption }}</p>
         </div>
@@ -106,9 +104,9 @@
         </div>
     </section>
 
-    <section class="workflow">
+    <section class="sectioncard">
         <div class="section-heading">
-            <p class="eyebrow">{{ lang.home_section_flow }}</p>
+            <p class="eyebrow"><i class="fa-solid fa-chart-diagram"></i>{{ lang.home_section_flow }}</p>
             <h2>{{ lang.home_flow_title }}</h2>
             <p class="muted">{{ lang.home_flow_caption }}</p>
         </div>

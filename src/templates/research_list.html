@@ -1,0 +1,23 @@
+{% from "macros/components/table.html" import table %}
+
+{% extends 'layouts/default.html' %} {% block content %}
+
+<main>
+    <header>
+        <h1>
+            Onderzoeken van {{ expert.profile.first_name }} {{
+            expert.profile.last_name }}
+        </h1>
+    </header>
+    <div class="seperator"></div>
+    <section>
+        <h2>Lijst met beschikbare onderzoeken</h2>
+                {{ table(['Titel', 'Bedrijf', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd'], available_study_table_data) }}
+    </section>
+    <section>
+        <h2>Lijst met ingeschreven onderzoeken</h2>
+                {{ table(['Titel', 'Bedrijf', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd'], enrolled_study_table_data) }}
+    </section>
+</main>
+
+{% endblock %}

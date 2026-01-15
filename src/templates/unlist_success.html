@@ -1,0 +1,20 @@
+{% from "macros/components/table.html" import table %}
+
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+
+
+    <main>
+<!--        Dit zit in main vanwege styling redenen-->
+    <header>
+        <h1>
+            Uitschrijving Voltooid
+        </h1>
+    </header>
+        <section>
+            {{ button(text=lang.go_to_overview, href=url_for('research.research_dashboard_render', language=base.locale), class_name="small-button") }}
+        </section>
+    </main>
+
+{% endblock %}

@@ -1,26 +1,51 @@
 from flask import Flask
 
-from routes.expert import expert_bp
+from routes.account import account_bp
 from routes.index import index_bp
 from routes.organization import org_bp
-from view import redirect_home, render
+from routes.research import research_bp
+from routes.management import management_bp
+from routes.error import error_bp
+from view import redirect_page
 
 app = Flask(__name__)
-app.register_blueprint(index_bp, url_prefix='/<language>')
-app.register_blueprint(org_bp, url_prefix='/<language>/organization')
-app.register_blueprint(expert_bp, url_prefix='/<language>/expert')
+app.secret_key = "aseu4a3fh375yaw3kjsddsafa3w95uhdsf"
+
+BLUEPRINTS = {
+    "": [error_bp],
+    "/": [index_bp, account_bp],
+    "/organization": org_bp,
+    "/research": research_bp,
+    "/management": management_bp,
+}
+
 
 @app.route("/")
 def goto_locale_page():
-    return redirect_home()
+    return redirect_page()
 
-@app.route("/<language>/debug")
-def debug(language):
-    return render("debug.html")
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render('error/not_found.html'), 404
+def remove_language_from_view_args(endpoint, values):
+    if values and "language" in values:
+        values.pop("language")
+
+
+def register_bp(url_prefix, blueprint):
+    blueprint.url_value_preprocessor(remove_language_from_view_args)
+    if url_prefix == "":
+        app.register_blueprint(blueprint)
+    else:
+        app.register_blueprint(blueprint, url_prefix="/<language>" + url_prefix)
+
 
 if __name__ == "__main__":
+    # set cache control manually for static files due to twemoji flickering
+    app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 3600
+
+    for url_prefix, blueprint_or_list in BLUEPRINTS.items():
+        if isinstance(blueprint_or_list, list):
+            for blueprint in blueprint_or_list:
+                register_bp(url_prefix, blueprint)
+        else:
+            register_bp(url_prefix, blueprint_or_list)
     app.run(debug=True)

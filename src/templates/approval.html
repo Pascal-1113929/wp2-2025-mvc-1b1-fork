@@ -1,0 +1,40 @@
+{% from "macros/components/table.html" import table %}
+
+{% extends 'layouts/default.html' %} {% block content %}
+
+<main class="home">
+    <header>
+        <h1>Approval</h1>
+    </header>
+
+    <section class="sectioncard">
+        <h2>Gebruikers</h2>
+        {% if user_table_count > 0 %}
+            {{ table(['Email', 'Notes', 'Options'], user_table) }}
+        {% else %}
+            <p>Alle gebruikers zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+        {% endif %}
+    </section>
+
+    <section class="sectioncard">
+        <h2>Onderzoeken</h2>
+        {% if research_table_count > 0 %}
+            {{ table(['Email', 'Organisatie', 'Options'], research_table) }}
+        {% else %}
+            <p>Alle onderzoeken zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+        {% endif %}
+
+    </section>
+
+    <section class="sectioncard">
+        <h2>Inschrijvingen</h2>
+        {% if enrollment_table_count > 0 %}
+            {{ table(['Full name', 'Study', 'Options'], enrollment_table) }}
+        {% else %}
+            <p>Alle inschrijvingen zijn beoordeeld <i class="fa-regular fa-face-smile"></i></p>
+        {% endif %}
+
+    </section>
+</main>
+
+{% endblock %}

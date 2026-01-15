@@ -4,6 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
         "dropdown-language-selector",
     );
     el_language_selector.addEventListener("change", (e) => {
-        window.location.href = "/" + e.target.value;
+        const path_parts = window.location.pathname.split("/");
+        path_parts[1] = e.target.value;
+        window.location.href = window.location.origin + path_parts.join("/");
     });
+});
+
+let toggle = document.querySelector(".nav-toggle");
+let navLeft = document.querySelector(".nav-links");
+
+toggle?.addEventListener("click", () => {
+    navLeft.classList.toggle("nav-open");
 });

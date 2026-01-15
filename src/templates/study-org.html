@@ -1,0 +1,25 @@
+{% from "macros/components/table.html" import table %}
+
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+
+
+    <main>
+<!--        Dit zit in main vanwege styling redenen-->
+    <header>
+        <h1>
+            Inschrijflijst pagina: {{ study.title }} van {{ organization.name }}
+        </h1>
+    </header>
+        <section>
+            <h2>Lijst van inschrijvingen met status nieuw</h2>
+            {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_new) }}
+        </section>
+            <section>
+            <h2>Lijst van inschrijvingen met status goedgekeurd</h2>
+            {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_verified) }}
+        </section>
+    </main>
+
+{% endblock %}

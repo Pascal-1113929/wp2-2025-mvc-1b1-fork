@@ -10,7 +10,9 @@
     text-decoration: none;
     font-weight: 700;
     letter-spacing: -0.01em;
-    transition: transform 0.15s ease, box-shadow 0.15s ease,
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
         background 0.2s ease;
 }
 
@@ -25,6 +27,24 @@
     border-color: #178f5c;
 }
 
+.button.danger {
+    background: linear-gradient(135deg, #ff6b6b, #ff4747);
+    color: #ffffff;
+    border-color: #ff4747;
+}
+
+.button.warning {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #ffffff;
+    border-color: #ff9800;
+}
+
+.button.info {
+    background: linear-gradient(135deg, #6b6bff, #4747ff);
+    color: #ffffff;
+    border-color: #4747ff;
+}
+
 .button.ghost {
     background: transparent;
     color: #168856;
@@ -35,4 +55,39 @@
 .button.ghost:hover {
     background: #e7f4ec;
     transform: none;
+}
+.button i {
+    margin-right: 8px;
+}
+
+.s-button {
+    background: var(--bg-reset);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 0.9rem 1.3rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    width: 10vw;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+.s-green-button {
+    background: var(--bg-submit);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 0.9rem 1.3rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    width: 10vw;
+    font-size: 1rem;
+}
+
+small-button {
+    width: 10vw;
 }

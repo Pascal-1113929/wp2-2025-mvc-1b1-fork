@@ -1,23 +1,22 @@
 from flask import Blueprint
 
-from data.database import DB_PATH, Database
 from models.enrollment import Enrollment
 from models.organization import Organization
 from models.study import Study
 from models.user import User
 from view import render
 
-_db = Database(DB_PATH)
-users = User(DB_PATH)
-organizations = Organization(DB_PATH)
-studies = Study(DB_PATH)
-enrollments = Enrollment(DB_PATH)
 
+users = User()
+organizations = Organization()
+studies = Study()
+enrollments = Enrollment()
 
-index_bp = Blueprint('index', __name__)
+index_bp = Blueprint("index", __name__)
+
 
 @index_bp.route("/")
-def index(language):
+def index():
     counts = {
         "experts": users.count_all()[0],
         "organizations": organizations.count_all()[0],
@@ -26,3 +25,8 @@ def index(language):
     }
 
     return render("index.html", counts=counts)
+
+
+@index_bp.route("/debug")
+def debug():
+    return render("debug.html")

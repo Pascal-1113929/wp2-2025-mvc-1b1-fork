@@ -1,0 +1,150 @@
+{% from "macros/components/link.html" import link %}
+
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+<main class="home">
+    <section class="sectioncard">
+                {% if success %}
+            <div class="alert alert-success">
+                Succesvol Geregistreerd Wachten op Goedkeuring!
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% endif %}
+        <form class="cm-form" action="{{ url_for('account.account_register', language=base.locale)}}" method="post">
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="usr-email">Email</label>
+                <input id="usr-email" type="email" name="email" placeholder="Voer hier uw email in" value="{{ request.form.email }}">
+                {% if errors.email %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="usr-pass">Wachtwoord</label>
+                <input id="usr-pass" type="password" name="password" placeholder="Voer hier uw wachtwoord in">
+                {% if errors.password %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <hr>
+
+            <!-- First Name -->
+            <div class="form-group">
+                <label for="prf-fname">Voornaam</label>
+                <input id="prf-fname" type="text" name="firstname" placeholder="vul hier uw voornaam in" value="{{ request.form.firstname }}">
+                {% if errors.firstname %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Last Name -->
+            <div class="form-group">
+                <label for="prf-lname">Achternaam</label>
+                <input id="prf-lname" type="text" name="lastname" placeholder="vul hier uw achternaam in" value="{{ request.form.lastname }}">
+                {% if errors.lastname %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+                <label for="prf-gender">Gender</label>
+                {{ dropdown(options=[
+                    {"value": "M", "text": "Man"},
+                    {"value": "V", "text": "Vrouw"},
+                    {"value": "X", "text": "Anders"}
+                ], name="gender", id="", class="", required=true, placeholder="Selecteer uw geslacht") }}
+                {% if errors.gender %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Disability -->
+            <div class="form-group">
+                <label for="prf-disabil">Beperkingen:</label>
+                {{ dropdown(options=disabilities, name="disability", id="", class="", required=true, placeholder="Selecteer een beperking") }}
+                {% if errors.disability %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Postal Code -->
+            <div class="form-group">
+                <label for="prf-postal">Postcode</label>
+                <input id="prf-postal" type="text" name="postal" placeholder="vul hier postcode in" value="{{ request.form.postal }}">
+                {% if errors.postal %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Intro -->
+            <div class="form-group">
+                <label for="prf-inro">Intro</label>
+                <textarea id="prf-inro" name="intro" rows="4" placeholder="vul hier uw intro voor uw profiel in">{{ request.form.intro }}</textarea>
+                {% if errors.intro %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label for="phone">Telefoonnummer</label>
+                <input id="phone" type="tel" name="phone" placeholder="Bijv: 067409236450" maxlength="10" value="{{ request.form.phone }}">
+                {% if errors.phone %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Birthdate -->
+            <div class="form-group">
+                <label for="prf-bdate">Geboorte Datum</label>
+                <input id="prf-bdate" type="date" name="birthdate" value="{{ request.form.birthdate }}">
+                {% if errors.birthdate %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Assistive Tools -->
+            <div class="form-group">
+                <label for="prf-atools">Hulpmiddelen</label>
+                <input id="prf-atools" type="text" name="atools" placeholder="Bijv: Screenreader" value="{{ request.form.atools }}">
+                {% if errors.atools %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Contact Preference -->
+            <div class="form-group">
+                <label for="prf-contact">Contact preferentie</label>
+                {{ dropdown(options=[
+                    {"value": "telefoon", "text": "Telefoon"},
+                    {"value": "e-mail", "text": "E-mail"},
+                ], name="contact", id="", class="", required=true, placeholder="Selecteer uw contact preferentie") }}
+                {% if errors.contact %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Research Type -->
+            <div class="form-group">
+                <label for="prf-researchtype">Onderzoek type preferentie</label>
+                {{ dropdown(options=[
+                    {"value": "telefonisch", "text": "Telefonisch"},
+                    {"value": "online", "text": "Online"},
+                    {"value": "locatie", "text": "Op locatie"},
+                ], name="researchtype", id="", class="", required=true, placeholder="Selecteer uw onderzoek type preferentie") }}
+                {% if errors.researchtype %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Availability -->
+            <div class="form-group">
+                <label for="prf-availab">Beschikbaarheid</label>
+                <input id="prf-availab" type="text" name="availability" placeholder="Bijv: Ma-Wo overdag" value="{{ request.form.availability }}">
+                {% if errors.availability %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Terms Checkbox -->
+            <div class="form-check">
+                <input type="checkbox" id="prf-aterms" name="aterms" value=1 {% if request.form.get('aterms') %}checked{% endif %}>
+                <label for="prf-aterms"> Ik ben het eens met de Userpolicy</label>
+                {% if errors.aterms %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+            </div>
+
+            <!-- Buttons -->
+            <div class="grid-section">
+                <button class="submit-btn" type="submit">Opslaan</button>
+                <button class="reset-btn" type="reset">Reset</button>
+            </div>
+
+            {{ link(href=".login", text="Heb je al een account? Log hier in") }}
+        </form>
+
+    </section>
+</main>
+{% endblock %}
