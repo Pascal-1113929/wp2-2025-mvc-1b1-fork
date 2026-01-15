@@ -13,6 +13,8 @@ from werkzeug.exceptions import NotFound
 from utils.table import Table
 from utils.auth import in_roles
 from utils.mail import send_mail
+from i18n.locale import get_iso_639_1
+from utils.translate import check_translation
 
 users = User()
 organizations = Organization()
@@ -27,6 +29,7 @@ research_bp = Blueprint("research", __name__)
 @research_bp.route("/")
 def research_dashboard_render():
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     userid = session.get("user_id")
     role = session.get("role")
@@ -149,6 +152,7 @@ def research_dashboard_render():
 
     return render(
         "research_list.html",
+        page_translated=page_translated,
         expert=expert,
         is_expert=is_expert,
         available_study_table_data=available_study_table_data,
@@ -159,6 +163,7 @@ def research_dashboard_render():
 @research_bp.route("/<study_id>")
 def study_dashboard_render(study_id):
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     if in_roles("expert"):
         user_id = session["user_id"]
@@ -182,6 +187,7 @@ def study_dashboard_render(study_id):
 
     return render(
         "study.html",
+        page_translated=page_translated,
         study=study,
         organization=organization,
         table_data=table_data,
@@ -192,6 +198,7 @@ def study_dashboard_render(study_id):
 @research_bp.route("/<study_id>/enroll")
 def enroll_page(study_id):
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     user_id = session.get("user_id")
 
@@ -199,7 +206,7 @@ def enroll_page(study_id):
     user = users.get_user_by_id(user_id)
     profile = profiles.get_profile_by_userid(user_id)
 
-    return render("enroll.html", study=study, user=user, profile=profile)
+    return render("enroll.html", page_translated=page_translated, study=study, user=user, profile=profile)
 
 
 @research_bp.route("/<study_id>/enroll", methods=["POST"])

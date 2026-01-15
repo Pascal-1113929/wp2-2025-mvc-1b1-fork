@@ -185,6 +185,7 @@
 "dashboard_profile_list_fullname": "Full name"
 "dashboard_profile_list_about": "About"
 "dashboard_profile_btn_edit": "Edit profile"
+"dashboard_profile_btn_view": "View profile"
 "dashboard_statistics_admin_title": "Admin statistics"
 "dashboard_statistics_expert_title": "Expert statistics"
 "dashboard_statistics_organization_title": "Organization statistics"
