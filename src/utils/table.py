@@ -10,6 +10,7 @@ class Table:
 
     def export_to_macro(self):
         table_data = []
+        print(self.table_data)
         for row in self.table_data:
             table_row = []
             for key, value in row.items():
@@ -78,9 +79,9 @@ class Table:
 
     def _process_other_element(self, element_def):
         if (
-            isinstance(element_def, list)
-            and len(element_def) >= 2
-            and element_def[0] == "text"
+                isinstance(element_def, list)
+                and len(element_def) >= 2
+                and element_def[0] == "text"
         ):
             value_list = element_def[1] if len(element_def) > 1 else []
             if isinstance(value_list, list) and len(value_list) > 0:
@@ -175,3 +176,12 @@ class Table:
         for row in self.table_data:
             column_value = process_conditional_elements(args[0], row)
             row[key] = column_value
+
+    def set_column_lang(self, lang, key):
+        for row in self.table_data:
+            if type(key) == list:
+                for col in key:
+                    row[key] = {
+                        "value": row[key],
+                        "lang": lang,
+                    }

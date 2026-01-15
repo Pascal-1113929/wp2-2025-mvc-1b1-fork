@@ -24,3 +24,9 @@ def list_locales():
             if filename.endswith(filetype):
                 locales.append(filename[: -len(filetype) - 1])
     return locales
+
+
+def get_iso_639_1():
+    locale = request.path.split("/")[1]
+    locale = locale.split("-")[0]
+    return locale

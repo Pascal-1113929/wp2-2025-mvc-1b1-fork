@@ -14,7 +14,7 @@
             {% for row in rows %}
             <tr>
                 {% for cell in row %}
-                <td>
+                <td {% if cell.lang %}lang="{{ cell.lang }}"{% endif %}>
                     {% for element in cell %}
                         {% if element.type == "text" %}
                             {{ element.value }}

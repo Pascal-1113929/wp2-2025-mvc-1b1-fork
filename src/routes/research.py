@@ -26,7 +26,8 @@ research_bp = Blueprint("research", __name__)
 
 @research_bp.route("/")
 def research_dashboard_render():
-    # userid = 3  # TODO: get userid from session after login has been completed
+    page_languages = ['nl']
+
     userid = session.get("user_id")
     role = session.get("role")
     is_expert = False
@@ -157,6 +158,8 @@ def research_dashboard_render():
 
 @research_bp.route("/<study_id>")
 def study_dashboard_render(study_id):
+    page_languages = ['nl']
+
     if in_roles("expert"):
         user_id = session["user_id"]
 
@@ -188,6 +191,8 @@ def study_dashboard_render(study_id):
 
 @research_bp.route("/<study_id>/enroll")
 def enroll_page(study_id):
+    page_languages = ['nl']
+
     user_id = session.get("user_id")
 
     study = studies.get_study_by_id(study_id)
@@ -220,11 +225,15 @@ def enroll_confirm(study_id):
 
 @research_bp.route("/<study_id>/enroll/success")
 def enroll_success(study_id):
+    page_languages = ['nl']
+
     return render("enroll_succes.html")
 
 
 @research_bp.route("/<study_id>/unlist")
 def unlist_page(study_id):
+    page_languages = ['nl']
+
     user_id = session.get("user_id")
 
     study = studies.get_study_by_id(study_id)
@@ -249,4 +258,6 @@ def unlist_confirm(study_id):
 
 @research_bp.route("/<study_id>/unlist/success")
 def unlist_success(study_id):
+    page_languages = ['nl']
+
     return render("unlist_success.html")

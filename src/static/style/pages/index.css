@@ -174,10 +174,28 @@
     box-sizing: border-box;
 }
 
+.alert-base {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 70VW;
+    box-sizing: border-box;
+}
+
 .alert-success {
     background-color: #d4edda;
     border-left: 4px solid #28a745;
     color: #155724;
+}
+
+.alert-warning {
+    background-color: #ede1d4;
+    border-left: 4px solid #a77028;
+    color: #573d15;
 }
 
 .alert-error {

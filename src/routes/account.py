@@ -74,6 +74,8 @@ def account_logout():
 
 @account_bp.route("/register", methods=["GET", "POST"])
 def account_register():
+    page_languages = ['nl']
+
     success = request.args.get("success")
     error = request.args.get("error")
     errors = {}
@@ -161,12 +163,16 @@ def account_register():
 
 @account_bp.route("/expert-profile")
 def expert_profile_redirect():
+    page_languages = ['nl']
+
     userid = session.get("user_id")
     return redirect_page(f"/expert-profile/{userid}")
 
 
 @account_bp.route("/expert-profile/<id>")
 def expert_profile(id):
+    page_languages = ['nl']
+
     userid = session.get("user_id")
     allow_delete = False
 
@@ -209,6 +215,8 @@ def expert_profile(id):
     "/expert-profile/<uid>/delete", methods=["GET", "DELETE", "POST"]
 )  # form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
 def expert_profile_delete(uid):
+    page_languages = ['nl']
+
     userid = session.get("user_id")
     role = session.get("role")
     id = int(uid)
@@ -240,6 +248,8 @@ def expert_profile_delete(uid):
 @account_bp.route("/expert-profile/<uid>/edit", methods=["GET", "POST"])
 # Using Post as this is the only way to avoid using Javascript
 def expert_profile_edit(uid):
+    page_languages = ['nl']
+
     success = request.args.get("success")
     error = request.args.get("error")
     userid = session.get("user_id")
@@ -326,6 +336,8 @@ def expert_profile_edit(uid):
 
 @account_bp.route("/status")
 def account_status():
+    page_languages = ['nl']
+
     userid = session.get("user_id")
     user = users.get_user_by_id(userid)
     status = statuses.get_status_name(int(user["status_id"]))

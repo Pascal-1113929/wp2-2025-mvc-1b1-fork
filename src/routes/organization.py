@@ -13,6 +13,8 @@ from utils.table import Table
 from utils.dropdown import Dropdown
 from utils.auth import is_authenticated, in_roles
 from view import redirect_page, render
+from utils.translate import check_translation
+from i18n.locale import get_iso_639_1
 
 organizations = Organization()
 users = User()
@@ -39,6 +41,9 @@ def organization_redirect():
 
 @org_bp.route("/<id>/")
 def organization_dashboard_render(id):
+    page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
+
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(403)
 
@@ -79,6 +84,7 @@ def organization_dashboard_render(id):
             "modify",
         ]
         table = Table(study_list)
+        table.set_column_lang('nl', table_header)
 
         table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
         table.add_column(
@@ -131,6 +137,7 @@ def organization_dashboard_render(id):
         study_table_data = table.export_to_macro()
 
     return render("organization.html",
+                  page_translated=page_translated,
                   organization=org,
                   study_list=study_table_data,
                   close_success=close_success,
@@ -143,6 +150,8 @@ def organization_dashboard_render(id):
 
 @org_bp.route("/add", methods=["GET", "POST"])
 def org_register_add():
+    page_languages = ['nl']
+
     success = request.args.get("success")
     error = request.args.get("error")
     errors = {}
@@ -199,6 +208,8 @@ def org_register_add():
 # Is aangepast door Pascal na verdere inspectie
 @org_bp.route("/research/add", methods=["GET", "POST"])
 def research_register():
+    page_languages = ['nl']
+
     success = request.args.get("success")
     error = request.args.get("error")
     errors = {}
@@ -281,6 +292,8 @@ def research_register():
 
 @org_bp.route("/<organization_id>/study/<study_id>/")
 def organization_study_page_render(organization_id, study_id):
+    page_languages = ['nl']
+
     user_id = session.get("user_id")
     verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
     if verified_org_id != int(organization_id):
@@ -382,6 +395,8 @@ def organization_study_open(organization_id, study_id):
 
 @org_bp.route("/<organization_id>/study/<study_id>/edit", methods=["GET", "POST"])
 def organization_study_edit_page_render(organization_id, study_id):
+    page_languages = ['nl']
+
     success = request.args.get("success")
     error = request.args.get("error")
 
@@ -468,6 +483,9 @@ def enrolment_table_data_converter(enrolment_list, table_header):
 
 @org_bp.route("<organization_id>/study/<study_id>/<profile_id>/unlist")
 def organization_unlist(organization_id, study_id, profile_id):
+    page_languages = ['nl']
+    check_translation(page_languages, get_iso_639_1())
+
     organization_id = int(organization_id)
     study_id = int(study_id)
     profile_id = int(profile_id)

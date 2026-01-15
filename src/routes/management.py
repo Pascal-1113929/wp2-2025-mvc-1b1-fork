@@ -26,6 +26,8 @@ def index():
 
 @management_bp.route("/approval")
 def approval():
+    page_languages = ['nl', 'en']
+
     lang = get_i18n()
 
     user_data = users.get_users_by_status(1)

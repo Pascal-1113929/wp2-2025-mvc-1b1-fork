@@ -61,6 +61,11 @@
                 </div>
             </div>
         </nav>
+            {% if not page_translated %}
+            <div class="alert-base alert-warning">
+            {{ lang.no_available_translation }}
+            </div>
+            {% endif %}
         {% endblock %} {% block content %} {% endblock %}
     </body>
     <footer class="footer">
