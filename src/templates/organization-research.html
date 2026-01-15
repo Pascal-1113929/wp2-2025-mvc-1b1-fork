@@ -18,37 +18,36 @@
         
         <form class="cm-form" action="{{ url_for('organization.research_register', language=base.locale)}}" method="post">
             <div class="form-group">
-                <label>Onderzoekstitel</label>
-                <input type="text" name="title" maxlength="255" value="{{ request.form.get('title', '') }}" required placeholder="vul hier uw onderzoekstitel in">
+                <label for="title">Onderzoekstitel</label>
+                <input type="text" id="title" name="title" maxlength="255" value="{{ request.form.get('title', '') }}" required placeholder="vul hier uw onderzoekstitel in">
                 {% if errors.title %}
                     <div class="alert alert-error">{{ lang.field_empty }}</div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label>Beschrijving</label>
-                <textarea name="description" rows="4" required placeholder="vul hier de bescrijving in van het onderzoek">{{ request.form.get('description', '') }}</textarea>
+                <label for="description">Beschrijving</label>
+                <textarea id="description" name="description" rows="4" required placeholder="vul hier de bescrijving in van het onderzoek">{{ request.form.get('description', '') }}</textarea>
                 {% if errors.description %}
                     <div class="alert alert-error">{{ lang.field_empty }}</div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label>Onderzoeks type</label>
-                    {{ dropdown(options=[
-                        {"value": "telefonisch", "text": "Telefonisch"},
-                        {"value": "online", "text": "Online"},
-                        {"value": "op locatie", "text": "Op locatie"},
-                    ], name="research_type", id="", class="", required=true, value=request.form.get('research_type', ''), placeholder="Selecteer uw Type onderzoek") }}
+                <label for="dropdown-research_type">Onderzoeks type</label>
+                {{ dropdown(options=[
+                    {"value": "telefonisch", "text": "Telefonisch"},
+                    {"value": "online", "text": "Online"},
+                    {"value": "op locatie", "text": "Op locatie"},
+                ], name="research_type", id="research_type", class="", required=true, value=request.form.get('research_type', ''), placeholder="Selecteer uw Type onderzoek") }}
                 {% if errors.type %}
                     <div class="alert alert-error">{{ lang.field_empty }}</div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label>Locatie (alleen verplicht bij 'Op locatie')</label>
-                <input type="text" name="location" class="" placeholder="Vul locatie in Als u Op locatie heeft geselecteerd" value="{{ request.form.get('location', '') }}"
-                >
+                <label for="location">Locatie (alleen verplicht bij 'Op locatie')</label>
+                <input type="text" id="location" name="location" class="" placeholder="Vul locatie in Als u Op locatie heeft geselecteerd" value="{{ request.form.get('location', '') }}">
                 {% if errors.location %}
                     <div class="alert alert-error">{{ lang.field_empty }}</div>
                 {% endif %}
@@ -56,15 +55,15 @@
 
             <div class="form-group-wrap-2">
                 <div class="form-group">
-                    <label>Minimale leeftijd</label>
-                    <input type="number" name="age_min" value="{{ request.form.get('age_min', '18') }}" min="1" required placeholder="Minimum leeftijd voor dit onderzoek">
+                    <label for="age_min">Minimale leeftijd</label>
+                    <input type="number" id="age_min" name="age_min" value="{{ request.form.get('age_min', '18') }}" min="1" required placeholder="Minimum leeftijd voor dit onderzoek">
                     {% if errors.age_min %}
                         <div class="alert alert-error">{{ lang.field_empty }}</div>
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    <label>Maximale leeftijd</label>
-                    <input type="number" name="age_max" value="{{ request.form.get('age_max', '50') }}" max="200" required placeholder="Maximum leeftijd voor dit onderzoek">
+                    <label for="age_max">Maximale leeftijd</label>
+                    <input type="number" id="age_max" name="age_max" value="{{ request.form.get('age_max', '50') }}" max="200" required placeholder="Maximum leeftijd voor dit onderzoek">
                     {% if errors.age_max %}
                         <div class="alert alert-error">{{ lang.field_empty }}</div>
                     {% endif %}
@@ -72,8 +71,8 @@
             </div>
 
             <div class="form-group">
-                <label for="disability">Betrokken Beperkingen:</label>
-                {{ dropdown(options=disabilities, name="disability", id="", class="", required=true, value=request.form.get('disability', ''), placeholder="Selecteer een beperking") }}
+                <label for="dropdown-disability">Betrokken Beperkingen:</label>
+                {{ dropdown(options=disabilities, name="disability", id="disability", class="", required=true, value=request.form.get('disability', ''), placeholder="Selecteer een beperking") }}
                 {% if errors.disability %}
                     <div class="alert alert-error">{{ lang.field_empty }}</div>
                 {% endif %}
@@ -81,15 +80,15 @@
 
             <div class="form-group-wrap-2">
                 <div class="form-group">
-                    <label>Start datum</label>
-                    <input type="date" name="start_date" value="{{ request.form.get('start_date', '') }}" required placeholder="Start datum van het onderzoek">
+                    <label for="start_date">Start datum</label>
+                    <input type="date" id="start_date" name="start_date" value="{{ request.form.get('start_date', '') }}" required placeholder="Start datum van het onderzoek">
                     {% if errors.start_date %}
                         <div class="alert alert-error">{{ lang.field_empty }}</div>
                     {% endif %}
                 </div>
                 <div class="form-group">
-                    <label>Eind datum</label>
-                    <input type="date" name="end_date" value="{{ request.form.get('end_date', '') }}" required placeholder="Eind datum van het onderzoek">
+                    <label for="end_date">Eind datum</label>
+                    <input type="date" id="end_date" name="end_date" value="{{ request.form.get('end_date', '') }}" required placeholder="Eind datum van het onderzoek">
                     {% if errors.end_date %}
                         <div class="alert alert-error">{{ lang.field_empty }}</div>
                     {% endif %}
@@ -97,8 +96,8 @@
             </div>
 
             <div class="form-group">
-                <label>Beloning</label>
-                <input type="text" name="reward" value="{{ request.form.get('reward', '') }}" placeholder="vul hier uw beloning in voor deelname aan het onderzoek (optioneel)">
+                <label for="reward">Beloning</label>
+                <input type="text" id="reward" name="reward" value="{{ request.form.get('reward', '') }}" placeholder="vul hier uw beloning in voor deelname aan het onderzoek (optioneel)">
                 {% if errors.reward %}
                     <div class="alert alert-error">{{ lang.field_empty }}</div>
                 {% endif %}

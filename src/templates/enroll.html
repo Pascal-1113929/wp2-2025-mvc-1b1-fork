@@ -8,29 +8,32 @@
     <form class="en-form" method="post">
 
         <label for="name">Naam:</label>
-        <input type="text" name="name" value="{{ profile.first_name}}" readonly>
+        <input type="text" id="name" name="name" value="{{ profile.first_name }}" readonly>
 
         <label for="surname">Achternaam:</label>
-        <input type="text" name="surname" value="{{ profile.last_name }}" readonly>
+        <input type="text" id="surname" name="surname" value="{{ profile.last_name }}" readonly>
 
         <label for="email">E-mail:</label>
-        <input type="email" name="email" value="{{ user.email }}" readonly>
+        <input type="email" id="email" name="email" value="{{ user.email }}" readonly>
 
         <label for="phone">Telefoonnummer:</label>
-        <input type="text" name="phone" value="{{ profile.phone }}" readonly>
+        <input type="text" id="phone" name="phone" value="{{ profile.phone }}" readonly>
 
         <label for="postcode">Postcode:</label>
-        <input type="text" name="postcode" value="{{ profile.postcode }}" readonly>
+        <input type="text" id="postcode" name="postcode" value="{{ profile.postcode }}" readonly>
 
         <label for="motivation">Motivatie:</label>
-        <input type="text" name="intro" value="{{ profile.intro }}" readonly>
+        <input type="text" id="motivation" name="intro" value="{{ profile.intro }}" readonly>
 
         <label for="availability">Beschikbaarheid:</label>
-        <input type="text" name="availability" value="{{ profile.availability }}" readonly>
-            
+        <input type="text" id="availability" name="availability" value="{{ profile.availability }}" readonly>
+
+
+
             <div class="button-group" >
                 <button type="submit" class="button">Bevestigen</button>
                 <a href="/{{ base.locale }}/research/{{ study.id }}" class="button">Annuleren</a>
             </div>
+    </form>
 </main>
 {% endblock %}

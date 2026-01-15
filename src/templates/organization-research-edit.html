@@ -18,62 +18,61 @@
         
         <form class="cm-form" action="{{ url_for('organization.organization_study_edit_page_render', study_id=study.id, organization_id=study.organization_id, language=base.locale)}}" method="post">
             <div class="form-group">
-                <label>Onderzoekstitel</label>
-                <input type="text" name="title" maxlength="255" value="{{ study.title }}" required placeholder="vul hier uw onderzoekstitel in">
+                <label for="title">Onderzoekstitel</label>
+                <input type="text" id="title" name="title" maxlength="255" value="{{ study.title }}" required placeholder="vul hier uw onderzoekstitel in">
             </div>
 
             <div class="form-group">
-                <label>Beschrijving</label>
-                <textarea name="description" rows="4" required placeholder="vul hier de bescrijving in van het onderzoek">{{ study.description }}</textarea>
+                <label for="description">Beschrijving</label>
+                <textarea id="description" name="description" rows="4" required placeholder="vul hier de bescrijving in van het onderzoek">{{ study.description }}</textarea>
             </div>
 
             <div class="form-group">
-                <label>Onderzoeks type</label>
-                    {{ dropdown(options=[
-                        {"value": "telefonisch", "text": "Telefonisch", "selected": study.study_type == "telefonisch"},
-                        {"value": "online", "text": "Online", "selected": study.study_type == "online"},
-                        {"value": "op locatie", "text": "Op locatie", "selected": study.study_type == "op locatie"}
-                    ], name="research_type", id="", class="", required=true, value=request.form.get('research_type', ''), placeholder="Selecteer uw Type onderzoek") }}
+                <label for="dropdown-research_type">Onderzoeks type</label>
+                {{ dropdown(options=[
+                    {"value": "telefonisch", "text": "Telefonisch", "selected": study.study_type == "telefonisch"},
+                    {"value": "online", "text": "Online", "selected": study.study_type == "online"},
+                    {"value": "op locatie", "text": "Op locatie", "selected": study.study_type == "op locatie"}
+                ], name="research_type", id="research_type", class="", required=true, value=request.form.get('research_type', ''), placeholder="Selecteer uw Type onderzoek") }}
             </div>
 
             <div class="form-group">
-                <label>Locatie (alleen verplicht bij 'Op locatie')</label>
+                <label for="location">Locatie (alleen verplicht bij 'Op locatie')</label>
                 {% set location = study.location or "" %}
-                <input type="text" name="location" class="" placeholder="Vul locatie in Als u Op locatie heeft geselecteerd" value="{{ location }}"
-                >
+                <input type="text" id="location" name="location" class="" placeholder="Vul locatie in Als u Op locatie heeft geselecteerd" value="{{ location }}">
             </div>
 
             <div class="form-group-wrap-2">
                 <div class="form-group">
-                    <label>Minimale leeftijd</label>
-                    <input type="number" name="age_min" value="{{ study.age_min }}" min="1" required placeholder="Minimum leeftijd voor dit onderzoek">
+                    <label for="age_min">Minimale leeftijd</label>
+                    <input type="number" id="age_min" name="age_min" value="{{ study.age_min }}" min="1" required placeholder="Minimum leeftijd voor dit onderzoek">
                 </div>
                 <div class="form-group">
-                    <label>Maximale leeftijd</label>
-                    <input type="number" name="age_max" value="{{ study.age_max }}" max="200" required placeholder="Maximum leeftijd voor dit onderzoek">
+                    <label for="age_max">Maximale leeftijd</label>
+                    <input type="number" id="age_max" name="age_max" value="{{ study.age_max }}" max="200" required placeholder="Maximum leeftijd voor dit onderzoek">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="disability">Betrokken Beperkingen:</label>
+                <label for="dropdown-disability">Betrokken Beperkingen:</label>
                 {% set selected_id = study.disability_list[0].id|string if study.disability_list else "" %}
-                {{ dropdown(options=disabilities, name="disability", id="", class="", required=true, value=selected_id, placeholder="Selecteer een beperking") }}
+                {{ dropdown(options=disabilities, name="disability", id="disability", class="", required=true, value=selected_id, placeholder="Selecteer een beperking") }}
             </div>
 
             <div class="form-group-wrap-2">
                 <div class="form-group">
-                    <label>Start datum</label>
-                    <input type="date" name="start_date" value="{{ study.start_date }}" required placeholder="Start datum van het onderzoek">
+                    <label for="start_date">Start datum</label>
+                    <input type="date" id="start_date" name="start_date" value="{{ study.start_date }}" required placeholder="Start datum van het onderzoek">
                 </div>
                 <div class="form-group">
-                    <label>Eind datum</label>
-                    <input type="date" name="end_date" value="{{ study.end_date }}" required placeholder="Eind datum van het onderzoek">
+                    <label for="end_date">Eind datum</label>
+                    <input type="date" id="end_date" name="end_date" value="{{ study.end_date }}" required placeholder="Eind datum van het onderzoek">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Beloning</label>
-                <input type="text" name="reward" value="{{ study.reward }}" placeholder="vul hier uw beloning in voor deelname aan het onderzoek (optioneel)">
+                <label for="reward">Beloning</label>
+                <input type="text" id="reward" name="reward" value="{{ study.reward }}" placeholder="vul hier uw beloning in voor deelname aan het onderzoek (optioneel)">
             </div>
 
             <div class="grid-section">
@@ -81,6 +80,7 @@
                 <button class="reset-btn" type="reset">Reset</button>
             </div>
         </form>
+
     </section>
 </main>
 {% endblock %}

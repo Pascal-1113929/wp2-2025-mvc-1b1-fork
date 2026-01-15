@@ -32,18 +32,18 @@
             </div>
 
             <div class="form-group">
-                <label for="prf-gender">Gender</label>
+                <label for="dropdown-prf-gender">Gender</label>
                 {{ dropdown(options=[
                     {"value": "M", "text": "Man", "selected": user.gender == "M"},
                     {"value": "V", "text": "Vrouw", "selected": user.gender == "V"},
                     {"value": "X", "text": "Anders", "selected": user.gender == "X"}
-                ], name="gender", id="", class="", required=true, placeholder="Selecteer uw geslacht") }}
+                ], name="gender", id="prf-gender", class="", required=true, placeholder="Selecteer uw geslacht") }}
             </div>
 
             <div class="form-group">
-                <label for="prf-disabil">Beperkingen:</label>
+                <label for="dropdown-prf-disability">Beperkingen:</label>
                 {% set selected_id = user.disability_list[0].id|string if user.disability_list else "" %}
-                {{ dropdown(options=disabilities, name="disability", id="", class="", required=true, placeholder="Selecteer een beperking", value=selected_id) }}
+                {{ dropdown(options=disabilities, name="disability", id="prf-disability", class="", required=true, placeholder="Selecteer een beperking", value=selected_id) }}
             </div>
 
             <div class="form-group">
@@ -72,20 +72,20 @@
             </div>
 
             <div class="form-group">
-                <label for="prf-contact">Contact preferentie</label>
+                <label for="dropdown-prf-contact">Contact preferentie</label>
                 {{ dropdown(options=[
                     {"value": "telefoon", "text": "Telefoon", "selected": user.contact_preference == "telefoon"},
                     {"value": "e-mail", "text": "E-mail", "selected": user.contact_preference == "e-mail"},
-                ], name="contact", id="", class="", required=true, placeholder="Selecteer uw contact preferentie") }}
+                ], name="contact", id="prf-contact", class="", required=true, placeholder="Selecteer uw contact preferentie") }}
             </div>
 
             <div class="form-group">
-                <label for="prf-researchtype">Onderzoek type preferentie</label>
+                <label for="dropdown-prf-researchtype">Onderzoek type preferentie</label>
                 {{ dropdown(options=[
                     {"value": "telefonisch", "text": "Telefonisch", "selected": user.preferred_study_type == "telefonisch"},
                     {"value": "online", "text": "Online", "selected": user.preferred_study_type == "online"},
                     {"value": "locatie", "text": "Op locatie", "selected": user.preferred_study_type == "locatie"},
-                ], name="researchtype", id="", class="", required=true, placeholder="Selecteer uw onderzoek type preferentie") }}
+                ], name="researchtype", id="prf-researchtype", class="", required=true, placeholder="Selecteer uw onderzoek type preferentie") }}
             </div>
 
             <div class="form-group">
