@@ -14,16 +14,54 @@
             {% for row in rows %}
             <tr>
                 {% for cell in row %}
-                <td {% if cell.lang %}lang="{{ cell.lang }}"{% endif %}>
-                    {% for element in cell %}
-                        {% if element.type == "text" %}
-                            {{ element.value }}
-                        {% elif element.type == "button" %}
-                            {{ button(href=element.href, text=element.text, icon=element.icon, class_name=element.class_name) }}
-                        {% elif element.type == "link" %}
-                            {{ link(href=element.href, text=element.text, class_name=element.class_name, icon=element.icon) }}
+                <td>
+                    {% if cell is string or cell is number %}
+                        {{ cell }}
+                    {% elif cell is mapping %}
+                        {% if cell.type is defined %}
+                            {% if cell.type == "button" %}
+                                {{ button(href=cell.href, text=cell.text, icon=cell.icon, class_name=cell.class_name) }}
+                            {% elif cell.type == "link" %}
+                                {{ link(href=cell.href, text=cell.text, class_name=cell.class_name, icon=cell.icon) }}
+                            {% elif cell.type == "text" %}
+                                {{ cell.value }}
+                            {% else %}
+                                {{ cell.value if cell.value is defined else cell }}
+                            {% endif %}
+                        {% elif cell.value is defined and cell.lang is defined %}
+                            <span lang="{{ cell.lang }}">{{ cell.value }}</span>
+                        {% elif cell.value is defined %}
+                            {{ cell.value }}
+                        {% else %}
+                            {{ cell }}
                         {% endif %}
-                    {% endfor %}
+                    {% elif cell is iterable %}
+                        {% for element in cell %}
+                            {% if element is mapping %}
+                                {% if element.type is defined %}
+                                    {% if element.type == "text" %}
+                                        {{ element.value }}
+                                    {% elif element.type == "button" %}
+                                        {{ button(href=element.href, text=element.text, icon=element.icon, class_name=element.class_name) }}
+                                    {% elif element.type == "link" %}
+                                        {{ link(href=element.href, text=element.text, class_name=element.class_name, icon=element.icon) }}
+                                    {% else %}
+                                        {{ element.value if element.value is defined else element }}
+                                    {% endif %}
+                                {% elif element.value is defined and element.lang is defined %}
+                                    <span lang="{{ element.lang }}">{{ element.value }}</span>
+                                {% elif element.value is defined %}
+                                    {{ element.value }}
+                                {% else %}
+                                    {{ element }}
+                                {% endif %}
+                            {% else %}
+                                {{ element }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ cell }}
+                    {% endif %}
                 </td>
                 {% endfor %}
             </tr>
