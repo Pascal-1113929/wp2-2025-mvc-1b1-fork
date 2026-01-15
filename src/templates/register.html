@@ -53,19 +53,19 @@
 
         <!-- Gender -->
         <div class="form-group">
-            <label for="prf-gender"><i class="fa-solid fa-person-half-dress"></i> {{ lang.account_register_field_gender_title }}</label>
+            <label for="dropdown-prf-gender"><i class="fa-solid fa-person-half-dress"></i> {{ lang.account_register_field_gender_title }}</label>
             {{ dropdown(options=[
                 {"value": "M", "text": lang.account_register_field_gender_male},
                 {"value": "V", "text": lang.account_register_field_gender_female},
                 {"value": "X", "text": lang.account_register_field_gender_other}
-            ], name="gender", id="", class="", required=true, placeholder=lang.account_register_field_gender_placeholder) }}
+            ], name="gender", id="prf-gender", class="", required=true, placeholder=lang.account_register_field_gender_placeholder) }}
             {% if errors.gender %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
         </div>
 
         <!-- Disability -->
         <div class="form-group">
-            <label for="prf-disabil"><i class="fa-solid fa-wheelchair"></i> {{ lang.account_register_field_disability_title }}</label>
-            {{ dropdown(options=disabilities, name="disability", id="", class="", required=true, placeholder=lang.account_register_field_disability_placeholder) }}
+            <label for="dropdown-prf-disability"><i class="fa-solid fa-wheelchair"></i> {{ lang.account_register_field_disability_title }}</label>
+            {{ dropdown(options=disabilities, name="disability", id="prf-disability", class="", required=true, placeholder=lang.account_register_field_disability_placeholder) }}
             {% if errors.disability %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
         </div>
 
@@ -106,22 +106,22 @@
 
         <!-- Contact Preference -->
         <div class="form-group">
-            <label for="prf-contact"><i class="fa-solid fa-envelope"></i> {{ lang.account_register_field_contact_title }}</label>
+            <label for="dropdown-prf-contact"><i class="fa-solid fa-envelope"></i> {{ lang.account_register_field_contact_title }}</label>
             {{ dropdown(options=[
                 {"value": "telefoon", "text": lang.account_register_field_contact_phone},
                 {"value": "e-mail", "text": lang.account_register_field_contact_email},
-            ], name="contact", id="", class="", required=true, placeholder=lang.account_register_field_contact_placeholder) }}
+            ], name="contact", id="prf-contact", class="", required=true, placeholder=lang.account_register_field_contact_placeholder) }}
             {% if errors.contact %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
         </div>
 
         <!-- Research Type -->
         <div class="form-group">
-            <label for="prf-researchtype"><i class="fa-solid fa-book"></i> {{ lang.account_register_field_researchtype_title }}</label>
+            <label for="dropdown-prf-researchtype"><i class="fa-solid fa-book"></i> {{ lang.account_register_field_researchtype_title }}</label>
             {{ dropdown(options=[
                 {"value": "telefonisch", "text": lang.account_register_field_researchtype_phone},
                 {"value": "online", "text": lang.account_register_field_researchtype_online},
                 {"value": "locatie", "text": lang.account_register_field_researchtype_location},
-            ], name="researchtype", id="", class="", required=true, placeholder=lang.account_register_field_researchtype_placeholder) }}
+            ], name="researchtype", id="prf-researchtype", class="", required=true, placeholder=lang.account_register_field_researchtype_placeholder) }}
             {% if errors.researchtype %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
         </div>
 
