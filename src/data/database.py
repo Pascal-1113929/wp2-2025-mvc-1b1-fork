@@ -446,6 +446,7 @@ class Database:
                     (1, "nieuw"),
                     (2, "goedgekeurd"),
                     (3, "afgekeurd"),
+                    (4, "gesloten")
                 ],
             )
 

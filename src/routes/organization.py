@@ -25,8 +25,14 @@ org_bp = Blueprint("organization", __name__)
 
 @org_bp.route("/")
 def organization_redirect():
-    userid = session.get("user_id")
-    return redirect_page(f"/organization/{userid}")
+    if not is_authenticated():
+        abort(403)
+
+    if in_roles("admin"):
+        return "wie"  # TODO make page for admin
+    else:
+        userid = session.get("user_id")
+        return redirect_page(f"/organization/{userid}")
 
 
 @org_bp.route("/<id>/")
