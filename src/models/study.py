@@ -15,12 +15,26 @@ class Study:
             con.commit()
             return cur.fetchone()
 
-    def set_research_status(self, user_id, status):
+    def count_available(self, disability_ids):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            placeholders = ",".join(["?"] * len(disability_ids))
+            cur.execute(
+                "SELECT COUNT(DISTINCT studies.id) FROM studies "
+                "INNER JOIN study_disabilities ON studies.id == study_disabilities.study_id "
+                "WHERE studies.available=1 AND DATE(end_date) > DATE('now') "
+                f"AND disability_id IN ({placeholders})",
+                disability_ids,
+            )
+            con.commit()
+            return cur.fetchone()
+
+    def set_research_status(self, study_id, status):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
                 "UPDATE studies SET status_id = ? WHERE id = ?",
-                (status, user_id),
+                (status, study_id),
             )
             con.commit()
             return cur.lastrowid
@@ -58,7 +72,27 @@ class Study:
             cur = con.cursor()
             cur.execute("SELECT * FROM studies WHERE available=1")
             con.commit()
-            return cur.fetchall()
+            study_list = cur.fetchall()
+
+            new_study_list = []
+            for study in study_list:
+                study_dict = dict(study)
+                new_study_list.append(study_dict)
+
+            return new_study_list
+
+    def get_all_available_ids(self):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            # Only select the id column
+            cur.execute("SELECT id FROM studies WHERE available=1")
+            con.commit()
+            study_list = cur.fetchall()
+
+            # Convert each row to a dict with only 'id'
+            new_study_list = [row["id"] for row in study_list]
+
+            return new_study_list
 
     def get_study_id_by_disability_id(self, disability_id: int):
         with self.db.connect() as con:
@@ -86,25 +120,9 @@ class Study:
                 "SELECT * FROM studies "
                 "WHERE available=1 "
                 "AND DATE(end_date) > DATE('now') "
-                "AND id=? ",
-                (study_id,),
-            )
-            con.commit()
-            row = cur.fetchone()
-            try:
-                return dict(row)
-            except TypeError:
-                return None
-
-    def get_available_enrolled_study_by_id(self, study_id: int):
-        with self.db.connect() as con:
-            cur = con.cursor()
-            cur.execute(
-                "SELECT * FROM studies "
-                "WHERE available=1 "
-                "AND DATE(end_date) > DATE('now') "
-                "AND id=? ",
-                (study_id,),
+                "AND id=? "
+                "AND status_id=?",
+                (study_id, 2),
             )
             con.commit()
             row = cur.fetchone()
@@ -116,9 +134,34 @@ class Study:
     def get_study_by_id(self, study_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT * FROM studies WHERE id=?", (study_id,))
+            cur.execute(
+                "SELECT * FROM studies WHERE id=? ",
+                (study_id,),
+            )
             con.commit()
-            return dict(cur.fetchone())
+            row = cur.fetchone()
+            if row:
+                return dict(row)
+            else:
+                return None
+
+    def get_available_enrolled_study_by_id(self, study_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                """SELECT studies.*, enrollments.status_id as "astatus_id" FROM studies 
+                INNER JOIN enrollments ON studies.id = enrollments.study_id
+                WHERE studies.available=1 
+                AND DATE(studies.end_date) > DATE('now') 
+                AND studies.id=?""",
+                (study_id,),
+            )
+            con.commit()
+            row = cur.fetchone()
+            try:
+                return dict(row)
+            except TypeError:
+                return None
 
     def get_study_by_status(self, status_id: int):
         with self.db.connect() as con:
@@ -137,7 +180,8 @@ class Study:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                """INSERT INTO studies (organization_id, title, description, study_type, location,age_min, age_max, reward, start_date, end_date, status_id, available, has_reward)
+                """INSERT INTO studies (organization_id, title, description, study_type, location,age_min, age_max,
+                                        reward, start_date, end_date, status_id, available, has_reward)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
@@ -168,8 +212,57 @@ class Study:
     def get_organization_id_by_id(self, id):
         with self.db.connect() as con:
             cur = con.cursor()
+            cur.execute("SELECT organization_id FROM studies WHERE id=?", (id,))
+            row = cur.fetchone()
+            if row is None:
+                return None
+            else:
+                return dict(row)["organization_id"]
+
+    def update_study(
+        self,
+        study_id: int,
+        title: str,
+        description: str,
+        start_date: str,
+        end_date: str,
+        study_type: str,
+        location: str | None,
+        has_reward: int,
+        reward: str,
+        age_min: int,
+        age_max: int,
+    ):
+        with self.db.connect() as con:
+            cur = con.cursor()
             cur.execute(
-                "SELECT organization_id FROM studies WHERE id=?", (id,)
+                """
+                        UPDATE studies
+                        SET title       = ?,
+                            description = ?,
+                            start_date  = ?,
+                            end_date    = ?,
+                            study_type  = ?,
+                            location    = ?,
+                            has_reward  = ?,
+                            reward      = ?,
+                            age_min     = ?,
+                            age_max     = ?
+                        WHERE id = ?
+                        """,
+                (
+                    title,
+                    description,
+                    start_date,
+                    end_date,
+                    study_type,
+                    location,
+                    has_reward,
+                    reward,
+                    age_min,
+                    age_max,
+                    study_id,
+                ),
             )
-            row = dict(cur.fetchone())
-            return row["organization_id"]
+            con.commit()
+            return cur.lastrowid

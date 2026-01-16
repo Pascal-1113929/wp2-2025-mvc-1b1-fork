@@ -1,4 +1,5 @@
 import re
+from .dynamic_objects import process_values, process_conditional_elements
 
 
 class Dropdown:
@@ -36,25 +37,8 @@ class Dropdown:
                 )
         return options
 
-    def _process_values(self, values, item):
-        processed_values = []
-        for val in values:
-            if isinstance(val, str):
-                result = val
-                placeholders = re.findall(r"<([^>]+)>", val)
-                for field_name in placeholders:
-                    if isinstance(item, dict):
-                        replacement = str(item.get(field_name, f"<{field_name}>"))
-                    else:
-                        replacement = f"<{field_name}>"
-                    result = result.replace(f"<{field_name}>", replacement)
-                processed_values.append(result)
-            else:
-                processed_values.append(val)
-        return processed_values
-
     def set(self, key, format_string):
         for item in self.dropdown_data:
             if isinstance(item, dict):
-                processed_values = self._process_values([format_string], item)
+                processed_values = process_values([format_string], item)
                 item[key] = processed_values[0] if processed_values else ""

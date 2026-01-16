@@ -10,6 +10,6 @@ def is_authenticated():
 
 def in_roles(role):
     user_role = session.get("role")
-    if isinstance(user_role, list):
-        return role in user_role
+    if isinstance(role, list):
+        return user_role in role
     return user_role == role

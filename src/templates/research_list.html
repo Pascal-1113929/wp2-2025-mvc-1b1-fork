@@ -1,23 +1,227 @@
 {% from "macros/components/table.html" import table %}
+{% from "macros/components/dropdown.html" import dropdown %}
 
-{% extends 'layouts/default.html' %} {% block content %}
+{% extends 'layouts/default.html' %}
+{% block content %}
+
+{% set all_columns = {
+    'title': lang.research_table_title,
+    'organization': lang.research_table_organization,
+    'start_date': lang.research_table_startdate,
+    'end_date': lang.research_table_enddate,
+    'location_display': lang.research_table_location,
+    'reward': lang.research_table_compensation,
+    'age_min': lang.research_table_minage,
+    'age_max': lang.research_table_maxage
+} %}
+
+{% set ns = namespace(table_header=[]) %}
+{% for key, label in all_columns.items() %}
+    {% if key in selected_columns %}
+        {% set ns.table_header = ns.table_header + [label] %}
+    {% endif %}
+{% endfor %}
 
 <main>
     <header>
-        <h1>
-            Onderzoeken van {{ expert.profile.first_name }} {{
-            expert.profile.last_name }}
-        </h1>
+        <h1>{{ lang.research_title }}</h1>
     </header>
+
+    <form method="get" class="cm-form table-filters">
+        <label for="search-input">{{ lang.research_search_label }}</label>
+        <input type="text" id="search-input" name="search" placeholder="{{ lang.research_search_placeholder }}">
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass"></i> {{ lang.research_search_button }}
+        </button>
+
+        <fieldset>
+            <legend>{{ lang.research_filter_legend }}</legend>
+
+            <div>
+                <label for="age_min">{{ lang.research_filter_min_age }}</label>
+                <input type="number" id="age_min" name="age_min" min="0" placeholder="{{ lang.research_filter_min_age }}" value="{{ request.args.get('age_min', '') }}">
+            </div>
+
+            <div>
+                <label for="age_max">{{ lang.research_filter_max_age }}</label>
+                <input type="number" id="age_max" name="age_max" min="0" placeholder="{{ lang.research_filter_max_age }}" value="{{ request.args.get('age_max', '') }}">
+            </div>
+
+            <fieldset>
+                <legend>{{ lang.research_filter_columns_legend }}</legend>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="organization"
+                        {% if 'organization' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_organization }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="start_date"
+                        {% if 'start_date' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_start_date }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="end_date"
+                        {% if 'end_date' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_end_date }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="location_display"
+                        {% if 'location_display' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_location_display }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="age_min"
+                        {% if 'age_min' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_age_min }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="age_max"
+                        {% if 'age_max' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_age_max }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="reward"
+                        {% if 'reward' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_reward }}
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>{{ lang.research_filter_study_type_legend }}</legend>
+                <label>
+                    <input type="checkbox" name="study_type" value="online" {% if 'online' in request.args.getlist('study_type') %}checked{% endif %}>
+                    {{ lang.research_filter_type_online }}
+                </label>
+                <label>
+                    <input type="checkbox" name="study_type" value="on-site" {% if 'on-site' in request.args.getlist('study_type') %}checked{% endif %}>
+                    {{ lang.research_filter_type_on_site }}
+                </label>
+            </fieldset>
+
+            <button type="submit" class="button">{{ lang.research_filter_apply }}</button>
+        </fieldset>
+    </form>
+
     <div class="seperator"></div>
-    <section>
-        <h2>Lijst met beschikbare onderzoeken</h2>
-                {{ table(['Titel', 'Bedrijf', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd'], available_study_table_data) }}
+
+    <!-- Available studies -->
+    <section class="sectioncard">
+        <h2><i class="fa-solid fa-book"></i> {{ lang.research_running_title }}</h2>
+
+        {% if is_expert %}
+        <form method="get">
+            <input type="hidden" name="preferences" value="0">
+            <label for="preferences">
+                <input type="checkbox" name="preferences" id="preferences" value="1" {% if show_matching == 1 %}checked{% endif %}>
+                {{ lang.research_show_matching_studies }}
+            </label>
+            <input type="hidden" name="available_page" value="{{ available_page }}">
+            <input type="hidden" name="available_page_size" value="{{ available_page_size }}">
+            <input type="hidden" name="enrolled_page" value="{{ enrolled_page }}">
+            <input type="hidden" name="enrolled_page_size" value="{{ enrolled_page_size }}">
+            <input type="hidden" name="tab" value="{{ request.args.get('tab') }}">
+        </form>
+        {% endif %}
+
+        <!-- Page size dropdown -->
+        <form method="get" class="page-size-form">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="available_page_size">{{ lang.table_row_size_description }}</label>
+                {{ dropdown(options=[
+                    {"value": "5", "text": lang.table_row_size_each_page.replace('%', "5"), "selected": available_page_size == "5"},
+                    {"value": "10", "text": lang.table_row_size_each_page.replace('%', "10"), "selected": available_page_size == "10"},
+                    {"value": "25", "text": lang.table_row_size_each_page.replace('%', "25"), "selected": available_page_size == "25"},
+                    {"value": "50", "text": lang.table_row_size_each_page.replace('%', "50"), "selected": available_page_size == "50"},
+                    {"value": "100", "text": lang.table_row_size_each_page.replace('%', "100"), "selected": available_page_size == "100"},
+                    {"value": "all", "text": lang.table_row_show_everything, "selected": available_page_size == "all"}
+                ], name="available_page_size", id="available_page_size", placeholder=lang.table_row_size_each_page.replace('%', available_page_size)) }}
+            </div>
+            <input type="hidden" name="available_page" value="{{ available_page }}">
+            <input type="hidden" name="enrolled_page" value="{{ enrolled_page }}">
+            <input type="hidden" name="enrolled_page_size" value="{{ enrolled_page_size }}">
+            <input type="hidden" name="preferences" value="{{ request.args.get('preferences') }}">
+            <input type="hidden" name="tab" value="{{ request.args.get('tab') }}">
+        </form>
+
+        {{ table(ns.table_header, available_study_table_data) }}
+
+        {% if total_pages_available > 1 %}
+        <nav class="pagination" aria-label="Available studies pagination">
+            {% if has_prev_available %}
+                <a href="?available_page={{ available_page - 1 }}&available_page_size={{ available_page_size }}">{{ lang.previous }}</a>
+            {% endif %}
+            {{ lang.page }} {{ available_page }} / {{ total_pages_available }}
+            {% if has_next_available %}
+                <a href="?available_page={{ available_page + 1 }}&available_page_size={{ available_page_size }}">{{ lang.next }}</a>
+            {% endif %}
+        </nav>
+        {% endif %}
     </section>
-    <section>
-        <h2>Lijst met ingeschreven onderzoeken</h2>
-                {{ table(['Titel', 'Bedrijf', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd'], enrolled_study_table_data) }}
+
+    <!-- Enrolled studies -->
+    {% if is_expert %}
+    <section class="sectioncard">
+        <h2><i class="fa-solid fa-signature"></i> {{ lang.research_enrolled_title }}</h2>
+
+        <section class="sectioncard">
+            <p class="muted">{{ lang.research_tab_description }}</p>
+            <div class="tabs">
+                {{ button("?tab=1" + extra_args, lang.new_enrollments, "ghost" if tab != '1', "fa-solid fa-users") }}
+                {{ button("?tab=2" + extra_args, lang.good_enrollments, "ghost" if tab != '2', "fa-solid fa-book") }}
+                {{ button("?tab=3" + extra_args, lang.bad_enrollments, "ghost" if tab != '3', "fa-solid fa-signature") }}
+            </div>
+        </section>
+
+        {% if tab == None %}
+        <p>{{ lang.select_status_tab }}</p>
+        <p>{{ lang.all_show }}</p>
+        {% endif %}
+
+        <!-- Page size dropdown -->
+        <form method="get" class="page-size-form">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="enrolled_page_size">{{ lang.table_row_size_description }}</label>
+                {{ dropdown(options=[
+                    {"value": "5", "text": lang.table_row_size_each_page.replace('%', "5"), "selected": enrolled_page_size == "5"},
+                    {"value": "10", "text": lang.table_row_size_each_page.replace('%', "10"), "selected": enrolled_page_size == "10"},
+                    {"value": "25", "text": lang.table_row_size_each_page.replace('%', "25"), "selected": enrolled_page_size == "25"},
+                    {"value": "50", "text": lang.table_row_size_each_page.replace('%', "50"), "selected": enrolled_page_size == "50"},
+                    {"value": "100", "text": lang.table_row_size_each_page.replace('%', "100"), "selected": enrolled_page_size == "100"},
+                    {"value": "all", "text": lang.table_row_show_everything, "selected": enrolled_page_size == "all"}
+                ], name="enrolled_page_size", id="enrolled_page_size", placeholder=lang.table_row_size_each_page.replace('%', enrolled_page_size)) }}
+            </div>
+
+            <input type="hidden" name="enrolled_page" value="{{ enrolled_page }}">
+            <input type="hidden" name="available_page" value="{{ available_page }}">
+            <input type="hidden" name="available_page_size" value="{{ available_page_size }}">
+            <input type="hidden" name="preferences" value="{{ request.args.get('preferences') }}">
+            <input type="hidden" name="tab" value="{{ request.args.get('tab') }}">
+        </form>
+
+        {{ table(ns.table_header, enrolled_study_table_data) }}
+
+        {% if total_pages_enrolled > 1 %}
+        <nav class="pagination" aria-label="Enrolled studies pagination">
+            {% if has_prev_enrolled %}
+                <a href="?enrolled_page={{ enrolled_page - 1 }}&enrolled_page_size={{ enrolled_page_size }}">{{ lang.previous }}</a>
+            {% endif %}
+            {{ lang.page }} {{ enrolled_page }} / {{ total_pages_enrolled }}
+            {% if has_next_enrolled %}
+                <a href="?enrolled_page={{ enrolled_page + 1 }}&enrolled_page_size={{ enrolled_page_size }}">{{ lang.next }}</a>
+            {% endif %}
+        </nav>
+        {% endif %}
     </section>
+    {% endif %}
+
 </main>
 
 {% endblock %}

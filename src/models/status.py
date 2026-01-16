@@ -12,5 +12,4 @@ class Status:
             con.commit()
             row = cur.fetchone()
             row = dict(row)
-            print(row)
             return row["status"]

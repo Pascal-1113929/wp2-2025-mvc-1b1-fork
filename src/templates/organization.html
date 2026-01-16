@@ -6,20 +6,68 @@
 
     {% if organization %}
     <main>
-    <h1>Organisatie pagina: {{ organization.name }}</h1>
-        <a href="/{{ base.locale }}/organization/research/add" class="button" type="button">{{ lang.research_create }}</a>
+    <h1>{{ lang.organization_title.replace('%', organization.name) }}</h1>
+        <a href="/{{ base.locale }}/organization/{{ id }}/research/add" class="button" type="button">{{ lang.research_create }}</a>
     <div class="seperator"></div>
+        {% if close_success and changes_study.title %}
+            <div class="alert alert-success">
+                {{ lang.organization_alert_study_successfully_closed.replace('%', changes_study.title) }}
+            </div>
+        {% endif %}
+
+        {% if close_error and changes_study.title %}
+            <div class="alert alert-danger">
+                {{ lang.organization_alert_study_error_closed.replace('%', changes_study.title) }}
+            </div>
+        {% endif %}
+
+        {% if open_success and changes_study.title %}
+            <div class="alert alert-success">
+                {{ lang.organization_alert_study_successfully_opened.replace('%', changes_study.title) }}
+            </div>
+        {% endif %}
+
+        {% if open_error and changes_study.title %}
+            <div class="alert alert-danger">
+                {{ lang.organization_alert_study_error_opened.replace('%', changes_study.title) }}
+            </div>
+        {% endif %}
     <section>
-        <h2>Lijst met onderzoeken</h2>
+        <h2>{{ lang.organization_list_with_researches }}</h2>
         <div class="spacer"></div>
-        {{ table(['Titel', 'Status', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd', "Modify"], study_list) }}
+        <form method="get" class="page-size-form">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="available_page_size">{{ lang.table_row_size_description }}</label>
+                {{ dropdown(options=[
+                {"value": "5", "text": lang.table_row_size_each_page.replace('%', "5"), "selected": available_page_size == "5"},
+                    {"value": "10", "text": lang.table_row_size_each_page.replace('%', "10"), "selected": available_page_size == "10"},
+                    {"value": "25", "text": lang.table_row_size_each_page.replace('%', "25"), "selected": available_page_size == "25"},
+                    {"value": "50", "text": lang.table_row_size_each_page.replace('%', "50"), "selected": available_page_size == "50"},
+                    {"value": "100", "text": lang.table_row_size_each_page.replace('%', "100"), "selected": available_page_size == "100"},
+                    {"value": "all", "text": lang.table_row_show_everything, "selected": available_page_size == "all"}
+                ], name="page_size", id="available_page_size", placeholder=lang.table_row_size_each_page.replace('%', page_size)) }}
+            </div>
+            <input type="hidden" name="page" value="{{ page }}">
+        </form>
+        {{ table([lang.organization_table_title, lang.organization_table_status, lang.organization_table_startdate, lang.organization_table_enddate, lang.organization_table_location, lang.organization_table_compensation, lang.organization_table_minage, lang.organization_table_maxage, lang.organization_table_action], study_list) }}
+        {% if total_pages > 1 %}
+        <nav class="pagination">
+            {% if has_prev %}
+                <a href="?page={{ page - 1 }}&page_size={{ page_size }}">{{ lang.organization_nav_previous_page }}</a>
+            {% endif %}
+            Page {{ page }} / {{ total_pages }}
+            {% if has_next %}
+                <a href="?page={{ page + 1 }}&page_size={{ page_size }}">{{ lang.organization_nav_next_page }}</a>
+            {% endif %}
+        </nav>
+        {% endif %}
     </section>
     </main>
 {% else %}
     <main>
-    <h1>De Organisatie waar u naar zocht, is niet gevonden</h1>
+    <h1>{{ lang.organization_not_found_title }}</h1>
     <p>
-        De gezochte organisatie is niet gevonden, probeer graag later opnieuw
+        {{ lang.organization_not_found_description }}
     </p>
     {{ button(text=lang.nav_home, href=".") }}
     </main>

@@ -28,28 +28,41 @@
         <nav class="navbar">
             <div class="nav-inner">
                 <div class="nav-left">
-                    <a class="brand" href="/{{ base.locale }}/">{{ lang.nav_brand }}</a>
+                    <p class="brand">{{ lang.nav_brand }}</p>
                     <div class="nav-links">
-                        {{ button(text=lang.nav_home, href=".", class_name="ghost" if base.path != "/") }}
-                        {{ button(text=lang.nav_debug, href=".debug", class_name="ghost" if base.path != "/debug") }}
+                        {{ button(text=lang.nav_home, href=".", class_name="ghost" if base.path != "/", icon="fa-solid fa-house") }}
                         {% if base.user %}
-                            {{ button(text=lang.nav_research, href=".research", class_name="ghost" if not base.path.startswith("/research")) }}
-                            {{ button(text=lang.nav_management, href=".management", class_name="ghost" if not base.path.startswith("/management")) }}
+                            {{ button(text=lang.nav_research, href=".research", class_name="ghost" if not base.path.startswith("/research"), icon="fa-solid fa-book") }}
+                            {% if base.user.role in ["organization", "admin"] %}
+                                {{ button(text=lang.nav_organization, href=".organization/", class_name="ghost" if not base.path.startswith("/organization"), icon="fa-solid fa-building") }}
+                            {% endif %}
+                            {% if base.user.role == "admin" %}
+                                {{ button(text=lang.nav_approval, href=".approval", class_name="ghost" if not base.path.startswith("/approval"), icon="fa-solid fa-check-double") }}
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
                 <div class="nav-right">
+                <div class="lang-container">
+                    <label for="dropdown-language-selector">{{ lang.lang_select_label }}</label>
                     {{ dropdown(options=[
-                        {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL"},
-                        {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US"}
+                        {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL", "lang": "nl"},
+                        {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US", "lang": "en"},
+                        {"value": "es-ES", "text": "🇪🇸 Español", "selected": base.locale == "es-ES", "lang": "es"},
+                        {"value": "fr-FR", "text": "🇫🇷 Français", "selected": base.locale == "fr-FR", "lang": "fr"},
+                        {"value": "jp-JP", "text": "🇯🇵 日本語", "selected": base.locale == "jp-JP", "lang": "jp"}
                     ], name="", id="language-selector") }}
-                    {% if base.user %}
+                </div>
+                <div class="nav-r-button">
+                   {% if base.user %}
                         {{ button(text=lang.nav_my_account, href=".dashboard", class_name="primary", icon="fa-solid fa-user") }}
-                        {{ button(text="logout", href=".logout", class_name="danger", icon="fa-solid fa-right-from-bracket") }}
+                        {{ button(text=lang.nav_logout, href=".logout", class_name="danger", icon="fa-solid fa-right-from-bracket") }}
                     {% else %}
                         {{ button(text=lang.nav_login, href=".login", class_name="primary") }}
                         {{ button(text=lang.nav_register, href=".register", class_name="primary") }}
                     {% endif %}
+                </div>
+
 
                     <button class="nav-toggle" aria-label="Open menu">
                         <i class="fa-solid fa-bars"></i>
@@ -57,6 +70,16 @@
                 </div>
             </div>
         </nav>
+            {% if not page_translated %}
+            <div class="alert-base alert-warning">
+            {{ lang.no_available_translation }}
+            </div>
+            {% endif %}
         {% endblock %} {% block content %} {% endblock %}
     </body>
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>{{ lang.created_by }}</p>
+        </div>
+    </footer>
 </html>

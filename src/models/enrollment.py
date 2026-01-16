@@ -12,6 +12,29 @@ class Enrollment:
             con.commit()
             return cur.fetchone()
 
+    def count_by_user_id(self, user_id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "SELECT COUNT() FROM enrollments INNER JOIN profiles ON profiles.id == enrollments.profile_id "
+                "WHERE profiles.user_id == ?",
+                (user_id,),
+            )
+            con.commit()
+            return cur.fetchone()
+
+    def count_by_organization_id(self, organization_id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "SELECT count() FROM enrollments "
+                "INNER JOIN studies ON enrollments.study_id == studies.id "
+                "WHERE studies.organization_id == ?",
+                (organization_id,),
+            )
+            con.commit()
+            return cur.fetchone()
+
     def create(self, study_id, profile_id, status):
         with self.db.connect() as con:
             cur = con.cursor()
@@ -49,13 +72,13 @@ class Enrollment:
             con.commit()
             return cur.lastrowid
 
-    def get_enrolments_by_status_id(self, status_id):
+    def get_enrollments_by_status(self, status_id):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
                 """
-                SELECT enrollments.*, studies.title as study_title, profiles.first_name as first_name, 
-                       profiles.last_name as last_name, profiles.user_id as user_id 
+                SELECT enrollments.*, studies.title as study_title, profiles.first_name as first_name,
+                       profiles.last_name as last_name, profiles.user_id as user_id
                 FROM enrollments
                 INNER JOIN studies ON enrollments.study_id = studies.id
                 INNER JOIN profiles ON enrollments.profile_id = profiles.id
@@ -123,4 +146,7 @@ class Enrollment:
             )
             con.commit()
             row = cur.fetchone()
-            return row["user_id"]
+            if row is not None:
+                return row["user_id"]
+            else:
+                return None
