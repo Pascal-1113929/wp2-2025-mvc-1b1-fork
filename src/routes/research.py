@@ -34,6 +34,11 @@ def research_dashboard_render():
         return redirect_page(f"research/?preferences=1")
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
+    search_query = request.args.get("search", "").lower()
+    age_min = request.args.get("age_min", type=int)
+    age_max = request.args.get("age_max", type=int)
+    study_type = request.args.getlist("study_type", type=str)
+    selected_columns = request.args.getlist("selected_columns", type=str)
 
     userid = session.get("user_id")
     role = session.get("role")
@@ -123,7 +128,29 @@ def research_dashboard_render():
             study["end_date"] = datetime.strptime(study["end_date"], "%Y-%m-%d")
             study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
             study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
-            available_studies.append(study)
+            available_studies.append(study)   
+        if search_query:
+            available_studies = [
+                study for study in available_studies
+                if search_query in study["title"].lower()
+                or search_query in study["organization"].lower()
+                or search_query in study["location_display"].lower()
+            ]
+        if age_min is not None:
+            available_studies = [
+                study for study in available_studies
+                if study["age_min"] >= age_min
+            ]
+        if age_max is not None:
+            available_studies = [
+                study for study in available_studies
+                if study["age_max"] <= age_max
+            ]
+        if study_type:
+            available_studies = [
+                study for study in available_studies
+                if study["study_type"] in study_type
+            ]
 
         enrolled_studies = []
         for study_id in enrolment_study_ids:
@@ -165,6 +192,29 @@ def research_dashboard_render():
             study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
             study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
             available_studies.append(study)
+        
+        if search_query:
+            available_studies = [
+                study for study in available_studies
+                if search_query in study["title"].lower()
+                or search_query in study["organization"].lower()
+                or search_query in study["location_display"].lower()
+            ]
+        if age_min is not None:
+            available_studies = [
+                study for study in available_studies
+                if study["age_min"] >= age_min
+            ]
+        if age_max is not None:
+            available_studies = [
+                study for study in available_studies
+                if study["age_max"] <= age_max
+            ]
+        if study_type:
+            available_studies = [
+                study for study in available_studies
+                if study["study_type"] in study_type
+            ]
 
         enrolled_studies = []
         expert = None
@@ -205,7 +255,8 @@ def research_dashboard_render():
     end = start + enrolled_PAGE_SIZE
     enrolled_studies_paginated = enrolled_studies[start:end]
 
-    table_header = [
+    if not selected_columns:
+        selected_columns = [
         "title",
         "organization",
         "start_date",
@@ -215,6 +266,8 @@ def research_dashboard_render():
         "age_min",
         "age_max",
     ]
+    
+    table_header = selected_columns
 
     available_table = Table(available_studies_paginated)
     available_table.set_type("title", "link", [".research/<id>"])

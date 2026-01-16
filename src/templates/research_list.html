@@ -4,6 +4,8 @@
 {% extends 'layouts/default.html' %}
 {% block content %}
 
+
+
 {% set table_header = [
     lang.research_table_title,
     lang.research_table_organization,
@@ -19,9 +21,91 @@
     <header>
         <h1>{{ lang.research_title }}</h1>
     </header>
-    <div class="seperator"></div>
 
-    <!-- Available studies -->
+    <form method="get" class="cm-form table-filters">
+
+     <label for="search-input"> {{ lang.research_search_label }} </label>
+    <input type="text" id="search-input" name="search" placeholder="{{ lang.research_search_placeholder }}">
+
+    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> {{ lang.research_search_button }}</button>
+
+    <fieldset>
+        <legend> Filter Onderzoeken</legend>
+
+        <!-- leeftijd filter -->
+        <div>
+            <label for="age_min">Minimum leeftijd</label>
+            <input type="number" id="age_min" name="age_min" min="0" placeholder="Minimum leeftijd" value="{{ request.args.get('age_min', '') }}">
+        </div>
+
+        <div>
+            <label for="age_max">Maximum leeftijd</label>
+            <input type="number" id="age_max" name="age_max" min="0" placeholder="Maximum leeftijd" value="{{ request.args.get('age_max', '') }}">
+        </div>
+
+        <fieldset>
+            <legend>Toon kolommen</legend>
+            <label>
+                <input type="checkbox" name="selected_columns" value="title"
+                    {% if 'title' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Titel
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="organization"
+                        {% if 'organization' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Organisatie
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="start_date"
+                        {% if 'start_date' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Startdatum
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="end_date"
+                        {% if 'end_date' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Einddatum
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="location_display"
+                        {% if 'location_display' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Locatie
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="age_min"   
+                        {% if 'age_min' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Minimum leeftijd
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="age_max"
+                        {% if 'age_max' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Maximum leeftijd
+            </label>
+        </fieldset>
+
+        <fieldset>
+            <legend>Type onderzoek</legend>
+
+            <label>
+                <input type="checkbox" name="study_type" value="online"
+                       {% if 'online' in request.args.getlist('study_type') %}checked{% endif %}>
+                Online
+            </label>
+
+            <label>
+                <input type="checkbox" name="study_type" value="on-site"
+                       {% if 'on-site' in request.args.getlist('study_type') %}checked{% endif %}>
+                Op locatie
+            </label>
+        </fieldset>
+
+        <button type="submit" class="button">Filter toepassen</button>
+
+
+    </fieldset>
+</form>
+   
+    <div class="seperator"></div>
+ <!-- Available studies -->
     <section class="sectioncard">
 
 
