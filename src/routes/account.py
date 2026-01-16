@@ -128,6 +128,21 @@ def account_register():
             "aterms": aterms,
         }
 
+        guardian_name = request.form.get("guardian_name", "").strip()
+        guardian_email = request.form.get("guardian_email", "").strip()
+        guardian_phone = request.form.get("guardian_phone", "").strip()
+
+        if guardian_name or guardian_email or guardian_phone:
+            if not guardian_name:
+                errors["guardian_name"] = True
+            if not guardian_email:
+                errors["guardian_email"] = True
+            if not guardian_phone:
+                errors["guardian_phone"] = True
+            has_guardian = 1
+        else:
+            has_guardian = 0
+
         for field, value in required_fields.items():
             if not value:
                 errors[field] = True
@@ -152,6 +167,15 @@ def account_register():
                     aterms,
                 )
                 disabilities.create_profile_disabilities(profile_id, disability)
+
+                if has_guardian:
+                    profiles.update_guardian(
+                        profile_id,
+                        guardian_name,
+                        guardian_email,
+                        guardian_phone,
+                        has_guardian
+                    )
 
                 return redirect_page("register?success=1")
 
@@ -252,7 +276,7 @@ def expert_profile_delete(uid):
         raise NotFound()
 
     if (
-        request.method == "POST" or request.method == "DELETE"
+            request.method == "POST" or request.method == "DELETE"
     ):  # form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
         users.delete_expert(userid, profiles)  # Need to provide the profiles instance
         session.pop("user_id")
@@ -287,6 +311,8 @@ def expert_profile_edit(uid):
     if not profile:
         raise NotFound()
 
+    errors = {}
+
     # Using Post as this is the only way to avoid using Javascript
     if request.method == "POST":
         email = request.form.get("email")
@@ -303,6 +329,21 @@ def expert_profile_edit(uid):
         researchtype = request.form.get("researchtype")
         availability = request.form.get("availability")
         aterms = request.form.get("aterms")
+
+        guardian_name = request.form.get("guardian_name", "").strip()
+        guardian_email = request.form.get("guardian_email", "").strip()
+        guardian_phone = request.form.get("guardian_phone", "").strip()
+
+        if guardian_name or guardian_email or guardian_phone:
+            if not guardian_name:
+                errors["guardian_name"] = True
+            if not guardian_email:
+                errors["guardian_email"] = True
+            if not guardian_phone:
+                errors["guardian_phone"] = True
+            has_guardian = 1
+        else:
+            has_guardian = 0
 
         try:
             users.update_email(id, email)
@@ -323,6 +364,15 @@ def expert_profile_edit(uid):
                 aterms,
             )
             disabilities.update_profile_disabilities(profile["id"], disability)
+
+            if has_guardian:
+                profiles.update_guardian(
+                    profile["id"],
+                    guardian_name,
+                    guardian_email,
+                    guardian_phone,
+                    has_guardian
+                )
 
             return redirect_page(f"/expert-profile/{uid}/edit?success=1")
         except Exception as e:
@@ -350,6 +400,7 @@ def expert_profile_edit(uid):
         user=user,
         success=success,
         error=error,
+        errors=errors,
     )
 
 

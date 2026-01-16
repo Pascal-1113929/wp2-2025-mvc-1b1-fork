@@ -120,7 +120,7 @@
             {{ dropdown(options=[
                 {"value": "telefonisch", "text": lang.account_register_field_researchtype_phone},
                 {"value": "online", "text": lang.account_register_field_researchtype_online},
-                {"value": "locatie", "text": lang.account_register_field_researchtype_location},
+                {"value": "op locatie", "text": lang.account_register_field_researchtype_location},
             ], name="researchtype", id="prf-researchtype", class="", required=true, placeholder=lang.account_register_field_researchtype_placeholder) }}
             {% if errors.researchtype %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
         </div>
@@ -137,6 +137,25 @@
             <input type="checkbox" id="prf-aterms" name="aterms" value=1 {% if request.form.get('aterms') %}checked{% endif %}>
             <label for="prf-aterms">{{ lang.account_register_field_terms_label }}</label>
             {% if errors.aterms %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+        </div>
+
+        <!-- Guardian Section -->
+        <div class="form-group">
+            <label for="prf-guardian-name"><i class="fa-solid fa-user-shield"></i> {{ lang.account_register_field_guardian_name }}</label>
+            <input id="prf-guardian-name" type="text" name="guardian_name" placeholder="{{ lang.account_register_field_guardian_name_placeholder }}" value="{{ request.form.guardian_name }}">
+            {% if errors.guardian_name %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="prf-guardian-email"><i class="fa-regular fa-envelope"></i> {{ lang.account_register_field_guardian_email }}</label>
+            <input id="prf-guardian-email" type="email" name="guardian_email" placeholder="{{ lang.account_register_field_guardian_email_placeholder }}" value="{{ request.form.guardian_email }}">
+            {% if errors.guardian_email %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="prf-guardian-phone"><i class="fa-solid fa-phone"></i> {{ lang.account_register_field_guardian_phone }}</label>
+            <input id="prf-guardian-phone" type="tel" name="guardian_phone" placeholder="{{ lang.account_register_field_guardian_phone_placeholder }}" value="{{ request.form.guardian_phone }}">
+            {% if errors.guardian_phone %}<div class="alert alert-error">{{ lang.field_empty }}</div>{% endif %}
         </div>
 
         <!-- Buttons -->
