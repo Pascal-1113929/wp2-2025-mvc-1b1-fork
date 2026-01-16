@@ -10,9 +10,9 @@
 
     <section class="sectioncard">
         <p class="muted">{{ lang.management_approval_tab_description }}</p>
-        {{ button("?tab=user", lang.management_approval_tab_users) }}
-        {{ button("?tab=research", lang.management_approval_tab_research) }}
-        {{ button("?tab=enrollment", lang.management_approval_tab_enrollment) }}
+        {{ button("?tab=user", lang.management_approval_tab_users, "ghost" if tab != 'user', "fa-solid fa-users") }}
+        {{ button("?tab=research", lang.management_approval_tab_research, "ghost" if tab != 'research', "fa-solid fa-book") }}
+        {{ button("?tab=enrollment", lang.management_approval_tab_enrollment, "ghost" if tab != 'enrollment', "fa-solid fa-signature") }}
     </section>
 
     <section class="sectioncard">
