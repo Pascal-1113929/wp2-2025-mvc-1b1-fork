@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, abort
+from flask import Blueprint, request, render_template
 
 from view import render, redirect_page
 from models.user import User
@@ -191,8 +191,24 @@ def approval():
 
     ALLOWED_TABS = ["user", "research", "enrollment"]
     tab = request.args.get("tab")
+
     if tab not in ALLOWED_TABS or tab is None:
         tab = "user"
+
+    notification_id = request.args.get("notification_id")
+    print(notification_id)
+    notification = None
+
+    match notification_id:
+        case "1":
+            notification = {
+                "type": "success",
+                "message": "Your request has been approved.",
+            }
+        case None:
+            pass
+        case _:
+            pass
 
     return render(
         "approval.html",
@@ -204,6 +220,7 @@ def approval():
         enrollment_table=enrollment_table_data,
         enrollment_table_count=len(enrollment_data),
         tab=tab,
+        notification=notification,
     )
 
 
@@ -228,15 +245,10 @@ def email_generate(
 @management_bp.route("/approval/<type>/<id>/reject")
 def approval_user_reject(type, id):
     if type == "user":
-        name = profile.get_name_by_userid(id)
-
-        if not name:
-            abort(404)
-
         users.set_user_status(id, 3)
         email_generate(
             "Account Afgekeurd",
-            name,
+            profile.get_name_by_userid(id),
             id,
             "Account",
             "Afgekeurd",
@@ -268,15 +280,10 @@ def approval_user_reject(type, id):
 @management_bp.route("/approval/<type>/<id>/approve")
 def approval_user_approve(type, id):
     if type == "user":
-        name = profile.get_name_by_userid(id)
-
-        if not name:
-            abort(404)
-
         users.set_user_status(id, 2)
         email_generate(
             "Account Goedgekeurd",
-            name,
+            profile.get_name_by_userid(id),
             id,
             "Account",
             "Goedgekeurd",
@@ -309,9 +316,6 @@ def approval_user_approve(type, id):
 def approval_edit_note(user_id):
     user = profile.get_profile_by_userid(user_id)
 
-    if not user:
-        abort(404)
-
     if request.method == "GET":
         if user.get("notes") is None:
             user["notes"] = ""
@@ -319,4 +323,4 @@ def approval_edit_note(user_id):
     elif request.method == "POST":
         note = request.form.get("note")
         profile.update_note(user_id, note)
-        return redirect_page("management/approval?tab=user&notification_id=1")
+        return redirect_page("management/approval?tab=user&notification_id=2")
