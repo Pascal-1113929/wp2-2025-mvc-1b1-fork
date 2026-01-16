@@ -195,19 +195,32 @@ def approval():
     if tab not in ALLOWED_TABS or tab is None:
         tab = "user"
 
-    notification_id = request.args.get("notification_id")
-    print(notification_id)
-    notification = None
+    alert_id = request.args.get("alert_id")
+    alert_field = request.args.get("alert_field")
+    alert = None
 
-    match notification_id:
+    def create_alert(type, message):
+        if alert_field is not None:
+            message = message.replace("%", alert_field)
+        return {
+            "type": type,
+            "message": message,
+        }
+
+    match alert_id:
         case "1":
-            notification = {
-                "type": "success",
-                "message": "Your request has been approved.",
-            }
+            alert = create_alert(
+                "success", lang["management_approval_alert_" + tab + "_approved"]
+            )
+        case "2":
+            alert = create_alert(
+                "success", lang["management_approval_alert_" + tab + "_rejected"]
+            )
+        case "3":
+            alert = create_alert(
+                "success", lang["management_approval_alert_user_noteedited"]
+            )
         case None:
-            pass
-        case _:
             pass
 
     return render(
@@ -219,8 +232,8 @@ def approval():
         research_table_count=len(research_data),
         enrollment_table=enrollment_table_data,
         enrollment_table_count=len(enrollment_data),
+        alert_view=alert,
         tab=tab,
-        notification=notification,
     )
 
 
@@ -244,11 +257,13 @@ def email_generate(
 
 @management_bp.route("/approval/<type>/<id>/reject")
 def approval_user_reject(type, id):
+    field_name = ""
     if type == "user":
+        field_name = profile.get_name_by_userid(id)
         users.set_user_status(id, 3)
         email_generate(
             "Account Afgekeurd",
-            profile.get_name_by_userid(id),
+            field_name,
             id,
             "Account",
             "Afgekeurd",
@@ -256,9 +271,11 @@ def approval_user_reject(type, id):
     elif type == "research":
         study.set_research_status(id, 3)
         organization_id = study.get_organization_id_by_id(id)
+        field_name = organization.get_name_by_id(organization_id)
+
         email_generate(
             "Onderzoek Goedgekeurd",
-            organization.get_name_by_id(organization_id),
+            field_name,
             organization_id,
             "Onderzoek",
             "Goedgekeurd",
@@ -267,28 +284,32 @@ def approval_user_reject(type, id):
     elif type == "enrollment":
         enrollment.set_enrollment_status(id, 3)
         user_id = enrollment.get_user_id_by_enrollment_id(id)
+        field_name = profile.get_name_by_userid(user_id)
         email_generate(
             "Inschrijving Afgekeurd",
-            profile.get_name_by_userid(user_id),
+            field_name,
             user_id,
             "Inschrijving",
             "Afgekeurd",
         )  # user is default reciever_type
-    return redirect_page("management/approval?tab=" + type)
+    return redirect_page(
+        "management/approval?tab=" + type + "&alert_id=2&alert_field=" + field_name
+    )
 
 
 @management_bp.route("/approval/<type>/<id>/approve")
 def approval_user_approve(type, id):
+    field_name = ""
     if type == "user":
-        name = profile.get_name_by_userid(id)
+        field_name = profile.get_name_by_userid(id)
 
-        if not name:
+        if not field_name:
             abort(404)
 
         users.set_user_status(id, 2, 0)
         email_generate(
             "Account Goedgekeurd",
-            profile.get_name_by_userid(id),
+            field_name,
             id,
             "Account",
             "Goedgekeurd",
@@ -296,9 +317,10 @@ def approval_user_approve(type, id):
     elif type == "research":
         study.set_research_status(id, 2)
         organization_id = study.get_organization_id_by_id(id)
+        field_name = organization.get_name_by_id(organization_id)
         email_generate(
             "Onderzoek Goedgekeurd",
-            organization.get_name_by_id(organization_id),
+            field_name,
             organization_id,
             "Onderzoek",
             "Goedgekeurd",
@@ -307,19 +329,23 @@ def approval_user_approve(type, id):
     elif type == "enrollment":
         enrollment.set_enrollment_status(id, 2)
         user_id = enrollment.get_user_id_by_enrollment_id(id)
+        field_name = profile.get_name_by_userid(user_id)
         email_generate(
             "Inschrijving Goedgekeurd",
-            profile.get_name_by_userid(user_id),
+            field_name,
             user_id,
             "Inschrijving",
             "Goedgekeurd",
         )  # user is default reciever_type
-    return redirect_page("management/approval?tab=" + type)
+    return redirect_page(
+        "management/approval?tab=" + type + "&alert_id=1&alert_field=" + field_name
+    )
 
 
 @management_bp.route("/approval/note/<user_id>", methods=["GET", "POST"])
 def approval_edit_note(user_id):
     user = profile.get_profile_by_userid(user_id)
+    field_name = profile.get_name_by_userid(user_id)
 
     if request.method == "GET":
         if user.get("notes") is None:
@@ -328,4 +354,6 @@ def approval_edit_note(user_id):
     elif request.method == "POST":
         note = request.form.get("note")
         profile.update_note(user_id, note)
-        return redirect_page("management/approval?tab=user&notification_id=2")
+        return redirect_page(
+            "management/approval?tab=user&alert_id=3&alert_field=" + field_name
+        )
