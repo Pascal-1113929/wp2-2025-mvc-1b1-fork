@@ -249,14 +249,20 @@ def research_dashboard_render():
 
     # Available studies pagination
     total_available = len(available_studies)
-    total_pages_available = ceil(total_available / available_PAGE_SIZE)
+    if available_PAGE_SIZE != 0:
+        total_pages_available = ceil(total_available / available_PAGE_SIZE)
+    else:
+        total_pages_available = 0
     start = (available_page - 1) * available_PAGE_SIZE
     end = start + available_PAGE_SIZE
     available_studies_paginated = available_studies[start:end]
 
     # Enrolled studies pagination
     total_enrolled = len(enrolled_studies)
-    total_pages_enrolled = ceil(total_enrolled / enrolled_PAGE_SIZE)
+    if enrolled_PAGE_SIZE != 0:
+        total_pages_enrolled = ceil(total_enrolled / enrolled_PAGE_SIZE)
+    else:
+        total_pages_available = 0
     start = (enrolled_page - 1) * enrolled_PAGE_SIZE
     end = start + enrolled_PAGE_SIZE
     enrolled_studies_paginated = enrolled_studies[start:end]
