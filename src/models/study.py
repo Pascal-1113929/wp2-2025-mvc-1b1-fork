@@ -81,6 +81,19 @@ class Study:
 
             return new_study_list
 
+    def get_all_available_ids(self):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            # Only select the id column
+            cur.execute("SELECT id FROM studies WHERE available=1")
+            con.commit()
+            study_list = cur.fetchall()
+
+            # Convert each row to a dict with only 'id'
+            new_study_list = [row["id"] for row in study_list]
+
+            return new_study_list
+
     def get_study_id_by_disability_id(self, disability_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
@@ -199,8 +212,11 @@ class Study:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute("SELECT organization_id FROM studies WHERE id=?", (id,))
-            row = dict(cur.fetchone())
-            return row["organization_id"]
+            row = cur.fetchone()
+            if row is None:
+                return None
+            else:
+                return dict(row)["organization_id"]
 
     def update_study(
         self,

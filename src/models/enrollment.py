@@ -146,4 +146,7 @@ class Enrollment:
             )
             con.commit()
             row = cur.fetchone()
-            return row["user_id"]
+            if row is not None:
+                return row["user_id"]
+            else:
+                return None

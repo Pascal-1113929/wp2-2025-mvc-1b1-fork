@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, date
 from math import ceil
 
-from flask import Blueprint, request, session, render_template
+from flask import Blueprint, session, render_template, request, url_for
 
 from models.enrollment import Enrollment
 from models.disabilities import Disablity
@@ -29,6 +29,8 @@ research_bp = Blueprint("research", __name__)
 
 @research_bp.route("/")
 def research_dashboard_render():
+    if not request.args:
+        return redirect_page(f"research/?preferences=1")
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
     search_query = request.args.get("search", "").lower()
@@ -46,17 +48,16 @@ def research_dashboard_render():
 
     # Available studies
     available_page = request.args.get("available_page", 1, type=int)
-    available_page_size = request.args.get("available_page_size", 5, type=str)
     if available_page < 1:
         available_page = 1
 
     # Enrolled studies
     enrolled_page = request.args.get("enrolled_page", 1, type=int)
-    enrolled_page_size = request.args.get("enrolled_page_size", 5, type=str)
     if enrolled_page < 1:
         enrolled_page = 1
 
     if role == "expert":
+        show_matching = request.args.get("preferences", type=int)
         is_expert = True
         expert_user = dict(users.get_user_by_id(userid))
         expert_profile = dict(profiles.get_profile_by_userid(userid))
@@ -80,18 +81,34 @@ def research_dashboard_render():
             enrolment_study_ids.append(enrolment["study_id"])
 
         study_ids = []
-        for disability_id in disability_ids:
-            study_id_list = studies.get_study_id_by_disability_id(disability_id)
-            for study_id in study_id_list:
-                study_ids.append(study_id)
+        if not show_matching:
+            study_ids = studies.get_all_available_ids()
+        else:
+            for disability_id in disability_ids:
+                study_id_list = studies.get_study_id_by_disability_id(disability_id)
+                for study_id in study_id_list:
+                    study_ids.append(study_id)
 
         available_studies = []
         for study_id in study_ids:
             if study_id in enrolment_study_ids:
                 continue
             study = studies.get_available_study_by_id(study_id)
+            profile_birth_date = datetime.strptime(expert["profile"]["birth_date"], "%Y-%m-%d").date()
+
+            today = date.today()
+            age = today.year - profile_birth_date.year - ((today.month, today.day) < (profile_birth_date.month,
+                                                                                      profile_birth_date.day))
+
             if study is None:
                 continue
+
+            if show_matching:
+                if expert["profile"]["preferred_study_type"] != study["study_type"]:
+                    continue
+                if not (study["age_min"] <= age <= study["age_max"]):
+                    continue
+
             organization = organizations.get_organization_by_id(
                 study["organization_id"]
             )
@@ -269,7 +286,7 @@ def research_dashboard_render():
         total_pages_enrolled=total_pages_enrolled,
         has_prev_enrolled=enrolled_page > 1,
         has_next_enrolled=enrolled_page < total_pages_enrolled,
-        enrolled_page_size=enrolled_page_size,
+        enrolled_page_size=str(enrolled_page_size),
     )
 
 

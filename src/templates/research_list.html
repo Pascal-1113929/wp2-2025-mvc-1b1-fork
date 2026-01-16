@@ -107,7 +107,22 @@
     <div class="seperator"></div>
  <!-- Available studies -->
     <section class="sectioncard">
+
+
         <h2><i class="fa-solid fa-book"></i> {{ lang.research_running_title }}</h2>
+        {% if is_expert %}
+            <form method="get">
+                <label for="preferences">
+                    <input type="checkbox" name="preferences" id="preferences" value="1"
+                           {% if request.args.get('preferences') %}checked{% endif %}>
+                    {{ lang.research_show_matching_studies }}
+                </label>
+            <input type="hidden" name="available_page" value="{{ available_page }}">
+            <input type="hidden" name="available_page_size" value="{{ available_page_size }}">
+            <input type="hidden" name="enrolled_page" value="{{ enrolled_page }}">
+            <input type="hidden" name="enrolled_page_size" value="{{ enrolled_page_size }}">
+            </form>
+    {% endif %}
 
         <!-- Page size dropdown -->
         <form method="get" class="page-size-form">
@@ -127,6 +142,7 @@
             <input type="hidden" name="available_page" value="{{ available_page }}">
             <input type="hidden" name="enrolled_page" value="{{ enrolled_page }}">
             <input type="hidden" name="enrolled_page_size" value="{{ enrolled_page_size }}">
+            <input type="hidden" name="preferences" value="{{ request.args.get('preferences') }}">
         </form>
 
         {{ table(table_header, available_study_table_data) }}
@@ -151,19 +167,23 @@
 
         <!-- Page size dropdown -->
         <form method="get" class="page-size-form">
-            <label for="enrolled_page_size">{{ lang.page_size }}:</label>
-            <select name="enrolled_page_size" id="enrolled_page_size" onchange="this.form.submit()">
-                {% for size in [5, 10, 25, 50, 100, 'all'] %}
-                    <option value="{{ size }}" {% if enrolled_page_size|string == size|string %}selected{% endif %}>
-                        {{ size }}
-                    </option>
-                {% endfor %}
-            </select>
+            <div style="display: flex; align-items: center; gap: 8px;">
+            <label for="enrolled_page_size">{{ lang.table_row_size_description }}</label>
+            {{ dropdown(options=[
+                {"value": "5", "text": lang.table_row_size_each_page.replace('%', "5"), "selected": enrolled_page_size == "5"},
+                    {"value": "10", "text": lang.table_row_size_each_page.replace('%', "10"), "selected": enrolled_page_size == "10"},
+                    {"value": "25", "text": lang.table_row_size_each_page.replace('%', "25"), "selected": enrolled_page_size == "25"},
+                    {"value": "50", "text": lang.table_row_size_each_page.replace('%', "50"), "selected": enrolled_page_size == "50"},
+                    {"value": "100", "text": lang.table_row_size_each_page.replace('%', "100"), "selected": enrolled_page_size == "100"},
+                    {"value": "all", "text": lang.table_row_show_everything, "selected": enrolled_page_size == "all"}
+                ], name="enrolled_page_size", id="enrolled_page_size", placeholder=lang.table_row_size_each_page.replace('%', enrolled_page_size)) }}
+            </div>
 
             <!-- Preserve current pages for both tables -->
             <input type="hidden" name="enrolled_page" value="{{ enrolled_page }}">
             <input type="hidden" name="available_page" value="{{ available_page }}">
             <input type="hidden" name="available_page_size" value="{{ available_page_size }}">
+            <input type="hidden" name="preferences" value="{{ request.args.get('preferences') }}">
         </form>
 
         {{ table(table_header, enrolled_study_table_data) }}
