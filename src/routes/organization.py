@@ -49,8 +49,6 @@ def organization_redirect():
             organization["userid"] = organization_userid
             updated_organization_list.append(organization)
 
-        print(updated_organization_list)
-
         table_header = [
             "name",
             "website",
@@ -207,7 +205,7 @@ def organization_dashboard_render(id):
         close_error=close_error,
         open_success=open_success,
         open_error=open_error,
-        study=study,
+        changes_study=changes_study,
     )
 
 

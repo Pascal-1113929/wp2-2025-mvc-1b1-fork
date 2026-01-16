@@ -172,6 +172,8 @@ def study_dashboard_render(study_id):
     if study is None:
         abort(404)
 
+    print(study)
+
     organization = organizations.get_organization_by_id(study["organization_id"])
     disability_list = disabilities.get_disability_list_by_studyid(study["id"])
     if in_roles("expert"):

@@ -57,6 +57,7 @@
                 </article>
             </div>
         </section>
+    {% if status_id == 2 %}
         {% if enrolled is not none %}
             <section>
 
@@ -68,6 +69,7 @@
 
             </section>
         {% endif %}
+    {% endif %}
     </main>
 
 {% endblock %}

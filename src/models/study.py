@@ -93,8 +93,9 @@ class Study:
                 "SELECT * FROM studies "
                 "WHERE available=1 "
                 "AND DATE(end_date) > DATE('now') "
-                "AND id=? ",
-                (study_id,),
+                "AND id=? "
+                "AND status_id=?",
+                (study_id, 2),
             )
             con.commit()
             row = cur.fetchone()

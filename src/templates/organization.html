@@ -17,19 +17,19 @@
 
         {% if close_error %}
             <div class="alert alert-danger">
-                Fout bij het sluiten van onderzoek "{{ study.title }}".
+                Fout bij het sluiten van onderzoek "{{ changes_study.title }}".
             </div>
         {% endif %}
 
         {% if open_success %}
             <div class="alert alert-success">
-                Onderzoek "{{ study.title }}" succesvol geopend.
+                Onderzoek "{{ changes_study.title }}" succesvol geopend.
             </div>
         {% endif %}
 
         {% if open_error %}
             <div class="alert alert-danger">
-                Fout bij het openen van onderzoek "{{ study.title }}".
+                Fout bij het openen van onderzoek "{{ changes_study.title }}".
             </div>
         {% endif %}
     <section>
