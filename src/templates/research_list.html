@@ -50,13 +50,48 @@
 
             <fieldset>
                 <legend>{{ lang.research_filter_columns_legend }}</legend>
-                {% for col_key, col_label in all_columns.items() %}
-                    <label>
-                        <input type="checkbox" name="selected_columns" value="{{ col_key }}"
-                            {% if col_key in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
-                        {{ col_label }}
-                    </label>
-                {% endfor %}
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="organization"
+                        {% if 'organization' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_organization }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="start_date"
+                        {% if 'start_date' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_start_date }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="end_date"
+                        {% if 'end_date' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_end_date }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="location_display"
+                        {% if 'location_display' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_location_display }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="age_min"
+                        {% if 'age_min' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_age_min }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="age_max"
+                        {% if 'age_max' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_age_max }}
+                </label>
+
+                <label>
+                    <input type="checkbox" name="selected_columns" value="reward"
+                        {% if 'reward' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                    {{ lang.research_filter_column_reward }}
+                </label>
             </fieldset>
 
             <fieldset>
