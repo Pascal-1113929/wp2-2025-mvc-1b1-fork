@@ -93,8 +93,8 @@
 "error_internal_server_error_message": "Er is een interne serverfout opgetreden. Wij zullen dit zo snel mogelijk oplossen."
 "error_internal_server_error_back_button": "Terug naar de home pagina"
 
-"delete_account": "Delete Account"
-"edit_profile": "Edit Profiel"
+delete_account: "Account verwijderen"
+edit_profile: "Profiel bewerken"
 
 "status_header1": "Status pagina voor: "
 "status_header": "Dit is de status pagina voor Nog niet goedgekeurde of afgekeurde gebruikers"
