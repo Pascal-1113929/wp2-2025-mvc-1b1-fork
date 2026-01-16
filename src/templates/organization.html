@@ -6,34 +6,34 @@
 
     {% if organization %}
     <main>
-    <h1>Organisatie pagina: {{ organization.name }}</h1>
+    <h1>{{ lang.organization_title.replace('%', organization.name) }}</h1>
         <a href="/{{ base.locale }}/organization/{{ id }}/research/add" class="button" type="button">{{ lang.research_create }}</a>
     <div class="seperator"></div>
-        {% if close_success %}
+        {% if close_success and changes_study.title %}
             <div class="alert alert-success">
-                Onderzoek "{{ changes_study.title }}" succesvol gesloten.
+                {{ lang.organization_alert_study_successfully_closed.replace('%', changes_study.title) }}
             </div>
         {% endif %}
 
-        {% if close_error %}
+        {% if close_error and changes_study.title %}
             <div class="alert alert-danger">
-                Fout bij het sluiten van onderzoek "{{ changes_study.title }}".
+                {{ lang.organization_alert_study_error_closed.replace('%', changes_study.title) }}
             </div>
         {% endif %}
 
-        {% if open_success %}
+        {% if open_success and changes_study.title %}
             <div class="alert alert-success">
-                Onderzoek "{{ changes_study.title }}" succesvol geopend.
+                {{ lang.organization_alert_study_successfully_opened.replace('%', changes_study.title) }}
             </div>
         {% endif %}
 
-        {% if open_error %}
+        {% if open_error and changes_study.title %}
             <div class="alert alert-danger">
-                Fout bij het openen van onderzoek "{{ changes_study.title }}".
+                {{ lang.organization_alert_study_error_opened.replace('%', changes_study.title) }}
             </div>
         {% endif %}
     <section>
-        <h2>Lijst met onderzoeken</h2>
+        <h2>{{ lang.organization_list_with_researches }}</h2>
         <div class="spacer"></div>
         <form method="get" class="page-size-form">
             <div style="display: flex; align-items: center; gap: 8px;">
@@ -49,15 +49,15 @@
             </div>
             <input type="hidden" name="page" value="{{ page }}">
         </form>
-        {{ table(['Titel', 'Status', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd', "Modify"], study_list) }}
+        {{ table([lang.organization_table_title, lang.organization_table_status, lang.organization_table_startdate, lang.organization_table_enddate, lang.organization_table_location, lang.organization_table_compensation, lang.organization_table_minage, lang.organization_table_maxage, lang.organization_table_action], study_list) }}
         {% if total_pages > 1 %}
-        <nav class="pagination" aria-label="Research list pagination">
+        <nav class="pagination">
             {% if has_prev %}
-                <a href="?page={{ page - 1 }}&page_size={{ page_size }}">Previous</a>
+                <a href="?page={{ page - 1 }}&page_size={{ page_size }}">{{ lang.organization_nav_previous_page }}</a>
             {% endif %}
             Page {{ page }} / {{ total_pages }}
             {% if has_next %}
-                <a href="?page={{ page + 1 }}&page_size={{ page_size }}">Next</a>
+                <a href="?page={{ page + 1 }}&page_size={{ page_size }}">{{ lang.organization_nav_next_page }}</a>
             {% endif %}
         </nav>
         {% endif %}
@@ -65,9 +65,9 @@
     </main>
 {% else %}
     <main>
-    <h1>De Organisatie waar u naar zocht, is niet gevonden</h1>
+    <h1>{{ lang.organization_not_found_title }}</h1>
     <p>
-        De gezochte organisatie is niet gevonden, probeer graag later opnieuw
+        {{ lang.organization_not_found_description }}
     </p>
     {{ button(text=lang.nav_home, href=".") }}
     </main>
