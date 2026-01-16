@@ -4,72 +4,69 @@
 
 {% block content %}
 
-
-    <main>
-<!--        Dit zit in main vanwege styling redenen-->
+<main>
+    <!-- This is in main for styling reasons -->
     <header>
-    <h1>
-        Detail pagina: {{ study.title }} van {{ organization.name }}
-    </h1>
-        <p>Dit is de detail pagina van {{ study.title }} voor de organisatie: {{ organization.name }}</p>
-        <p>Dit onderzoek heeft een minimum leeftijd van: {{ study.age_min }} en een maximum leeftijd van: {{ study.age_max }}</p>
+        <h1>
+            {{ lang.research_study_page_title.replace('%study%', study.title).replace('%organization%', organization.name) }}
+        </h1>
+        <p>{{ lang.research_study_page_description.replace('%study%', study.title).replace('%organization%', organization.name) }}</p>
+        <p>{{ lang.research_study_age_requirement.replace('%min%', study.age_min|string).replace('%max%', study.age_max|string) }}</p>
     </header>
+
     <div class="seperator"></div>
-        <section>
-            <h2>
-                De volgende beperkingen zijn hierbij betrokken:
-            </h2>
-                {{ table(['Categorie', 'Naam'], table_data) }}
-        </section>
-        <div class="l-spacer"></div>
-        <div class="seperator"></div>
-        <section>
-            <h2>Beschijving</h2>
-            <p>
-                {{ study.description }}
-            </p>
-        </section>
-        <section>
-            <h2>Belangrijke informatie</h2>
-            <div class="grid-section">
-                <article class="grid-article1">
-                    <h3>
-                        Locatie
-                    </h3>
-                    {% if study.study_type == "online" %}
-                    <p>Dit onderzoek is online.</p>
-                    {% elif study.study_type == "telefonisch" %}
-                    <p>Dit onderzoek is telefonisch en gaat dus via de telefoon</p>
-                    {% else %}
-                    <p>Dit onderzoek is op locatie in: {{ study.location }}</p>
-                    {% endif %}
-                </article>
-                <article class="grid-article2">
-                    <h3>
-                        Vergoeding
-                    </h3>
-                    {% if study.has_reward == 1 %}
-                    <p>Dit onderzoek heeft een Vergoeding</p>
-                    <p>Deze vergoeding bedraagt: {{ study.reward }}</p>
-                    {% else %}
-                    <p>Dit onderzoek heeft geen Vergoeding</p>
-                    {% endif %}
-                </article>
-            </div>
-        </section>
-    {% if study.status_id == 2 %}
-        {% if enrolled is not none %}
-            <section>
 
-                {% if enrolled == False %}
-                    <a href="/{{ base.locale }}/research/{{ study.id }}/enroll" class="button">Schrijf in op dit onderzoek</a>
+    <section>
+        <h2>{{ lang.research_study_restrictions_title }}</h2>
+        {{ table(['Categorie', 'Naam'], table_data) }}
+    </section>
+
+    <div class="l-spacer"></div>
+    <div class="seperator"></div>
+
+    <section>
+        <h2>{{ lang.research_study_description_title }}</h2>
+        <p>{{ study.description }}</p>
+    </section>
+
+    <section>
+        <h2>{{ lang.research_study_important_info_title }}</h2>
+        <div class="grid-section">
+            <article class="grid-article1">
+                <h3>{{ lang.research_study_location_title }}</h3>
+                {% if study.study_type == "online" %}
+                    <p>{{ lang.research_study_location_online }}</p>
+                {% elif study.study_type == "telefonisch" %}
+                    <p>{{ lang.research_study_location_phone }}</p>
                 {% else %}
-                    <a href="/{{ base.locale }}/research/{{ study.id }}/unlist" class="button">Uitschrijven uit dit onderzoek</a>
+                    <p>{{ lang.research_study_location_on_site.replace('%location%', study.location) }}</p>
                 {% endif %}
+            </article>
+            <article class="grid-article2">
+                <h3>{{ lang.research_study_reward_title }}</h3>
+                {% if study.has_reward == 1 %}
+                    <p>{{ lang.research_study_reward_available }}</p>
+                    <p>{{ lang.research_study_reward_amount.replace('%reward%', study.reward) }}</p>
+                {% else %}
+                    <p>{{ lang.research_study_reward_none }}</p>
+                {% endif %}
+            </article>
+        </div>
+    </section>
 
-            </section>
-        {% endif %}
+    {% if study.status_id == 2 and enrolled is not none %}
+        <section>
+            {% if enrolled == False %}
+                <a href="/{{ base.locale }}/research/{{ study.id }}/enroll" class="button">
+                    {{ lang.research_study_enroll_button }}
+                </a>
+            {% else %}
+                <a href="/{{ base.locale }}/research/{{ study.id }}/unlist" class="button">
+                    {{ lang.research_study_unenroll_button }}
+                </a>
+            {% endif %}
+        </section>
     {% endif %}
-    </main>
+</main>
 
 {% endblock %}
