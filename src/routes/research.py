@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import ceil
 
 from flask import Blueprint, request, session, render_template
 
@@ -11,7 +12,7 @@ from models.user import User
 from view import render, redirect_page
 from werkzeug.exceptions import NotFound, abort
 from utils.table import Table
-from utils.auth import in_roles
+from utils.auth import in_roles, is_authenticated
 from utils.mail import send_mail
 from i18n.locale import get_iso_639_1
 from utils.translate import check_translation
@@ -28,9 +29,12 @@ research_bp = Blueprint("research", __name__)
 
 @research_bp.route("/")
 def research_dashboard_render():
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
     search_query = request.args.get("search", "").lower()
+    age_min = request.args.get("age_min", type=int)
+    age_max = request.args.get("age_max", type=int)
+    study_type = request.args.getlist("study_type", type=str)
 
     userid = session.get("user_id")
     role = session.get("role")
@@ -38,6 +42,18 @@ def research_dashboard_render():
 
     if userid is None:
         raise NotFound()
+
+    # Available studies
+    available_page = request.args.get("available_page", 1, type=int)
+    available_page_size = request.args.get("available_page_size", 5, type=str)
+    if available_page < 1:
+        available_page = 1
+
+    # Enrolled studies
+    enrolled_page = request.args.get("enrolled_page", 1, type=int)
+    enrolled_page_size = request.args.get("enrolled_page_size", 5, type=str)
+    if enrolled_page < 1:
+        enrolled_page = 1
 
     if role == "expert":
         is_expert = True
@@ -94,6 +110,21 @@ def research_dashboard_render():
                 or search_query in study["organization"].lower()
                 or search_query in study["location_display"].lower()
             ]
+        if age_min is not None:
+            available_studies = [
+                study for study in available_studies
+                if study["age_min"] >= age_min
+            ]
+        if age_max is not None:
+            available_studies = [
+                study for study in available_studies
+                if study["age_max"] <= age_max
+            ]
+        if study_type:
+            available_studies = [
+                study for study in available_studies
+                if study["study_type"] in study_type
+            ]
 
         enrolled_studies = []
         for study_id in enrolment_study_ids:
@@ -139,9 +170,60 @@ def research_dashboard_render():
                 or search_query in study["organization"].lower()
                 or search_query in study["location_display"].lower()
             ]
+        if age_min is not None:
+            available_studies = [
+                study for study in available_studies
+                if study["age_min"] >= age_min
+            ]
+        if age_max is not None:
+            available_studies = [
+                study for study in available_studies
+                if study["age_max"] <= age_max
+            ]
+        if study_type:
+            available_studies = [
+                study for study in available_studies
+                if study["study_type"] in study_type
+            ]
 
         enrolled_studies = []
         expert = None
+
+    # Available studies page size
+    available_page_size = request.args.get("available_page_size", 10, type=str)
+    if available_page_size == "":
+        available_page_size = 10
+
+    # Enrolled studies page size
+    enrolled_page_size = request.args.get("enrolled_page_size", 10, type=str)
+    if enrolled_page_size == "":
+        enrolled_page_size = 10
+
+    # Available studies page size
+    if available_page_size == "all":
+        available_PAGE_SIZE = len(available_studies)
+    else:
+        available_PAGE_SIZE = int(available_page_size)
+
+    # Enrolled studies page size
+    if enrolled_page_size == "all":
+        enrolled_PAGE_SIZE = len(enrolled_studies)
+    else:
+        enrolled_PAGE_SIZE = int(enrolled_page_size)
+
+    # Available studies pagination
+    total_available = len(available_studies)
+    total_pages_available = ceil(total_available / available_PAGE_SIZE)
+    start = (available_page - 1) * available_PAGE_SIZE
+    end = start + available_PAGE_SIZE
+    available_studies_paginated = available_studies[start:end]
+
+    # Enrolled studies pagination
+    total_enrolled = len(enrolled_studies)
+    total_pages_enrolled = ceil(total_enrolled / enrolled_PAGE_SIZE)
+    start = (enrolled_page - 1) * enrolled_PAGE_SIZE
+    end = start + enrolled_PAGE_SIZE
+    enrolled_studies_paginated = enrolled_studies[start:end]
 
     table_header = [
         "title",
@@ -154,13 +236,13 @@ def research_dashboard_render():
         "age_max",
     ]
 
-    available_table = Table(available_studies)
+    available_table = Table(available_studies_paginated)
     available_table.set_type("title", "link", [".research/<id>"])
     available_table.whitelist_data(table_header)
     available_table.set_order(table_header)
     available_study_table_data = available_table.export_to_macro()
 
-    enrolled_table = Table(enrolled_studies)
+    enrolled_table = Table(enrolled_studies_paginated)
     enrolled_table.set_type("title", "link", [".research/<id>"])
     enrolled_table.whitelist_data(table_header)
     enrolled_table.set_order(table_header)
@@ -173,12 +255,23 @@ def research_dashboard_render():
         is_expert=is_expert,
         available_study_table_data=available_study_table_data,
         enrolled_study_table_data=enrolled_study_table_data,
+        # pagination metadata
+        available_page=available_page,
+        total_pages_available=total_pages_available,
+        has_prev_available=available_page > 1,
+        has_next_available=available_page < total_pages_available,
+        available_page_size=str(available_page_size),
+        enrolled_page=enrolled_page,
+        total_pages_enrolled=total_pages_enrolled,
+        has_prev_enrolled=enrolled_page > 1,
+        has_next_enrolled=enrolled_page < total_pages_enrolled,
+        enrolled_page_size=enrolled_page_size,
     )
 
 
 @research_bp.route("/<study_id>")
 def study_dashboard_render(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     if in_roles("expert"):
@@ -218,8 +311,11 @@ def study_dashboard_render(study_id):
 
 @research_bp.route("/<study_id>/enroll")
 def enroll_page(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
+
+    if not is_authenticated() or not in_roles("expert"):
+        abort(403)
 
     user_id = session.get("user_id")
 
@@ -227,11 +323,20 @@ def enroll_page(study_id):
     user = users.get_user_by_id(user_id)
     profile = profiles.get_profile_by_userid(user_id)
 
-    return render("enroll.html", page_translated=page_translated, study=study, user=user, profile=profile)
+    return render(
+        "enroll.html",
+        page_translated=page_translated,
+        study=study,
+        user=user,
+        profile=profile,
+    )
 
 
 @research_bp.route("/<study_id>/enroll", methods=["POST"])
 def enroll_confirm(study_id):
+    if not is_authenticated() or not in_roles("expert"):
+        abort(403)
+
     user_id = session.get("user_id")
     profile = profiles.get_profile_by_userid(user_id)
     user_name = profiles.get_name_by_userid(user_id)
@@ -253,7 +358,7 @@ def enroll_confirm(study_id):
 
 @research_bp.route("/<study_id>/enroll/success")
 def enroll_success(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     return render("enroll_succes.html", page_translated=page_translated)
@@ -261,7 +366,10 @@ def enroll_success(study_id):
 
 @research_bp.route("/<study_id>/unlist")
 def unlist_page(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
+
+    if not is_authenticated() or not in_roles("expert"):
+        abort(403)
 
     user_id = session.get("user_id")
 
@@ -274,6 +382,9 @@ def unlist_page(study_id):
 
 @research_bp.route("/<study_id>/unlist", methods=["POST"])
 def unlist_confirm(study_id):
+    if not is_authenticated() or not in_roles("expert"):
+        abort(403)
+
     user_id = session.get("user_id")
     profile = profiles.get_profile_by_userid(user_id)
 
@@ -287,7 +398,7 @@ def unlist_confirm(study_id):
 
 @research_bp.route("/<study_id>/unlist/success")
 def unlist_success(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     return render("unlist_success.html", page_translated=page_translated)

@@ -8,6 +8,15 @@ document.addEventListener("DOMContentLoaded", () => {
         path_parts[1] = e.target.value;
         window.location.href = window.location.origin + path_parts.join("/");
     });
+
+    const el_dropdown_page_size = document.getElementById(
+        "dropdown-available_page_size",
+    );
+    if (el_dropdown_page_size) {
+        el_dropdown_page_size.addEventListener("change", (e) => {
+            document.querySelector("form").submit();
+        });
+    }
 });
 
 let toggle = document.querySelector(".nav-toggle");

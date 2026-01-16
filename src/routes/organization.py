@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import ceil
 
 from flask import Blueprint, session, abort, request
 
@@ -124,6 +125,11 @@ def organization_dashboard_render(id):
             return abort(403)
     org = organizations.get_organization_by_id(verified_org_id)
 
+    page = request.args.get("page", 1, type=int)
+    page_size = request.args.get("page_size", 10, type=str)  # default 5
+    if page < 1:
+        page = 1
+
     study_table_data = []
     if org is not None:
         study_list = studies.get_study_by_organization_id(verified_org_id)
@@ -131,6 +137,18 @@ def organization_dashboard_render(id):
         for study in study_list:
             study["location_display"] = study["location"] or study["study_type"]
             full_study_list.append(study)
+
+        total_studies = len(study_list)
+        if page_size == "all":
+            PAGE_SIZE = total_studies or 1
+        else:
+            PAGE_SIZE = int(page_size)
+
+        total_pages = ceil(total_studies / PAGE_SIZE)
+        start = (page - 1) * PAGE_SIZE
+        end = start + PAGE_SIZE
+        paginated_studies = study_list[start:end]
+
         table_header = [
             "title",
             "status",
@@ -142,7 +160,7 @@ def organization_dashboard_render(id):
             "age_max",
             "modify",
         ]
-        table = Table(study_list)
+        table = Table(paginated_studies)
         table.set_column_lang("nl", table_header)
 
         table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
@@ -206,12 +224,21 @@ def organization_dashboard_render(id):
         open_success=open_success,
         open_error=open_error,
         changes_study=changes_study,
-        id=id
+        id=id,
+
+        # Pagination variables
+        page=page,
+        page_size=str(page_size),
+        total_pages=total_pages,
+        has_prev=page > 1,
+        has_next=page < total_pages,
     )
 
 
 @org_bp.route("/add", methods=["GET", "POST"])
 def org_register_add():
+    if not is_authenticated() or not in_roles("admin"):
+        return abort(403)
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
@@ -277,6 +304,8 @@ def org_register_add():
 # Is aangepast door Pascal na verdere inspectie
 @org_bp.route("<organization_user_id>/research/add", methods=["GET", "POST"])
 def research_register(organization_user_id):
+    if not is_authenticated() or not in_roles(["organization", "admin"]):
+        return abort(403)
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
@@ -321,7 +350,9 @@ def research_register(organization_user_id):
                 errors["location"] = True
 
         if not errors:
-            user = users.get_user_by_id(user_id)
+            user = users.get_user_by_id(session.get("user_id"))
+            if not user or not user.get("organization_id"):
+                return abort(403)
 
             try:
                 study_id = studies.create_with_organisation(
@@ -368,19 +399,50 @@ def organization_study_page_render(organization_user_id, study_id):
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
-    org_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
+        return abort(403)
 
-    org = organizations.get_organization_by_id(org_id)
+    organization_id_dict = users.get_organization_id_by_userid(organization_user_id)
+    organization_id = organization_id_dict["organization_id"]
+
+    user_id = session.get("user_id")
+    if in_roles("admin"):
+        verified_org_id_dict = users.get_organization_id_by_userid(organization_user_id)
+        verified_org_id = verified_org_id_dict["organization_id"]
+    else:
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict:
+            return abort(403)
+        verified_org_id = verified_org_id_dict["organization_id"]
+        if verified_org_id != int(organization_id):
+            print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+            return abort(403)
+    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
+    if verified_org_id != int(organization_id):
+        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+        return abort(403)
+
+    org = organizations.get_organization_by_id(organization_id)
     study = studies.get_study_by_id(study_id)
+
+    if not study:
+        return abort(404)
+
     raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(study_id, 1)
     raw_verified_enrolment_list = enrolments.get_enrolments_by_study_id(study_id, 2)
+
+    new_page = request.args.get("new_page", 1, type=int)
+    new_page_size = request.args.get("new_page_size", 10, type=str)
+
+    verified_page = request.args.get("verified_page", 1, type=int)
+    verified_page_size = request.args.get("verified_page_size", 10, type=str)
 
     new_enrolment_list = []
     for enrolment in raw_new_enrolment_list:
         profile = profiles.get_profile_by_id(enrolment["profile_id"])
         user = users.get_user_by_id(profile["user_id"])
         new_enrolment = {
-            "organization_id": int(org_id),
+            "organization_id": int(organization_id),
             "organization_user_id": int(organization_user_id),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
@@ -398,7 +460,7 @@ def organization_study_page_render(organization_user_id, study_id):
         profile = profiles.get_profile_by_id(enrolment["profile_id"])
         user = users.get_user_by_id(profile["user_id"])
         verified_enrolment = {
-            "organization_id": int(org_id),
+            "organization_id": int(organization_id),
             "organization_user_id": int(organization_user_id),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
@@ -411,6 +473,20 @@ def organization_study_page_render(organization_user_id, study_id):
         }
         verified_enrolment_list.append(verified_enrolment)
 
+    def paginate_list(data_list, page, page_size):
+        total = len(data_list)
+        if page_size == "all":
+            PAGE_SIZE = total or 1
+        else:
+            PAGE_SIZE = int(page_size)
+        total_pages = ceil(total / PAGE_SIZE)
+        start = (page - 1) * PAGE_SIZE
+        end = start + PAGE_SIZE
+        return data_list[start:end], total_pages
+
+    paginated_new, total_pages_new = paginate_list(new_enrolment_list, new_page, new_page_size)
+    paginated_verified, total_pages_verified = paginate_list(verified_enrolment_list, verified_page, verified_page_size)
+
     table_header = [
         "name",
         "phonenr",
@@ -421,12 +497,10 @@ def organization_study_page_render(organization_user_id, study_id):
         "unlist",
     ]
 
-    table_data_new = enrolment_table_data_converter(new_enrolment_list, table_header)
-    table_data_verified = enrolment_table_data_converter(
-        verified_enrolment_list, table_header
-    )
+    table_data_new = enrolment_table_data_converter(paginated_new, table_header)
+    table_data_verified = enrolment_table_data_converter(paginated_verified, table_header)
 
-    if int(org_id) != study["organization_id"]:
+    if int(organization_id) != study["organization_id"]:
         print("forbidden study_orgid mismatch")
         return abort(403)
 
@@ -437,13 +511,35 @@ def organization_study_page_render(organization_user_id, study_id):
         study=study,
         table_data_new=table_data_new,
         table_data_verified=table_data_verified,
+
+        # Pagination variables
+        new_page=new_page,
+        new_page_size=str(new_page_size),
+        total_pages_new=total_pages_new,
+        has_prev_new=new_page > 1,
+        has_next_new=new_page < total_pages_new,
+        verified_page=verified_page,
+        verified_page_size=str(verified_page_size),
+        total_pages_verified=total_pages_verified,
+        has_prev_verified=verified_page > 1,
+        has_next_verified=verified_page < total_pages_verified,
     )
 
 
-@org_bp.route("/<organization_user_id>/study/<study_id>/close")
-def organization_study_close(organization_user_id, study_id):
-    if not is_authenticated():
+@org_bp.route("/<organization_id>/study/<study_id>/close")
+def organization_study_close(organization_id, study_id):
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(401)
+    study = studies.get_study_by_id(study_id)
+    if not study:
+        return abort(404)
+    if int(organization_id) != study["organization_id"]:
+        return abort(403)
+    if not in_roles("admin"):
+        user_id = session.get("user_id")
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict or verified_org_id_dict["organization_id"] != int(organization_id):
+            return abort(403)
 
     try:
         studies.set_research_status(study_id, 4)
@@ -457,10 +553,20 @@ def organization_study_close(organization_user_id, study_id):
         )
 
 
-@org_bp.route("/<organization_user_id>/study/<study_id>/open")
-def organization_study_open(organization_user_id, study_id):
-    if not is_authenticated():
+@org_bp.route("/<organization_id>/study/<study_id>/open")
+def organization_study_open(organization_id, study_id):
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(401)
+    study = studies.get_study_by_id(study_id)
+    if not study:
+        return abort(404)
+    if int(organization_id) != study["organization_id"]:
+        return abort(403)
+    if not in_roles("admin"):
+        user_id = session.get("user_id")
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict or verified_org_id_dict["organization_id"] != int(organization_id):
+            return abort(403)
 
     try:
         studies.set_research_status(study_id, 2)
@@ -482,7 +588,30 @@ def organization_study_edit_page_render(organization_user_id, study_id):
     success = request.args.get("success")
     error = request.args.get("error")
 
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
+        return abort(403)
+
+    user_id = session.get("user_id")
+    if in_roles("admin"):
+        verified_org_id = int(organization_id)
+    else:
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict:
+            return abort(403)
+        verified_org_id = verified_org_id_dict["organization_id"]
+        if verified_org_id != int(organization_id):
+            print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+            return abort(403)
+    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
+    if verified_org_id != int(organization_id):
+        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+        return abort(403)
+
     db_study = studies.get_study_by_id(study_id)
+    if not db_study:
+        return abort(404)
+    if int(organization_id) != db_study["organization_id"]:
+        return abort(403)
     disability_list = disabilities.get_disability_list_by_studyid(study_id)
 
     study = {
@@ -557,14 +686,31 @@ def enrolment_table_data_converter(enrolment_list, table_header):
 
     table.set_type("title", "link", [".organization/<organization_user_id>/study/<id>"])
     table.add_column(
-        "view_profile", "button", ["Bekijk Profiel", ".expert-profile/<user_id>"]
+        "view_profile",
+        [
+            [
+                "button",
+                [
+                    "Bekijk Profiel",
+                    ".expert-profile/<user_id>",
+                    "",
+                    "primary",
+                ],
+            ]
+        ],
     )
     table.add_column(
         "unlist",
-        "button",
         [
-            "Uitschrijven",
-            ".organization/<organization_user_id>/study/<study_id>/<profile_id>/unlist",
+            [
+                "button",
+                [
+                    "Uitschrijven",
+                    ".organization/<organization_user_id>/study/<study_id>/<profile_id>/unlist",
+                    "",
+                    "danger",
+                ],
+            ]
         ],
     )
     table.whitelist_data(table_header)
@@ -578,10 +724,24 @@ def enrolment_table_data_converter(enrolment_list, table_header):
 def organization_unlist(organization_user_id, study_id, profile_id):
     page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
-    organization_user_id = int(organization_user_id)
-    organization_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
+
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
+        return abort(403)
+
+    organization_id = int(organization_id)
     study_id = int(study_id)
     profile_id = int(profile_id)
+
+    study = studies.get_study_by_id(study_id)
+    if not study:
+        return abort(404)
+    if organization_id != study["organization_id"]:
+        return abort(403)
+    if not in_roles("admin"):
+        user_id = session.get("user_id")
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict or verified_org_id_dict["organization_id"] != organization_id:
+            return abort(403)
 
     enrolments.delete_enrollment(study_id, profile_id)
 

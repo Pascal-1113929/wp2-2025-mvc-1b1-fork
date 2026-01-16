@@ -93,6 +93,49 @@
                 <input id="prf-availab" type="text" name="availability" placeholder="Bijv: Ma-Wo overdag" value="{{ user.availability }}">
             </div>
 
+            <!-- Guardian -->
+            <div class="form-group">
+                <label for="prf-guardian-name">Naam toezichthouder (optioneel)</label>
+                <input
+                    id="prf-guardian-name"
+                    type="text"
+                    name="guardian_name"
+                    placeholder="Naam van de toezichthouder"
+                    value="{{ user.guardian_name or "" }}"
+                >
+                {% if errors.guardian_name %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="prf-guardian-email">E-mail toezichthouder</label>
+                <input
+                    id="prf-guardian-email"
+                    type="email"
+                    name="guardian_email"
+                    placeholder="E-mail van de toezichthouder"
+                    value="{{ user.guardian_email or "" }}"
+                >
+                {% if errors.guardian_email %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="prf-guardian-phone">Telefoonnummer toezichthouder</label>
+                <input
+                    id="prf-guardian-phone"
+                    type="tel"
+                    name="guardian_phone"
+                    placeholder="Telefoonnummer van de toezichthouder"
+                    value="{{ user.guardian_phone or "" }}"
+                >
+                {% if errors.guardian_phone %}
+                    <div class="alert alert-error">{{ lang.field_empty }}</div>
+                {% endif %}
+            </div>
+
             <div class="form-check">
                 <input type="checkbox" id="prf-aterms" name="aterms" value=1 required {% if user.agreed_terms == 1 %} checked {% endif %}>
                 <label for="prf-aterms"> Ik ben het eens met de Userpolicy</label>
