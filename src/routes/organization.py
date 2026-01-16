@@ -142,7 +142,10 @@ def organization_dashboard_render(id):
         if page_size == "all":
             PAGE_SIZE = total_studies or 1
         else:
-            PAGE_SIZE = int(page_size)
+            try:
+                PAGE_SIZE = int(page_size)
+            except ValueError:
+                PAGE_SIZE = 10
 
         total_pages = ceil(total_studies / PAGE_SIZE)
         start = (page - 1) * PAGE_SIZE
@@ -414,10 +417,6 @@ def organization_study_page_render(organization_user_id, study_id):
         if verified_org_id != int(organization_id):
             print(f"forbidden id mismatch {verified_org_id} {organization_id}")
             return abort(403)
-    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
-    if verified_org_id != int(organization_id):
-        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
-        return abort(403)
 
     org = organizations.get_organization_by_id(organization_id)
     study = studies.get_study_by_id(study_id)
@@ -725,7 +724,7 @@ def organization_unlist(organization_user_id, study_id, profile_id):
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(403)
 
-    organization_id = int(organization_id)
+    organization_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
     study_id = int(study_id)
     profile_id = int(profile_id)
 

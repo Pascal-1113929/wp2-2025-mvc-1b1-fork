@@ -26,6 +26,8 @@ account_bp = Blueprint("account", __name__)
 
 @account_bp.route("/login", methods=["GET", "POST"])
 def account_login():
+    if is_authenticated():
+        return redirect_page("/dashboard")
     if request.method == "POST":
         email = request.form.get("email", "")
         password = request.form.get("password", "")
@@ -94,6 +96,8 @@ def account_logout():
 
 @account_bp.route("/register", methods=["GET", "POST"])
 def account_register():
+    if is_authenticated():
+        return redirect_page("/dashboard")
     page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 

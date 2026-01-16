@@ -233,13 +233,19 @@ def research_dashboard_render():
     if available_page_size == "all":
         available_PAGE_SIZE = len(available_studies)
     else:
-        available_PAGE_SIZE = int(available_page_size)
+        try:
+            available_PAGE_SIZE = int(available_page_size)
+        except ValueError:
+            available_PAGE_SIZE = 10
 
     # Enrolled studies page size
     if enrolled_page_size == "all":
         enrolled_PAGE_SIZE = len(enrolled_studies)
     else:
-        enrolled_PAGE_SIZE = int(enrolled_page_size)
+        try:
+            enrolled_PAGE_SIZE = int(enrolled_page_size)
+        except ValueError:
+            available_PAGE_SIZE = 10
 
     # Available studies pagination
     total_available = len(available_studies)

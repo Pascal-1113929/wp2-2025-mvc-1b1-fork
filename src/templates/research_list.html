@@ -55,11 +55,6 @@
         <fieldset>
             <legend>Toon kolommen</legend>
             <label>
-                <input type="checkbox" name="selected_columns" value="title"
-                    {% if 'title' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
-                Titel
-            </label>
-            <label>
                 <input type="checkbox" name="selected_columns" value="organization"
                         {% if 'organization' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
                 Organisatie
