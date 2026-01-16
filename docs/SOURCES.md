@@ -17,4 +17,5 @@ Tools:
  - https://chromewebstore.google.com/detail/modheader-modify-http-hea/idgpnmonknjnojddfkpgkljpfnnfcklj local testing
 
 AI links:
- - https://chatgpt.com/share/69428d78-c8f8-8002-9424-7e08fc3e5b39
+ - https://chatgpt.com/share/69428d78-c8f8-8002-9424-7e08fc3e5b39 - Shemar
+ - https://chatgpt.com/share/696a6eb5-5d54-8002-8420-e12dd12e5404 - Shemar
