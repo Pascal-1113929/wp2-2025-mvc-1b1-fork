@@ -149,10 +149,11 @@ class Study:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                "SELECT * FROM studies "
-                "WHERE available=1 "
-                "AND DATE(end_date) > DATE('now') "
-                "AND id=? ",
+                """SELECT studies.*, enrollments.status_id as "astatus_id" FROM studies 
+                INNER JOIN enrollments ON studies.id = enrollments.study_id
+                WHERE studies.available=1 
+                AND DATE(studies.end_date) > DATE('now') 
+                AND studies.id=?""",
                 (study_id,),
             )
             con.commit()

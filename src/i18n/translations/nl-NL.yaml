@@ -259,3 +259,10 @@
 "table_row_size_description": "Aantal records op de pagina:"
 "table_row_size_each_page": "% per pagina"
 "table_row_show_everything": "Laat alles zien"
+
+"select_status_tab": "Selecteer een status om inschrijvingen te bekijken"
+"new_enrollments":"inschrijvingen In beoordeling"
+"good_enrollments":"Goedgekeurd inschrijvingen"
+"bad_enrollments":"Afgekeurde inschrijvingen"
+"all_show":"Momenteel laat het nu alle inschrijvingen zien"
+"research_tab_description": "Kies welke status u de inschrijving van wilt bekijken, In beoordeling, Goedgekeurd, Afgekeurd"
