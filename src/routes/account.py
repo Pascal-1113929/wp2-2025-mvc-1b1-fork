@@ -48,6 +48,8 @@ def expert_dashboard_render():
     if not is_authenticated():
         return redirect_page("/login")
     user_id = str(session.get("user_id"))
+    user = users.get_user_by_id(user_id)
+    users.set_user_approve_notifications(user_id)
     profile = profiles.get_profile_by_userid(session["user_id"])
     stats = [0] * 9
 
@@ -66,7 +68,7 @@ def expert_dashboard_render():
         stats[7] = len(studies.get_study_by_status(1))
         stats[8] = len(studies.get_study_by_status(1))
 
-    return render("dashboard.html", profile=profile, stats=stats, user_id=user_id)
+    return render("dashboard.html", profile=profile, stats=stats, user_id=user_id, user=user)
 
 
 @account_bp.route("/logout")

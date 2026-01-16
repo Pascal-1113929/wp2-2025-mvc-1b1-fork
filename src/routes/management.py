@@ -273,7 +273,7 @@ def approval_user_approve(type, id):
         if not name:
             abort(404)
 
-        users.set_user_status(id, 2)
+        users.set_user_status(id, 2, 0)
         email_generate(
             "Account Goedgekeurd",
             name,
