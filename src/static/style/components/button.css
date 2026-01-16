@@ -14,6 +14,11 @@
         transform 0.15s ease,
         box-shadow 0.15s ease,
         background 0.2s ease;
+    font-size: 1rem;
+}
+
+button.button {
+    padding: 16px 22px;
 }
 
 .button:hover {
