@@ -13,9 +13,11 @@
 
     <section class="sectioncard">
         <p class="muted">{{ lang.approval_tab_description }}</p>
-        {{ button("?tab=user", lang.approval_tab_users, "ghost" if tab != 'user', "fa-solid fa-users") }}
-        {{ button("?tab=research", lang.approval_tab_research, "ghost" if tab != 'research', "fa-solid fa-book") }}
-        {{ button("?tab=enrollment", lang.approval_tab_enrollment, "ghost" if tab != 'enrollment', "fa-solid fa-signature") }}
+        <div class="tabs">
+            {{ button("?tab=user", lang.approval_tab_users, "ghost" if tab != 'user', "fa-solid fa-users") }}
+            {{ button("?tab=research", lang.approval_tab_research, "ghost" if tab != 'research', "fa-solid fa-book") }}
+            {{ button("?tab=enrollment", lang.approval_tab_enrollment, "ghost" if tab != 'enrollment', "fa-solid fa-signature") }}
+        </div>
     </section>
 
     <section class="sectioncard">
