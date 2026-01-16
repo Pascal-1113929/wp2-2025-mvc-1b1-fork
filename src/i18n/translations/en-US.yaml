@@ -235,6 +235,7 @@
 "research_table_compensation": "Compensation"
 "research_table_minage": "Minimum age"
 "research_table_maxage": "Maximum age"
+"research_show_matching_studies": "Show only matching studies"
 
 "admin_org_choice_title": "Choose a organization to view"
 "admin_org_choice_table_title": "Table of organizations"

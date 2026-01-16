@@ -243,6 +243,7 @@
 "research_table_compensation": "Vergoeding"
 "research_table_minage": "Minimumleeftijd"
 "research_table_maxage": "Maximumleeftijd"
+"research_show_matching_studies": "Toon alleen passende onderzoeken"
 
 "admin_org_choice_title": "Kies een organisatie te bekijken"
 "admin_org_choice_table_title": "Tabel met organisaties"
