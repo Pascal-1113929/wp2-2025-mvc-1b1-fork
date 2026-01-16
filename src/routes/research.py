@@ -301,7 +301,8 @@ def research_dashboard_render():
         enrolled_page_size=str(enrolled_page_size),
 
         tab=tab,
-        extra_args=extra_args
+        extra_args=extra_args,
+        selected_columns=selected_columns
     )
 
 

@@ -6,16 +6,25 @@
 
 
 
-{% set table_header = [
-    lang.research_table_title,
-    lang.research_table_organization,
-    lang.research_table_startdate,
-    lang.research_table_enddate,
-    lang.research_table_location,
-    lang.research_table_compensation,
-    lang.research_table_minage,
-    lang.research_table_maxage
-] %}
+{% set all_columns = {
+    'title': lang.research_table_title,
+    'organization': lang.research_table_organization,
+    'start_date': lang.research_table_startdate,
+    'end_date': lang.research_table_enddate,
+    'location_display': lang.research_table_location,
+    'reward': lang.research_table_compensation,
+    'age_min': lang.research_table_minage,
+    'age_max': lang.research_table_maxage
+} %}
+
+    {% set ns = namespace(table_header=[]) %}
+
+{% for key, label in all_columns.items() %}
+    {% if key in selected_columns %}
+        {% set ns.table_header = ns.table_header + [label] %}
+    {% endif %}
+{% endfor %}
+
 
 <main>
     <header>
@@ -79,6 +88,11 @@
                 <input type="checkbox" name="selected_columns" value="age_max"
                         {% if 'age_max' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
                 Maximum leeftijd
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="reward"
+                        {% if 'reward' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Vergoeding
             </label>
         </fieldset>
 
@@ -147,7 +161,7 @@
             <input type="hidden" name="tab" value="{{ request.args.get('tab') }}">
         </form>
 
-        {{ table(table_header, available_study_table_data) }}
+        {{ table(ns.table_header, available_study_table_data) }}
 
         {% if total_pages_available > 1 %}
         <nav class="pagination" aria-label="Available studies pagination">
@@ -200,7 +214,7 @@
             <input type="hidden" name="preferences" value="{{ request.args.get('preferences') }}">
             <input type="hidden" name="tab" value="{{ request.args.get('tab') }}">
         </form>
-        {{ table(table_header, enrolled_study_table_data) }}
+        {{ table(ns.table_header, enrolled_study_table_data) }}
         {% if total_pages_enrolled > 1 %}
         <nav class="pagination" aria-label="Enrolled studies pagination">
             {% if has_prev_enrolled %}
