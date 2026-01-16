@@ -28,9 +28,7 @@ class Organization:
     def get_organization_list(self):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute(
-                "SELECT * FROM organizations"
-            )
+            cur.execute("SELECT * FROM organizations")
             con.commit()
             rows = cur.fetchall()
 
@@ -43,7 +41,9 @@ class Organization:
     def get_organization_userid(self, organization_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("SELECT id FROM users WHERE organization_id = ?", (organization_id,))
+            cur.execute(
+                "SELECT id FROM users WHERE organization_id = ?", (organization_id,)
+            )
             con.commit()
             row = cur.fetchone()
             if row is None:

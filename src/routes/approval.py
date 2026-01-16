@@ -97,18 +97,36 @@ def approval():
                 "button",
                 [
                     lang.get("approval_users_option_approve"),
-                    ".approval/user/<id>/approve",
+                    "submit",
                     "fa-solid fa-check",
                     "",
+                    "POST",
+                    {
+                        "action": "submit",
+                        "hidden_fields": {
+                            "type": "user",
+                            "click": "approve",
+                            "id": "<id>",
+                        },
+                    },
                 ],
             ],
             [
                 "button",
                 [
                     lang.get("approval_users_option_reject"),
-                    ".approval/user/<id>/reject",
+                    "submit",
                     "fa-solid fa-xmark",
                     "danger",
+                    "POST",
+                    {
+                        "action": "submit",
+                        "hidden_fields": {
+                            "type": "user",
+                            "click": "reject",
+                            "id": "<id>",
+                        },
+                    },
                 ],
             ],
         ],
@@ -130,18 +148,36 @@ def approval():
                 "button",
                 [
                     lang.get("approval_research_option_approve"),
-                    ".approval/research/<id>/approve",
+                    "submit",
                     "fa-solid fa-check",
                     "",
+                    "POST",
+                    {
+                        "action": "submit",
+                        "hidden_fields": {
+                            "type": "research",
+                            "click": "approve",
+                            "id": "<id>",
+                        },
+                    },
                 ],
             ],
             [
                 "button",
                 [
                     lang.get("approval_research_option_reject"),
-                    ".approval/research/<id>/reject",
+                    ".approval/submit",
                     "fa-solid fa-xmark",
                     "danger",
+                    "POST",
+                    {
+                        "action": "submit",
+                        "hidden_fields": {
+                            "type": "research",
+                            "click": "reject",
+                            "id": "<id>",
+                        },
+                    },
                 ],
             ],
         ],
@@ -171,18 +207,36 @@ def approval():
                 "button",
                 [
                     lang.get("approval_enrollment_option_approve"),
-                    ".approval/enrollment/<id>/approve",
+                    "submit",
                     "fa-solid fa-check",
                     "",
+                    "POST",
+                    {
+                        "action": "submit",
+                        "hidden_fields": {
+                            "type": "enrollment",
+                            "click": "approve",
+                            "id": "<id>",
+                        },
+                    },
                 ],
             ],
             [
                 "button",
                 [
                     lang.get("approval_enrollment_option_reject"),
-                    ".approval/enrollment/<id>/reject",
+                    "submit",
                     "fa-solid fa-xmark",
                     "danger",
+                    "POST",
+                    {
+                        "action": "submit",
+                        "hidden_fields": {
+                            "type": "enrollment",
+                            "click": "reject",
+                            "id": "<id>",
+                        },
+                    },
                 ],
             ],
         ],
@@ -291,94 +345,57 @@ def email_generate(
         raise Exception("Unknown reciever_type")
 
 
-@approval_bp.route("/<type>/<id>/reject")
-def approval_user_reject(type, id):
+@approval_bp.route("/submit", methods=["POST"])
+def approval_submit():
+    type = request.form.get("type")  # user, research, enrollment
+    click = request.form.get("click")  # approve of reject
+    id = request.form.get("id")
+
     if not is_authenticated() or not in_roles("admin"):
         abort(403)
+
     field_name = ""
+    status = 2 if click == "approve" else 3  # 2 = approved, 3 = rejected
+
     if type == "user":
         field_name = profile.get_name_by_userid(id)
-        users.set_user_status(id, 3)
+        users.set_user_status(id, status)
         email_generate(
-            "Account Afgekeurd",
+            "Account Afgekeurd" if click == "reject" else "Account Goedgekeurd",
             field_name,
             id,
             "Account",
-            "Afgekeurd",
-        )  # user is default reciever_type
-    elif type == "research":
-        study.set_research_status(id, 3)
-        organization_id = study.get_organization_id_by_id(id)
-        field_name = organization.get_name_by_id(organization_id)
-
-        email_generate(
-            "Onderzoek Goedgekeurd",
-            field_name,
-            organization_id,
-            "Onderzoek",
-            "Goedgekeurd",
-            reciever_type="Organization",
+            "Afgekeurd" if click == "reject" else "Goedgekeurd",
         )
-    elif type == "enrollment":
-        enrollment.set_enrollment_status(id, 3)
-        user_id = enrollment.get_user_id_by_enrollment_id(id)
-        field_name = profile.get_name_by_userid(user_id)
-        email_generate(
-            "Inschrijving Afgekeurd",
-            field_name,
-            user_id,
-            "Inschrijving",
-            "Afgekeurd",
-        )  # user is default reciever_type
-    return redirect_page(
-        "approval?tab=" + type + "&alert_id=2&alert_field=" + field_name
-    )
-
-
-@approval_bp.route("/<type>/<id>/approve")
-def approval_user_approve(type, id):
-    if not is_authenticated() or not in_roles("admin"):
-        abort(403)
-    field_name = ""
-    if type == "user":
-        field_name = profile.get_name_by_userid(id)
-
-        if not field_name:
-            abort(404)
-
-        users.set_user_status(id, 2, 0)
-        email_generate(
-            "Account Goedgekeurd",
-            field_name,
-            id,
-            "Account",
-            "Goedgekeurd",
-        )  # user is default reciever_type
     elif type == "research":
-        study.set_research_status(id, 2)
+        study.set_research_status(id, status)
         organization_id = study.get_organization_id_by_id(id)
         field_name = organization.get_name_by_id(organization_id)
         email_generate(
-            "Onderzoek Goedgekeurd",
+            "Onderzoek Afgekeurd" if click == "reject" else "Onderzoek Goedgekeurd",
             field_name,
             organization_id,
             "Onderzoek",
-            "Goedgekeurd",
+            "Afgekeurd" if click == "reject" else "Goedgekeurd",
             reciever_type="Organization",
         )
     elif type == "enrollment":
-        enrollment.set_enrollment_status(id, 2)
+        enrollment.set_enrollment_status(id, status)
         user_id = enrollment.get_user_id_by_enrollment_id(id)
         field_name = profile.get_name_by_userid(user_id)
         email_generate(
-            "Inschrijving Goedgekeurd",
+            "Inschrijving Afgekeurd"
+            if click == "reject"
+            else "Inschrijving Goedgekeurd",
             field_name,
             user_id,
             "Inschrijving",
-            "Goedgekeurd",
-        )  # user is default reciever_type
+            "Afgekeurd" if click == "reject" else "Goedgekeurd",
+        )
+
+    alert_id = "1" if click == "approve" else "2"
     return redirect_page(
-        "approval?tab=" + type + "&alert_id=1&alert_field=" + field_name
+        "approval?tab=" + type + "&alert_id=" + alert_id + "&alert_field=" + field_name
     )
 
 
