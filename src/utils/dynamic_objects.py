@@ -2,18 +2,21 @@ import re
 
 
 def process_values(values, row):
-    processed_values = []
-    for val in values:
-        if isinstance(val, str):
-            result = val
-            placeholders = re.findall(r"<([^>]+)>", val)
+    def replace_placeholders(value):
+        if isinstance(value, str):
+            result = value
+            placeholders = re.findall(r"<([^>]+)>", value)
             for field_name in placeholders:
                 replacement = str(row.get(field_name, f"<{field_name}>"))
                 result = result.replace(f"<{field_name}>", replacement)
-            processed_values.append(result)
-        else:
-            processed_values.append(val)
-    return processed_values
+            return result
+        if isinstance(value, list):
+            return [replace_placeholders(item) for item in value]
+        if isinstance(value, dict):
+            return {key: replace_placeholders(val) for key, val in value.items()}
+        return value
+
+    return [replace_placeholders(val) for val in values]
 
 
 def evaluate_condition(condition_str, row):
