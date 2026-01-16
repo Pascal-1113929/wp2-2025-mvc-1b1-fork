@@ -60,3 +60,6 @@ Soms vond ik code van teamleden moeilijk te begrijpen. In dat geval heb ik AI ge
 ## Reflectie
 De AI heeft mij geholpen om sneller inzicht te krijgen in de code en om zelfstandiger problemen op te lossen.  
 Ik heb de gegenereerde code altijd zelf gecontroleerd en aangepast zodat deze paste binnen het project en de gemaakte afspraken binnen het team.
+
+## Overig gebruik GenAI
+- Genarative Ai is gebruikt om vertalingen nar meerdere talen moegelijk te maken
