@@ -1,5 +1,6 @@
 from datetime import datetime, date
 from math import ceil
+from urllib.parse import urlencode
 
 from flask import Blueprint, session, render_template, request, url_for
 
@@ -40,6 +41,13 @@ def research_dashboard_render():
 
     if userid is None:
         raise NotFound()
+
+    tab = request.args.get("tab")
+
+    args = request.args.to_dict(flat=True)
+    args.pop("tab", None)  # Remove 'tab' key if present
+    print(args)
+    extra_args = "&" + urlencode(args)
 
     # Available studies
     available_page = request.args.get("available_page", 1, type=int)
@@ -122,6 +130,10 @@ def research_dashboard_render():
             study = studies.get_available_enrolled_study_by_id(study_id)
             if study is None:
                 continue
+
+            if tab and tab != "None":
+                if study["astatus_id"] != int(tab):
+                    continue
             organization = organizations.get_organization_by_id(
                 study["organization_id"]
             )
@@ -234,6 +246,9 @@ def research_dashboard_render():
         has_prev_enrolled=enrolled_page > 1,
         has_next_enrolled=enrolled_page < total_pages_enrolled,
         enrolled_page_size=str(enrolled_page_size),
+
+        tab=tab,
+        extra_args=extra_args
     )
 
 

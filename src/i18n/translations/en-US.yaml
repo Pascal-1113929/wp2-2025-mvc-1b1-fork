@@ -250,3 +250,10 @@
 "table_row_size_description": "Amount of records on page:"
 "table_row_size_each_page": "% each page"
 "table_row_show_everything": "Show everything"
+
+"select_status_tab": "Select a status to view enrollments"
+"new_enrollments": "Enrollments under review"
+"good_enrollments": "Approved enrollments"
+"bad_enrollments": "Rejected enrollments"
+"all_show": "Currently showing all enrollments"
+"research_tab_description": "Choose which enrollment status you want to view: Under review, Approved, or Rejected"
