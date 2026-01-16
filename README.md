@@ -80,7 +80,16 @@ python src/app.py
 
 ERD Gegenereerd met DbVisualizer https://www.dbvis.com/ 
 
+## Mail Fucntionalitijd
+Deze applicatie bevat de nodige connecties om via smtp4dev mail te sturen
+
 ## Screenshots
+<img width="945" height="482" alt="image" src="https://github.com/user-attachments/assets/f1c2fd71-24e2-4171-a53a-e7df6b3c31a1" />
+
+<img width="945" height="480" alt="image" src="https://github.com/user-attachments/assets/e9d22f59-7a73-4afd-9d69-4fd1c81a9870" />
+
+<img width="945" height="482" alt="image" src="https://github.com/user-attachments/assets/fbb178bb-812d-476a-9ff0-f539c8ad3cfc" />
+
 
 ## Bronnen
 De bronnen staan in 
