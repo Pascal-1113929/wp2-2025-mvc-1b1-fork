@@ -228,7 +228,7 @@ def organization_dashboard_render(id):
 
         # Pagination variables
         page=page,
-        page_size=page_size,
+        page_size=str(page_size),
         total_pages=total_pages,
         has_prev=page > 1,
         has_next=page < total_pages,
@@ -514,12 +514,12 @@ def organization_study_page_render(organization_user_id, study_id):
 
         # Pagination variables
         new_page=new_page,
-        new_page_size=new_page_size,
+        new_page_size=str(new_page_size),
         total_pages_new=total_pages_new,
         has_prev_new=new_page > 1,
         has_next_new=new_page < total_pages_new,
         verified_page=verified_page,
-        verified_page_size=verified_page_size,
+        verified_page_size=str(verified_page_size),
         total_pages_verified=total_pages_verified,
         has_prev_verified=verified_page > 1,
         has_next_verified=verified_page < total_pages_verified,
