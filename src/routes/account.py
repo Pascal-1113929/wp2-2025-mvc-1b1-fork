@@ -81,7 +81,7 @@ def expert_dashboard_render():
             + len(studies.get_study_by_status(2))
             + len(studies.get_study_by_status(2))
         )
-        stats[8] = enrollments.count_by_organization_id(user["organization_id"])
+        stats[8] = dict(enrollments.count_by_organization_id(user["organization_id"]))["count()"]
 
     return render(
         "dashboard.html", profile=profile, stats=stats, user_id=user_id, user=user
