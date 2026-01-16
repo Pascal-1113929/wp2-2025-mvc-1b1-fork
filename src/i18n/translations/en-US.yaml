@@ -411,3 +411,12 @@ organization_research_add_reward_label: "Reward"
 organization_research_add_reward_placeholder: "Enter the reward for participating in the study (optional)"
 organization_research_add_btn_save: "Save"
 organization_research_add_btn_reset: "Reset"
+
+organization_org_add_success: "Organization successfully created!"
+admin_org_choice_type: "Organization type"
+admin_org_type_commercial: "Commercial"
+admin_org_type_nonprofit: "Non-profit"
+admin_org_choice_description: "Description"
+admin_org_choice_contact_person: "Contact person"
+
+"org_create": "Create a new organization"
