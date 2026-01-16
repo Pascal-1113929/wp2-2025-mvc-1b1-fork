@@ -447,3 +447,8 @@ admin_org_choice_description: "Description"
 admin_org_choice_contact_person: "Contact person"
 
 "org_create": "Create a new organization"
+
+"organization_research_delete": "Delete study"
+"organization_research_reopen": "Reopen study"
+"organization_research_close": "Close study"
+"organization_research_edit": "Edit study"

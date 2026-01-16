@@ -138,6 +138,8 @@ def organization_dashboard_render(id):
             study["location_display"] = study["location"] or study["study_type"]
             full_study_list.append(study)
 
+        lang = get_i18n()
+
         total_studies = len(study_list)
         if page_size == "all":
             PAGE_SIZE = total_studies or 1
@@ -173,7 +175,7 @@ def organization_dashboard_render(id):
                 [
                     "button",
                     [
-                        "delete",
+                        lang.get("organization_research_delete"),
                         ".organization/<organization_id>/study/<id>/delete",
                         "fa-solid fa-trash",
                         "danger",
@@ -183,7 +185,7 @@ def organization_dashboard_render(id):
                     "{<status_id> == 2}",
                     "button",
                     [
-                        "close",
+                        lang.get("organization_research_close"),
                         ".organization/<organization_id>/study/<id>/close",
                         "fa-solid fa-lock",
                         "warning",
@@ -193,7 +195,7 @@ def organization_dashboard_render(id):
                     "{<status_id> == 4}",
                     "button",
                     [
-                        "re-open",
+                        lang.get("organization_research_reopen"),
                         ".organization/<organization_id>/study/<id>/open",
                         "fa-solid fa-lock-open",
                         "warning",
@@ -203,7 +205,7 @@ def organization_dashboard_render(id):
                     "{<status_id> != 4}",
                     "button",
                     [
-                        "edit",
+                        lang.get("organization_research_edit"),
                         ".organization/<organization_id>/study/<id>/edit",
                         "fa-solid fa-pen-to-square",
                         "warning",
