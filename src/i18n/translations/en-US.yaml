@@ -247,6 +247,5 @@
 
 "no_available_translation": "This page does not offer a translation to english"
 "table_row_size_description": "Amount of records on page:"
-"table_row_size_each_page": " each page"
+"table_row_size_each_page": "% each page"
 "table_row_show_everything": "Show everything"
-"table_row_show_custom": "Custom size"

@@ -30,13 +30,13 @@
             <div style="display: flex; align-items: center; gap: 8px;">
                 <label for="available_page_size">{{ lang.table_row_size_description }}</label>
                 {{ dropdown(options=[
-                    {"value": "5", "text": "5 " + lang.table_row_size_each_page, "selected": available_page_size == "5"},
-                    {"value": "10", "text": "10 " + lang.table_row_size_each_page, "selected": available_page_size == "10"},
-                    {"value": "25", "text": "25 " + lang.table_row_size_each_page, "selected": available_page_size == "25"},
-                    {"value": "50", "text": "50 " + lang.table_row_size_each_page, "selected": available_page_size == "50"},
-                    {"value": "100", "text": "100 " + lang.table_row_size_each_page, "selected": available_page_size == "100"},
+                {"value": "5", "text": lang.table_row_size_each_page.replace('%', available_page_size), "selected": available_page_size == "5"},
+                    {"value": "10", "text": lang.table_row_size_each_page.replace('%', available_page_size), "selected": available_page_size == "10"},
+                    {"value": "25", "text": lang.table_row_size_each_page.replace('%', available_page_size), "selected": available_page_size == "25"},
+                    {"value": "50", "text": lang.table_row_size_each_page.replace('%', available_page_size), "selected": available_page_size == "50"},
+                    {"value": "100", "text": lang.table_row_size_each_page.replace('%', available_page_size), "selected": available_page_size == "100"},
                     {"value": "all", "text": lang.table_row_show_everything, "selected": available_page_size == "all"}
-                ], name="available_page_size", id="available_page_size", placeholder=available_page_size + lang.table_row_size_each_page) }}
+                ], name="available_page_size", id="available_page_size", placeholder=lang.table_row_size_each_page.replace('%', available_page_size)) }}
             </div>
 
             <!-- Preserve current pages for both tables -->
