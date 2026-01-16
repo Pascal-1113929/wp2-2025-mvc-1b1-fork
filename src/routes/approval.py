@@ -1,3 +1,5 @@
+from math import ceil
+
 from flask import Blueprint, request, render_template, abort
 
 from view import render, redirect_page
@@ -38,13 +40,37 @@ def approval():
         research["organization_name"] = org["name"]
     enrollment_data = enrollment.get_enrollments_by_status(1)
 
+    user_page = request.args.get("user_page", 1, type=int)
+    research_page = request.args.get("research_page", 1, type=int)
+    enrollment_page = request.args.get("enrollment_page", 1, type=int)
+
+    user_page_size = request.args.get("user_page_size", 10, type=str)
+    research_page_size = request.args.get("research_page_size", 10, type=str)
+    enrollment_page_size = request.args.get("enrollment_page_size", 10, type=str)
+
+    def paginate_list(data_list, page, page_size):
+        if page_size == "all":
+            PAGE_SIZE = len(data_list) or 1
+        else:
+            PAGE_SIZE = int(page_size)
+        total_pages = ceil(len(data_list) / PAGE_SIZE)
+        start = (page - 1) * PAGE_SIZE
+        end = start + PAGE_SIZE
+        paginated = data_list[start:end]
+        return paginated, total_pages
+
+    user_data_paginated, user_total_pages = paginate_list(user_data, user_page, user_page_size)
+    research_data_paginated, research_total_pages = paginate_list(research_data, research_page, research_page_size)
+    enrollment_data_paginated, enrollment_total_pages = paginate_list(enrollment_data, enrollment_page,
+                                                                      enrollment_page_size)
+
     user_table_header = ["email", "notes", "options"]
     research_table_header = ["title", "organization_name", "options"]
     enrollment_table_header = ["expert_name", "study_title", "options"]
 
-    user_table = Table(user_data)
-    research_table = Table(research_data)
-    enrollment_table = Table(enrollment_data)
+    user_table = Table(user_data_paginated)
+    research_table = Table(research_data_paginated)
+    enrollment_table = Table(enrollment_data_paginated)
 
     user_table.add_column(
         "options",
@@ -220,10 +246,28 @@ def approval():
         page_translated=page_translated,
         user_table=user_table_data,
         user_table_count=len(user_data),
+        user_page=user_page,
+        user_total_pages=user_total_pages,
+        user_has_prev=user_page > 1,
+        user_has_next=user_page < user_total_pages,
+        user_page_size=str(user_page_size),
+
         research_table=research_table_data,
         research_table_count=len(research_data),
+        research_page=research_page,
+        research_total_pages=research_total_pages,
+        research_has_prev=research_page > 1,
+        research_has_next=research_page < research_total_pages,
+        research_page_size=str(research_page_size),
+
         enrollment_table=enrollment_table_data,
         enrollment_table_count=len(enrollment_data),
+        enrollment_page=enrollment_page,
+        enrollment_total_pages=enrollment_total_pages,
+        enrollment_has_prev=enrollment_page > 1,
+        enrollment_has_next=enrollment_page < enrollment_total_pages,
+        enrollment_page_size=str(enrollment_page_size),
+
         alert_view=alert,
         tab=tab,
     )

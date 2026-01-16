@@ -113,7 +113,6 @@
 "yes": "Ja"
 "no": "Nee"
 "field_empty": "Leeg veld"
-"page_size": "Records per pagina"
 
 "management_approval_title": "Goedkeuring"
 "management_approval_users_title": "Gebruikersgoedkeuring"
@@ -255,3 +254,7 @@
 "lang_select_label": "Selecteer uw taal"
 
 "no_available_translation": "Deze pagina heeft geen Nederlandse vertaling"
+
+"table_row_size_description": "Aantal records op de pagina:"
+"table_row_size_each_page": "% per pagina"
+"table_row_show_everything": "Laat alles zien"
