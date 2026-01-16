@@ -18,15 +18,10 @@ study = Study()
 organization = Organization()
 enrollment = Enrollment()
 
-management_bp = Blueprint("management", __name__)
+approval_bp = Blueprint("approval", __name__)
 
 
-@management_bp.route("/")
-def index():
-    return render("management.html")
-
-
-@management_bp.route("/approval")
+@approval_bp.route("/")
 def approval():
     page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
@@ -54,7 +49,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_users_option_viewprofile"),
+                    lang.get("approval_users_option_viewprofile"),
                     ".expert-profile/<id>",
                     "fa-solid fa-eye",
                     "info",
@@ -63,8 +58,8 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_users_option_editnote"),
-                    ".management/approval/note/<id>",
+                    lang.get("approval_users_option_editnote"),
+                    ".approval/note/<id>",
                     "fa-solid fa-pen-to-square",
                     "warning",
                 ],
@@ -72,8 +67,8 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_users_option_approve"),
-                    ".management/approval/user/<id>/approve",
+                    lang.get("approval_users_option_approve"),
+                    ".approval/user/<id>/approve",
                     "fa-solid fa-check",
                     "",
                 ],
@@ -81,8 +76,8 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_users_option_reject"),
-                    ".management/approval/user/<id>/reject",
+                    lang.get("approval_users_option_reject"),
+                    ".approval/user/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
                 ],
@@ -96,7 +91,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_research_option_viewresearch"),
+                    lang.get("approval_research_option_viewresearch"),
                     ".research/<id>",
                     "fa-solid fa-eye",
                     "info",
@@ -105,8 +100,8 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_research_option_approve"),
-                    ".management/approval/research/<id>/approve",
+                    lang.get("approval_research_option_approve"),
+                    ".approval/research/<id>/approve",
                     "fa-solid fa-check",
                     "",
                 ],
@@ -114,8 +109,8 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_research_option_reject"),
-                    ".management/approval/research/<id>/reject",
+                    lang.get("approval_research_option_reject"),
+                    ".approval/research/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
                 ],
@@ -128,7 +123,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_enrollment_option_viewprofile"),
+                    lang.get("approval_enrollment_option_viewprofile"),
                     ".expert-profile/<user_id>",
                     "fa-solid fa-eye",
                     "info",
@@ -137,7 +132,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_enrollment_option_viewresearch"),
+                    lang.get("approval_enrollment_option_viewresearch"),
                     ".research/<study_id>",
                     "fa-solid fa-pen-to-square",
                     "info",
@@ -146,8 +141,8 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_enrollment_option_approve"),
-                    ".management/approval/enrollment/<id>/approve",
+                    lang.get("approval_enrollment_option_approve"),
+                    ".approval/enrollment/<id>/approve",
                     "fa-solid fa-check",
                     "",
                 ],
@@ -155,8 +150,8 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_enrollment_option_reject"),
-                    ".management/approval/enrollment/<id>/reject",
+                    lang.get("approval_enrollment_option_reject"),
+                    ".approval/enrollment/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
                 ],
@@ -209,17 +204,11 @@ def approval():
 
     match alert_id:
         case "1":
-            alert = create_alert(
-                "success", lang["management_approval_alert_" + tab + "_approved"]
-            )
+            alert = create_alert("success", lang["approval_alert_" + tab + "_approved"])
         case "2":
-            alert = create_alert(
-                "success", lang["management_approval_alert_" + tab + "_rejected"]
-            )
+            alert = create_alert("success", lang["approval_alert_" + tab + "_rejected"])
         case "3":
-            alert = create_alert(
-                "success", lang["management_approval_alert_user_noteedited"]
-            )
+            alert = create_alert("success", lang["approval_alert_user_noteedited"])
         case None:
             pass
 
@@ -255,7 +244,7 @@ def email_generate(
         raise Exception("Unknown reciever_type")
 
 
-@management_bp.route("/approval/<type>/<id>/reject")
+@approval_bp.route("/<type>/<id>/reject")
 def approval_user_reject(type, id):
     field_name = ""
     if type == "user":
@@ -293,11 +282,11 @@ def approval_user_reject(type, id):
             "Afgekeurd",
         )  # user is default reciever_type
     return redirect_page(
-        "management/approval?tab=" + type + "&alert_id=2&alert_field=" + field_name
+        "approval?tab=" + type + "&alert_id=2&alert_field=" + field_name
     )
 
 
-@management_bp.route("/approval/<type>/<id>/approve")
+@approval_bp.route("/<type>/<id>/approve")
 def approval_user_approve(type, id):
     field_name = ""
     if type == "user":
@@ -338,11 +327,11 @@ def approval_user_approve(type, id):
             "Goedgekeurd",
         )  # user is default reciever_type
     return redirect_page(
-        "management/approval?tab=" + type + "&alert_id=1&alert_field=" + field_name
+        "approval?tab=" + type + "&alert_id=1&alert_field=" + field_name
     )
 
 
-@management_bp.route("/approval/note/<user_id>", methods=["GET", "POST"])
+@approval_bp.route("/note/<user_id>", methods=["GET", "POST"])
 def approval_edit_note(user_id):
     user = profile.get_profile_by_userid(user_id)
     field_name = profile.get_name_by_userid(user_id)
@@ -354,6 +343,4 @@ def approval_edit_note(user_id):
     elif request.method == "POST":
         note = request.form.get("note")
         profile.update_note(user_id, note)
-        return redirect_page(
-            "management/approval?tab=user&alert_id=3&alert_field=" + field_name
-        )
+        return redirect_page("approval?tab=user&alert_id=3&alert_field=" + field_name)

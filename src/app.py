@@ -6,7 +6,7 @@ from routes.account import account_bp
 from routes.index import index_bp
 from routes.organization import org_bp
 from routes.research import research_bp
-from routes.management import management_bp
+from routes.approval import approval_bp
 from routes.error import error_bp
 from view import redirect_page
 from utils.auth import in_roles
@@ -23,7 +23,7 @@ BLUEPRINTS = {
     "/": [index_bp, account_bp],
     "/organization": org_bp,
     "/research": research_bp,
-    "/management": management_bp,
+    "/approval": approval_bp,
 }
 
 
