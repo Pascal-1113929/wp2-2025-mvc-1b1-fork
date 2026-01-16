@@ -6,39 +6,39 @@
 
 <main class="home">
     <header>
-        <h1>{{ lang.management_approval_title }}</h1>
+        <h1>{{ lang.approval_title }}</h1>
     </header>
 
     {{ alert(alert_view) }}
 
     <section class="sectioncard">
-        <p class="muted">{{ lang.management_approval_tab_description }}</p>
-        {{ button("?tab=user", lang.management_approval_tab_users, "ghost" if tab != 'user', "fa-solid fa-users") }}
-        {{ button("?tab=research", lang.management_approval_tab_research, "ghost" if tab != 'research', "fa-solid fa-book") }}
-        {{ button("?tab=enrollment", lang.management_approval_tab_enrollment, "ghost" if tab != 'enrollment', "fa-solid fa-signature") }}
+        <p class="muted">{{ lang.approval_tab_description }}</p>
+        {{ button("?tab=user", lang.approval_tab_users, "ghost" if tab != 'user', "fa-solid fa-users") }}
+        {{ button("?tab=research", lang.approval_tab_research, "ghost" if tab != 'research', "fa-solid fa-book") }}
+        {{ button("?tab=enrollment", lang.approval_tab_enrollment, "ghost" if tab != 'enrollment', "fa-solid fa-signature") }}
     </section>
 
     <section class="sectioncard">
         {% if tab == 'user' %}
-            <h2><i class="fa-solid fa-users"></i> {{ lang.management_approval_users_title }}</h2>
+            <h2><i class="fa-solid fa-users"></i> {{ lang.approval_users_title }}</h2>
             {% if user_table_count > 0 %}
-                {{ table([lang.management_approval_users_table_email, lang.management_approval_users_table_notes, lang.management_approval_users_table_options], user_table) }}
+                {{ table([lang.approval_users_table_email, lang.approval_users_table_notes, lang.approval_users_table_options], user_table) }}
             {% else %}
-                <p>{{ lang.management_approval_users_done }} <i class="fa-regular fa-face-smile"></i></p>
+                <p>{{ lang.approval_users_done }} <i class="fa-regular fa-face-smile"></i></p>
             {% endif %}
         {% elif tab == 'research' %}
-            <h2><i class="fa-solid fa-book"></i> {{ lang.management_approval_research_title }}</h2>
+            <h2><i class="fa-solid fa-book"></i> {{ lang.approval_research_title }}</h2>
             {% if research_table_count > 0 %}
-                {{ table([lang.management_approval_research_table_name, lang.management_approval_research_table_org, lang.management_approval_research_table_options], research_table) }}
+                {{ table([lang.approval_research_table_name, lang.approval_research_table_org, lang.approval_research_table_options], research_table) }}
             {% else %}
-                <p>{{ lang.management_approval_research_done }} <i class="fa-regular fa-face-smile"></i></p>
+                <p>{{ lang.approval_research_done }} <i class="fa-regular fa-face-smile"></i></p>
             {% endif %}
         {% elif tab == 'enrollment' %}
-            <h2><i class="fa-solid fa-signature"></i> {{ lang.management_approval_enrollment_title }}</h2>
+            <h2><i class="fa-solid fa-signature"></i> {{ lang.approval_enrollment_title }}</h2>
             {% if enrollment_table_count > 0 %}
-                {{ table([lang.management_approval_enrollment_table_fullname, lang.management_approval_enrollment_table_study, lang.management_approval_enrollment_table_options], enrollment_table) }}
+                {{ table([lang.approval_enrollment_table_fullname, lang.approval_enrollment_table_study, lang.approval_enrollment_table_options], enrollment_table) }}
             {% else %}
-                <p>{{ lang.management_approval_enrollment_done }} <i class="fa-regular fa-face-smile"></i></p>
+                <p>{{ lang.approval_enrollment_done }} <i class="fa-regular fa-face-smile"></i></p>
             {% endif %}
         {% endif %}
     </section>

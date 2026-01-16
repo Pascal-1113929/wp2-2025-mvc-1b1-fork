@@ -49,7 +49,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_users_option_viewprofile"),
+                    lang.get("approval_users_option_viewprofile"),
                     ".expert-profile/<id>",
                     "fa-solid fa-eye",
                     "info",
@@ -58,7 +58,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_users_option_editnote"),
+                    lang.get("approval_users_option_editnote"),
                     ".approval/note/<id>",
                     "fa-solid fa-pen-to-square",
                     "warning",
@@ -67,7 +67,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_users_option_approve"),
+                    lang.get("approval_users_option_approve"),
                     ".approval/user/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -76,7 +76,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_users_option_reject"),
+                    lang.get("approval_users_option_reject"),
                     ".approval/user/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
@@ -91,7 +91,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_research_option_viewresearch"),
+                    lang.get("approval_research_option_viewresearch"),
                     ".research/<id>",
                     "fa-solid fa-eye",
                     "info",
@@ -100,7 +100,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_research_option_approve"),
+                    lang.get("approval_research_option_approve"),
                     ".approval/research/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -109,7 +109,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_research_option_reject"),
+                    lang.get("approval_research_option_reject"),
                     ".approval/research/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
@@ -123,7 +123,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_enrollment_option_viewprofile"),
+                    lang.get("approval_enrollment_option_viewprofile"),
                     ".expert-profile/<user_id>",
                     "fa-solid fa-eye",
                     "info",
@@ -132,7 +132,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_enrollment_option_viewresearch"),
+                    lang.get("approval_enrollment_option_viewresearch"),
                     ".research/<study_id>",
                     "fa-solid fa-pen-to-square",
                     "info",
@@ -141,7 +141,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_enrollment_option_approve"),
+                    lang.get("approval_enrollment_option_approve"),
                     ".approval/enrollment/<id>/approve",
                     "fa-solid fa-check",
                     "",
@@ -150,7 +150,7 @@ def approval():
             [
                 "button",
                 [
-                    lang.get("management_approval_enrollment_option_reject"),
+                    lang.get("approval_enrollment_option_reject"),
                     ".approval/enrollment/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
@@ -204,17 +204,11 @@ def approval():
 
     match alert_id:
         case "1":
-            alert = create_alert(
-                "success", lang["management_approval_alert_" + tab + "_approved"]
-            )
+            alert = create_alert("success", lang["approval_alert_" + tab + "_approved"])
         case "2":
-            alert = create_alert(
-                "success", lang["management_approval_alert_" + tab + "_rejected"]
-            )
+            alert = create_alert("success", lang["approval_alert_" + tab + "_rejected"])
         case "3":
-            alert = create_alert(
-                "success", lang["management_approval_alert_user_noteedited"]
-            )
+            alert = create_alert("success", lang["approval_alert_user_noteedited"])
         case None:
             pass
 
