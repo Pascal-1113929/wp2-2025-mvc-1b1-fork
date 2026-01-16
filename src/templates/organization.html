@@ -49,7 +49,7 @@
             </div>
             <input type="hidden" name="page" value="{{ page }}">
         </form>
-        {{ table([lang.organization_table_title, lang.organization_table_status, lang.organization_table_startdate, lang.organization_table_enddate, lang.organization_table_location, lang.organization_table_payment, lang.organization_table_minage, lang.organization_table_maxage, lang.organization_table_action], study_list) }}
+        {{ table([lang.organization_table_title, lang.organization_table_status, lang.organization_table_startdate, lang.organization_table_enddate, lang.organization_table_location, lang.organization_table_compensation, lang.organization_table_minage, lang.organization_table_maxage, lang.organization_table_action], study_list) }}
         {% if total_pages > 1 %}
         <nav class="pagination">
             {% if has_prev %}
