@@ -30,8 +30,6 @@ research_bp = Blueprint("research", __name__)
 
 @research_bp.route("/")
 def research_dashboard_render():
-    if not request.args:
-        return redirect_page(f"research/?preferences=1")
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
     search_query = request.args.get("search", "").lower()
@@ -64,7 +62,11 @@ def research_dashboard_render():
         enrolled_page = 1
 
     if role == "expert":
-        show_matching = request.args.get("preferences", type=int)
+        preferences_values = request.args.getlist("preferences")
+        if preferences_values:
+            show_matching = 1 if "1" in preferences_values else 0
+        else:
+            show_matching = 1
         is_expert = True
         expert_user = dict(users.get_user_by_id(userid))
         expert_profile = dict(profiles.get_profile_by_userid(userid))
@@ -101,11 +103,19 @@ def research_dashboard_render():
             if study_id in enrolment_study_ids:
                 continue
             study = studies.get_available_study_by_id(study_id)
-            profile_birth_date = datetime.strptime(expert["profile"]["birth_date"], "%Y-%m-%d").date()
+            profile_birth_date = datetime.strptime(
+                expert["profile"]["birth_date"], "%Y-%m-%d"
+            ).date()
 
             today = date.today()
-            age = today.year - profile_birth_date.year - ((today.month, today.day) < (profile_birth_date.month,
-                                                                                      profile_birth_date.day))
+            age = (
+                today.year
+                - profile_birth_date.year
+                - (
+                    (today.month, today.day)
+                    < (profile_birth_date.month, profile_birth_date.day)
+                )
+            )
 
             if study is None:
                 continue
@@ -131,24 +141,24 @@ def research_dashboard_render():
 
         if search_query:
             available_studies = [
-                study for study in available_studies
+                study
+                for study in available_studies
                 if search_query in study["title"].lower()
                 or search_query in study["organization"].lower()
                 or search_query in study["location_display"].lower()
             ]
         if age_min is not None:
             available_studies = [
-                study for study in available_studies
-                if study["age_min"] >= age_min
+                study for study in available_studies if study["age_min"] >= age_min
             ]
         if age_max is not None:
             available_studies = [
-                study for study in available_studies
-                if study["age_max"] <= age_max
+                study for study in available_studies if study["age_max"] <= age_max
             ]
         if study_type:
             available_studies = [
-                study for study in available_studies
+                study
+                for study in available_studies
                 if study["study_type"] in study_type
             ]
 
@@ -195,24 +205,24 @@ def research_dashboard_render():
 
         if search_query:
             available_studies = [
-                study for study in available_studies
+                study
+                for study in available_studies
                 if search_query in study["title"].lower()
                 or search_query in study["organization"].lower()
                 or search_query in study["location_display"].lower()
             ]
         if age_min is not None:
             available_studies = [
-                study for study in available_studies
-                if study["age_min"] >= age_min
+                study for study in available_studies if study["age_min"] >= age_min
             ]
         if age_max is not None:
             available_studies = [
-                study for study in available_studies
-                if study["age_max"] <= age_max
+                study for study in available_studies if study["age_max"] <= age_max
             ]
         if study_type:
             available_studies = [
-                study for study in available_studies
+                study
+                for study in available_studies
                 if study["study_type"] in study_type
             ]
 
@@ -311,10 +321,10 @@ def research_dashboard_render():
         has_prev_enrolled=enrolled_page > 1,
         has_next_enrolled=enrolled_page < total_pages_enrolled,
         enrolled_page_size=str(enrolled_page_size),
-
         tab=tab,
         extra_args=extra_args,
-        selected_columns=selected_columns
+        selected_columns=selected_columns,
+        show_matching=show_matching,
     )
 
 

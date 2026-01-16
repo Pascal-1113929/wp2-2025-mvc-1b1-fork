@@ -75,7 +75,7 @@
                 Locatie
             </label>
             <label>
-                <input type="checkbox" name="selected_columns" value="age_min"   
+                <input type="checkbox" name="selected_columns" value="age_min"
                         {% if 'age_min' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
                 Minimum leeftijd
             </label>
@@ -112,7 +112,7 @@
 
     </fieldset>
 </form>
-   
+
     <div class="seperator"></div>
  <!-- Available studies -->
     <section class="sectioncard">
@@ -121,9 +121,10 @@
         <h2><i class="fa-solid fa-book"></i> {{ lang.research_running_title }}</h2>
         {% if is_expert %}
             <form method="get">
+                <input type="hidden" name="preferences" value="0">
                 <label for="preferences">
                     <input type="checkbox" name="preferences" id="preferences" value="1"
-                           {% if request.args.get('preferences') %}checked{% endif %}>
+                           {% if show_matching == 1 %}checked{% endif %}>
                     {{ lang.research_show_matching_studies }}
                 </label>
             <input type="hidden" name="available_page" value="{{ available_page }}">
@@ -132,7 +133,7 @@
             <input type="hidden" name="enrolled_page_size" value="{{ enrolled_page_size }}">
             <input type="hidden" name="tab" value="{{ request.args.get('tab') }}">
             </form>
-    {% endif %}
+        {% endif %}
 
         <!-- Page size dropdown -->
         <form method="get" class="page-size-form">
