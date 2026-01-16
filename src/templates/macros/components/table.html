@@ -20,7 +20,7 @@
                     {% elif cell is mapping %}
                         {% if cell.type is defined %}
                             {% if cell.type == "button" %}
-                                {{ button(href=cell.href, text=cell.text, icon=cell.icon, class_name=cell.class_name) }}
+                                {{ button(href=cell.href, text=cell.text, icon=cell.icon, class_name=cell.class_name, form_data=cell.form_data) }}
                             {% elif cell.type == "link" %}
                                 {{ link(href=cell.href, text=cell.text, class_name=cell.class_name, icon=cell.icon) }}
                             {% elif cell.type == "text" %}
@@ -42,7 +42,7 @@
                                     {% if element.type == "text" %}
                                         {{ element.value }}
                                     {% elif element.type == "button" %}
-                                        {{ button(href=element.href, text=element.text, icon=element.icon, class_name=element.class_name) }}
+                                        {{ button(href=element.href, text=element.text, icon=element.icon, class_name=element.class_name, form_data=element.form_data) }}
                                     {% elif element.type == "link" %}
                                         {{ link(href=element.href, text=element.text, class_name=element.class_name, icon=element.icon) }}
                                     {% else %}

@@ -350,9 +350,7 @@ def research_register(organization_user_id):
                 errors["location"] = True
 
         if not errors:
-            user = users.get_user_by_id(session.get("user_id"))
-            if not user or not user.get("organization_id"):
-                return abort(403)
+            user = users.get_user_by_id(int(organization_user_id))
 
             try:
                 study_id = studies.create_with_organisation(

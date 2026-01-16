@@ -66,8 +66,8 @@ def expert_dashboard_render():
         stats[2] = len(enrollments.get_enrollments_by_status(1))
 
     if in_roles(["expert"]):
-        stats[3] = enrollments.count_by_user_id(user_id)
-        stats[4] = studies.count_available(user_disability_ids)
+        stats[3] = dict(enrollments.count_by_user_id(user_id))["COUNT()"]
+        stats[4] = dict(studies.count_available(user_disability_ids))["COUNT(DISTINCT studies.id)"]
 
     if in_roles(["organization"]):
         stats[6] = len(studies.get_study_by_organization_id(user["organization_id"]))

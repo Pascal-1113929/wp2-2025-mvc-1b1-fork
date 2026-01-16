@@ -89,10 +89,10 @@ class Database:
                             TEXT
                             NOT
                             NULL,
-                            approve_notification 
-                            INTEGER 
-                            NOT NULL 
-                            DEFAULT 0 
+                            approve_notification
+                            INTEGER
+                            NOT NULL
+                            DEFAULT 0
                             CHECK (
                             role
                             IN
@@ -446,12 +446,7 @@ class Database:
             (id, status)
             VALUES (?, ?)
                             """,
-                [
-                    (1, "nieuw"),
-                    (2, "goedgekeurd"),
-                    (3, "afgekeurd"),
-                    (4, "gesloten")
-                ],
+                [(1, "nieuw"), (2, "goedgekeurd"), (3, "afgekeurd"), (4, "gesloten")],
             )
 
             # Organizations
@@ -503,7 +498,7 @@ class Database:
             cur.executemany(
                 """
                             INSERT
-                            OR IGNORE INTO users (email, password, role, status_id, organization_id, 
+                            OR IGNORE INTO users (email, password, role, status_id, organization_id,
                             approve_notification)
                 VALUES (?, ?, ?, ?, ?, ?)
                             """,
