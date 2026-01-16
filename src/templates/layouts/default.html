@@ -28,7 +28,7 @@
         <nav class="navbar">
             <div class="nav-inner">
                 <div class="nav-left">
-                    <a class="brand" href="/{{ base.locale }}/">{{ lang.nav_brand }}</a>
+                    <p class="brand">{{ lang.nav_brand }}</p>
                     <div class="nav-links">
                         {{ button(text=lang.nav_home, href=".", class_name="ghost" if base.path != "/", icon="fa-solid fa-house") }}
                         {% if base.user %}
@@ -43,17 +43,23 @@
                     </div>
                 </div>
                 <div class="nav-right">
+                <div class="lang-container">
+                    <label for="dropdown-language-selector">{{ lang.lang_select_label }}</label>
                     {{ dropdown(options=[
                         {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL", "lang": "nl"},
                         {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US", "lang": "en"}
                     ], name="", id="language-selector") }}
-                    {% if base.user %}
+                </div>
+                <div class="nav-r-button">
+                   {% if base.user %}
                         {{ button(text=lang.nav_my_account, href=".dashboard", class_name="primary", icon="fa-solid fa-user") }}
                         {{ button(text=lang.nav_logout, href=".logout", class_name="danger", icon="fa-solid fa-right-from-bracket") }}
                     {% else %}
                         {{ button(text=lang.nav_login, href=".login", class_name="primary") }}
                         {{ button(text=lang.nav_register, href=".register", class_name="primary") }}
                     {% endif %}
+                </div>
+
 
                     <button class="nav-toggle" aria-label="Open menu">
                         <i class="fa-solid fa-bars"></i>

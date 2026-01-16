@@ -25,6 +25,32 @@ class Organization:
             con.commit()
             return cur.lastrowid
 
+    def get_organization_list(self):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "SELECT * FROM organizations"
+            )
+            con.commit()
+            rows = cur.fetchall()
+
+            organization_list = []
+            for row in rows:
+                organization_list.append(dict(row))
+
+            return organization_list
+
+    def get_organization_userid(self, organization_id: int):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT id FROM users WHERE organization_id = ?", (organization_id,))
+            con.commit()
+            row = cur.fetchone()
+            if row is None:
+                return None
+            else:
+                return row
+
     def get_organization_by_id(self, organization_id: int):
         with self.db.connect() as con:
             cur = con.cursor()

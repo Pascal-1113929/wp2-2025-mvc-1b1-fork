@@ -15,6 +15,7 @@ from utils.auth import is_authenticated, in_roles
 from view import redirect_page, render
 from utils.translate import check_translation
 from i18n.locale import get_iso_639_1
+from i18n.locale import get_i18n
 
 organizations = Organization()
 users = User()
@@ -29,11 +30,55 @@ org_bp = Blueprint("organization", __name__)
 
 @org_bp.route("/")
 def organization_redirect():
+    page_languages = ['nl', 'en']
+    page_translated = check_translation(page_languages, get_iso_639_1())
+
     if not is_authenticated():
         abort(403)
 
     if in_roles("admin"):
-        return "wie"  # TODO make page for admin
+        lang = get_i18n()
+        organization_list = organizations.get_organization_list()
+        updated_organization_list = []
+        for organization in organization_list:
+            organization_id = organization["id"]
+            organization_userid_dict = organizations.get_organization_userid(organization_id)
+            if organization_userid_dict is None:
+                continue
+            organization_userid = organization_userid_dict["id"]
+            organization["userid"] = organization_userid
+            updated_organization_list.append(organization)
+
+        print(updated_organization_list)
+
+        table_header = [
+            "name",
+            "website",
+            "view"
+        ]
+        organization_table = Table(updated_organization_list)
+        organization_table.add_column(
+            "view",
+            [
+                [
+                    "button",
+                    [
+                        lang.get("admin_org_choice_view_btn"),
+                        ".organization/<userid>",
+                        "fa-solid fa-eye",
+                        "info",
+                    ],
+                ],
+            ],
+        )
+        organization_table.whitelist_data(table_header)
+        organization_table.set_order(table_header)
+        organization_table_data = organization_table.export_to_macro()
+
+        return render("admin-organization-choice.html",
+                      page_translated=page_translated,
+                      organization_table_data=organization_table_data,
+                      )
     else:
         userid = session.get("user_id")
         return redirect_page(f"/organization/{userid}")
