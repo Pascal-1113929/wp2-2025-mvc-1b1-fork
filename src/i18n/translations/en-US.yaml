@@ -305,7 +305,7 @@ page: "Page"
 
 "lang_select_label": "Select your language"
 
-"no_available_translation": "This page does not offer a translation to english"
+"no_available_translation": "This page does not offer a full translation to english"
 "table_row_size_description": "Amount of records on page:"
 "table_row_size_each_page": "% each page"
 "table_row_show_everything": "Show everything"
@@ -320,14 +320,11 @@ page: "Page"
 'unsubscribe_completed': 'Unsubscription Completed'
 
 organization_study_page_title: "Study page: %study% of %organization%"
-
 organization_study_new_registrations_list_title: "List of registrations with status 'new'"
 organization_study_verified_registrations_list_title: "List of registrations with status 'approved'"
-
 organization_study_table_row_size_description: "Amount of records on page:"
 organization_study_table_row_size_each_page: "% each page"
 organization_study_table_row_show_everything: "Show everything"
-
 organization_study_table_columns:
   - "Name"
   - "Phone number"
@@ -340,7 +337,6 @@ organization_study_table_columns:
 organization_study_previous: "Previous"
 organization_study_next: "Next"
 organization_study_page: "Page"
-
 organization_study_unsubscribe_completed: "Unsubscription Completed"
 organization_study_go_to_study_org: "Go to Study Page"
 
@@ -360,3 +356,30 @@ research_study_reward_amount: "The reward amount is: %reward%"
 research_study_reward_none: "This study has no reward."
 research_study_enroll_button: "Enroll in this study"
 research_study_unenroll_button: "Unenroll from this study"
+
+organization_research_edit_return_overview: "Return to overview"
+organization_research_edit_title_label: "Study title"
+organization_research_edit_title_placeholder: "Enter your study title"
+organization_research_edit_description_label: "Description"
+organization_research_edit_description_placeholder: "Enter the description of the study"
+organization_research_edit_type_label: "Research type"
+organization_research_edit_type_placeholder: "Select the research type"
+organization_research_edit_type_phone: "By telephone"
+organization_research_edit_type_online: "Online"
+organization_research_edit_type_on_site: "On location"
+organization_research_edit_location_label: "Location (required only for 'On location')"
+organization_research_edit_location_placeholder: "Enter the location if 'On location' is selected"
+organization_research_edit_age_min_label: "Minimum age"
+organization_research_edit_age_min_placeholder: "Minimum age for this study"
+organization_research_edit_age_max_label: "Maximum age"
+organization_research_edit_age_max_placeholder: "Maximum age for this study"
+organization_research_edit_disabilities_label: "Involved disabilities"
+organization_research_edit_disabilities_placeholder: "Select a disability"
+organization_research_edit_start_date_label: "Start date"
+organization_research_edit_start_date_placeholder: "Start date of the study"
+organization_research_edit_end_date_label: "End date"
+organization_research_edit_end_date_placeholder: "End date of the study"
+organization_research_edit_reward_label: "Reward"
+organization_research_edit_reward_placeholder: "Enter the reward for participating in the study (optional)"
+organization_research_edit_btn_save: "Save"
+organization_research_edit_btn_reset: "Reset"
