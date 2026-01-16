@@ -94,3 +94,4 @@ Deze applicatie bevat de nodige connecties om via smtp4dev mail te sturen
 ## Bronnen
 De bronnen staan in 
 - [Sources](https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice/blob/main/docs/SOURCES.md)
+- [GenAI](https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice/blob/max-doc-update/docs/GenAI.md)
