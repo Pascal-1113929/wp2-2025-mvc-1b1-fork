@@ -1,6 +1,7 @@
 from datetime import datetime
+from math import ceil
 
-from flask import Blueprint, session, render_template
+from flask import Blueprint, session, render_template, request
 
 from models.enrollment import Enrollment
 from models.disabilities import Disablity
@@ -37,6 +38,18 @@ def research_dashboard_render():
 
     if userid is None:
         raise NotFound()
+
+    # Available studies
+    available_page = request.args.get("available_page", 1, type=int)
+    available_page_size = request.args.get("available_page_size", 5, type=str)
+    if available_page < 1:
+        available_page = 1
+
+    # Enrolled studies
+    enrolled_page = request.args.get("enrolled_page", 1, type=int)
+    enrolled_page_size = request.args.get("enrolled_page_size", 5, type=str)
+    if enrolled_page < 1:
+        enrolled_page = 1
 
     if role == "expert":
         is_expert = True
@@ -127,6 +140,42 @@ def research_dashboard_render():
         enrolled_studies = []
         expert = None
 
+    # Available studies page size
+    available_page_size = request.args.get("available_page_size", 10, type=str)
+    if available_page_size == "":
+        available_page_size = 10
+
+    # Enrolled studies page size
+    enrolled_page_size = request.args.get("enrolled_page_size", 10, type=str)
+    if enrolled_page_size == "":
+        enrolled_page_size = 10
+
+    # Available studies page size
+    if available_page_size == "all":
+        available_PAGE_SIZE = len(available_studies)
+    else:
+        available_PAGE_SIZE = int(available_page_size)
+
+    # Enrolled studies page size
+    if enrolled_page_size == "all":
+        enrolled_PAGE_SIZE = len(enrolled_studies)
+    else:
+        enrolled_PAGE_SIZE = int(enrolled_page_size)
+
+    # Available studies pagination
+    total_available = len(available_studies)
+    total_pages_available = ceil(total_available / available_PAGE_SIZE)
+    start = (available_page - 1) * available_PAGE_SIZE
+    end = start + available_PAGE_SIZE
+    available_studies_paginated = available_studies[start:end]
+
+    # Enrolled studies pagination
+    total_enrolled = len(enrolled_studies)
+    total_pages_enrolled = ceil(total_enrolled / enrolled_PAGE_SIZE)
+    start = (enrolled_page - 1) * enrolled_PAGE_SIZE
+    end = start + enrolled_PAGE_SIZE
+    enrolled_studies_paginated = enrolled_studies[start:end]
+
     table_header = [
         "title",
         "organization",
@@ -138,13 +187,13 @@ def research_dashboard_render():
         "age_max",
     ]
 
-    available_table = Table(available_studies)
+    available_table = Table(available_studies_paginated)
     available_table.set_type("title", "link", [".research/<id>"])
     available_table.whitelist_data(table_header)
     available_table.set_order(table_header)
     available_study_table_data = available_table.export_to_macro()
 
-    enrolled_table = Table(enrolled_studies)
+    enrolled_table = Table(enrolled_studies_paginated)
     enrolled_table.set_type("title", "link", [".research/<id>"])
     enrolled_table.whitelist_data(table_header)
     enrolled_table.set_order(table_header)
@@ -157,6 +206,19 @@ def research_dashboard_render():
         is_expert=is_expert,
         available_study_table_data=available_study_table_data,
         enrolled_study_table_data=enrolled_study_table_data,
+
+        # pagination metadata
+        available_page=available_page,
+        total_pages_available=total_pages_available,
+        has_prev_available=available_page > 1,
+        has_next_available=available_page < total_pages_available,
+        available_page_size=available_page_size,
+
+        enrolled_page=enrolled_page,
+        total_pages_enrolled=total_pages_enrolled,
+        has_prev_enrolled=enrolled_page > 1,
+        has_next_enrolled=enrolled_page < total_pages_enrolled,
+        enrolled_page_size=enrolled_page_size
     )
 
 

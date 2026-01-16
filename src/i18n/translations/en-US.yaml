@@ -107,6 +107,7 @@
 "yes": "Yes"
 "no": "No"
 "field_empty": "Field Empty"
+"page_size": "Records per page"
 
 "approval_alert_user_approved": "User '%' has been approved."
 "approval_alert_user_rejected": "User '%' has been rejected."

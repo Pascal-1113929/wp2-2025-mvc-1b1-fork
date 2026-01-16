@@ -1,34 +1,98 @@
 {% from "macros/components/table.html" import table %}
 
-{% extends 'layouts/default.html' %} {% block content %}
+{% extends 'layouts/default.html' %}
+{% block content %}
 
 {% set table_header = [
-            lang.research_table_title,
-            lang.research_table_organization,
-            lang.research_table_startdate,
-            lang.research_table_enddate,
-            lang.research_table_location,
-            lang.research_table_compensation,
-            lang.research_table_minage,
-            lang.research_table_maxage
-        ]
-%}
+    lang.research_table_title,
+    lang.research_table_organization,
+    lang.research_table_startdate,
+    lang.research_table_enddate,
+    lang.research_table_location,
+    lang.research_table_compensation,
+    lang.research_table_minage,
+    lang.research_table_maxage
+] %}
 
 <main>
     <header>
         <h1>{{ lang.research_title }}</h1>
     </header>
     <div class="seperator"></div>
+
+    <!-- Available studies -->
     <section class="sectioncard">
         <h2><i class="fa-solid fa-book"></i> {{ lang.research_running_title }}</h2>
-                {{ table(table_header, available_study_table_data) }}
+
+        <!-- Page size dropdown -->
+        <form method="get" class="page-size-form">
+            <label for="available_page_size">{{ lang.page_size }}:</label>
+            <select name="available_page_size" id="available_page_size" onchange="this.form.submit()">
+                {% for size in [5, 10, 25, 50, 100, 'all'] %}
+                    <option value="{{ size }}" {% if available_page_size|string == size|string %}selected{% endif %}>
+                        {{ size }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Preserve current pages for both tables -->
+            <input type="hidden" name="available_page" value="{{ available_page }}">
+            <input type="hidden" name="enrolled_page" value="{{ enrolled_page }}">
+            <input type="hidden" name="enrolled_page_size" value="{{ enrolled_page_size }}">
+        </form>
+
+        {{ table(table_header, available_study_table_data) }}
+
+        {% if total_pages_available > 1 %}
+        <nav class="pagination" aria-label="Available studies pagination">
+            {% if has_prev_available %}
+                <a href="?available_page={{ available_page - 1 }}&available_page_size={{ available_page_size }}">Previous</a>
+            {% endif %}
+            Page {{ available_page }} / {{ total_pages_available }}
+            {% if has_next_available %}
+                <a href="?available_page={{ available_page + 1 }}&available_page_size={{ available_page_size }}">Next</a>
+            {% endif %}
+        </nav>
+        {% endif %}
     </section>
-{% if is_expert %}
+
+    <!-- Enrolled studies -->
+    {% if is_expert %}
     <section class="sectioncard">
         <h2><i class="fa-solid fa-signature"></i> {{ lang.research_enrolled_title }}</h2>
-                {{ table(table_header, enrolled_study_table_data) }}
+
+        <!-- Page size dropdown -->
+        <form method="get" class="page-size-form">
+            <label for="enrolled_page_size">{{ lang.page_size }}:</label>
+            <select name="enrolled_page_size" id="enrolled_page_size" onchange="this.form.submit()">
+                {% for size in [5, 10, 25, 50, 100, 'all'] %}
+                    <option value="{{ size }}" {% if enrolled_page_size|string == size|string %}selected{% endif %}>
+                        {{ size }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <!-- Preserve current pages for both tables -->
+            <input type="hidden" name="enrolled_page" value="{{ enrolled_page }}">
+            <input type="hidden" name="available_page" value="{{ available_page }}">
+            <input type="hidden" name="available_page_size" value="{{ available_page_size }}">
+        </form>
+
+        {{ table(table_header, enrolled_study_table_data) }}
+
+        {% if total_pages_enrolled > 1 %}
+        <nav class="pagination" aria-label="Enrolled studies pagination">
+            {% if has_prev_enrolled %}
+                <a href="?enrolled_page={{ enrolled_page - 1 }}&enrolled_page_size={{ enrolled_page_size }}">Previous</a>
+            {% endif %}
+            Page {{ enrolled_page }} / {{ total_pages_enrolled }}
+            {% if has_next_enrolled %}
+                <a href="?enrolled_page={{ enrolled_page + 1 }}&enrolled_page_size={{ enrolled_page_size }}">Next</a>
+            {% endif %}
+        </nav>
+        {% endif %}
     </section>
-{% endif %}
+    {% endif %}
 </main>
 
 {% endblock %}
