@@ -22,14 +22,14 @@ enrollment = Enrollment()
 approval_bp = Blueprint("approval", __name__)
 
 
-@management_bp.route("/")
+@approval_bp.route("/")
 def index():
     if not is_authenticated() or not in_roles("admin"):
         abort(403)
     return render("management.html")
 
 
-@management_bp.route("/approval")
+@approval_bp.route("/approval")
 def approval():
     if not is_authenticated() or not in_roles("admin"):
         abort(403)
