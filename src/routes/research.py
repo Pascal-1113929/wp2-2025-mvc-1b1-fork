@@ -12,7 +12,7 @@ from models.user import User
 from view import render, redirect_page
 from werkzeug.exceptions import NotFound, abort
 from utils.table import Table
-from utils.auth import in_roles
+from utils.auth import in_roles, is_authenticated
 from utils.mail import send_mail
 from i18n.locale import get_iso_639_1
 from utils.translate import check_translation
@@ -267,6 +267,9 @@ def enroll_page(study_id):
     page_languages = ['nl']
     page_translated = check_translation(page_languages, get_iso_639_1())
 
+    if not is_authenticated() or not in_roles("expert"):
+        abort(403)
+
     user_id = session.get("user_id")
 
     study = studies.get_study_by_id(study_id)
@@ -278,6 +281,9 @@ def enroll_page(study_id):
 
 @research_bp.route("/<study_id>/enroll", methods=["POST"])
 def enroll_confirm(study_id):
+    if not is_authenticated() or not in_roles("expert"):
+        abort(403)
+
     user_id = session.get("user_id")
     profile = profiles.get_profile_by_userid(user_id)
     user_name = profiles.get_name_by_userid(user_id)
@@ -309,6 +315,9 @@ def enroll_success(study_id):
 def unlist_page(study_id):
     page_languages = ['nl']
 
+    if not is_authenticated() or not in_roles("expert"):
+        abort(403)
+
     user_id = session.get("user_id")
 
     study = studies.get_study_by_id(study_id)
@@ -320,6 +329,9 @@ def unlist_page(study_id):
 
 @research_bp.route("/<study_id>/unlist", methods=["POST"])
 def unlist_confirm(study_id):
+    if not is_authenticated() or not in_roles("expert"):
+        abort(403)
+
     user_id = session.get("user_id")
     profile = profiles.get_profile_by_userid(user_id)
 

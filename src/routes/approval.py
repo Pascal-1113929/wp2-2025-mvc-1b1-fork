@@ -7,6 +7,7 @@ from models.study import Study
 from models.organization import Organization
 from models.enrollment import Enrollment
 from utils.table import Table
+from utils.auth import is_authenticated, in_roles
 from utils.mail import send_mail
 from i18n.locale import get_i18n
 from i18n.locale import get_iso_639_1
@@ -21,8 +22,17 @@ enrollment = Enrollment()
 approval_bp = Blueprint("approval", __name__)
 
 
-@approval_bp.route("/")
+@management_bp.route("/")
+def index():
+    if not is_authenticated() or not in_roles("admin"):
+        abort(403)
+    return render("management.html")
+
+
+@management_bp.route("/approval")
 def approval():
+    if not is_authenticated() or not in_roles("admin"):
+        abort(403)
     page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
@@ -246,6 +256,8 @@ def email_generate(
 
 @approval_bp.route("/<type>/<id>/reject")
 def approval_user_reject(type, id):
+    if not is_authenticated() or not in_roles("admin"):
+        abort(403)
     field_name = ""
     if type == "user":
         field_name = profile.get_name_by_userid(id)
@@ -288,6 +300,8 @@ def approval_user_reject(type, id):
 
 @approval_bp.route("/<type>/<id>/approve")
 def approval_user_approve(type, id):
+    if not is_authenticated() or not in_roles("admin"):
+        abort(403)
     field_name = ""
     if type == "user":
         field_name = profile.get_name_by_userid(id)
@@ -333,6 +347,8 @@ def approval_user_approve(type, id):
 
 @approval_bp.route("/note/<user_id>", methods=["GET", "POST"])
 def approval_edit_note(user_id):
+    if not is_authenticated() or not in_roles("admin"):
+        abort(403)
     user = profile.get_profile_by_userid(user_id)
     field_name = profile.get_name_by_userid(user_id)
 

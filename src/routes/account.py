@@ -187,6 +187,10 @@ def expert_profile(id):
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     userid = session.get("user_id")
+    if not is_authenticated() or not in_roles(["admin", "organization", "expert"]):
+        raise Forbidden()
+    if in_roles("expert") and userid != int(id):
+        raise Forbidden()
     allow_delete = False
 
     if userid == int(id):

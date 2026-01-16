@@ -212,6 +212,8 @@ def organization_dashboard_render(id):
 
 @org_bp.route("/add", methods=["GET", "POST"])
 def org_register_add():
+    if not is_authenticated() or not in_roles("admin"):
+        return abort(403)
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
@@ -276,7 +278,9 @@ def org_register_add():
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
 # Is aangepast door Pascal na verdere inspectie
 @org_bp.route("<organization_user_id>/research/add", methods=["GET", "POST"])
-def research_register(organization_user_id):
+def research_register():
+    if not is_authenticated() or not in_roles(["organization", "admin"]):
+        return abort(403)
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
@@ -321,7 +325,9 @@ def research_register(organization_user_id):
                 errors["location"] = True
 
         if not errors:
-            user = users.get_user_by_id(user_id)
+            user = users.get_user_by_id(session.get("user_id"))
+            if not user or not user.get("organization_id"):
+                return abort(403)
 
             try:
                 study_id = studies.create_with_organisation(
@@ -368,10 +374,29 @@ def organization_study_page_render(organization_user_id, study_id):
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
-    org_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
+        return abort(403)
+
+    user_id = session.get("user_id")
+    if in_roles("admin"):
+        verified_org_id = int(organization_id)
+    else:
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict:
+            return abort(403)
+        verified_org_id = verified_org_id_dict["organization_id"]
+        if verified_org_id != int(organization_id):
+            print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+            return abort(403)
+    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
+    if verified_org_id != int(organization_id):
+        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+        return abort(403)
 
     org = organizations.get_organization_by_id(org_id)
     study = studies.get_study_by_id(study_id)
+    if not study:
+        return abort(404)
     raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(study_id, 1)
     raw_verified_enrolment_list = enrolments.get_enrolments_by_study_id(study_id, 2)
 
@@ -440,10 +465,20 @@ def organization_study_page_render(organization_user_id, study_id):
     )
 
 
-@org_bp.route("/<organization_user_id>/study/<study_id>/close")
-def organization_study_close(organization_user_id, study_id):
-    if not is_authenticated():
+@org_bp.route("/<organization_id>/study/<study_id>/close")
+def organization_study_close(organization_id, study_id):
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(401)
+    study = studies.get_study_by_id(study_id)
+    if not study:
+        return abort(404)
+    if int(organization_id) != study["organization_id"]:
+        return abort(403)
+    if not in_roles("admin"):
+        user_id = session.get("user_id")
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict or verified_org_id_dict["organization_id"] != int(organization_id):
+            return abort(403)
 
     try:
         studies.set_research_status(study_id, 4)
@@ -457,10 +492,20 @@ def organization_study_close(organization_user_id, study_id):
         )
 
 
-@org_bp.route("/<organization_user_id>/study/<study_id>/open")
-def organization_study_open(organization_user_id, study_id):
-    if not is_authenticated():
+@org_bp.route("/<organization_id>/study/<study_id>/open")
+def organization_study_open(organization_id, study_id):
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(401)
+    study = studies.get_study_by_id(study_id)
+    if not study:
+        return abort(404)
+    if int(organization_id) != study["organization_id"]:
+        return abort(403)
+    if not in_roles("admin"):
+        user_id = session.get("user_id")
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict or verified_org_id_dict["organization_id"] != int(organization_id):
+            return abort(403)
 
     try:
         studies.set_research_status(study_id, 2)
@@ -482,7 +527,30 @@ def organization_study_edit_page_render(organization_user_id, study_id):
     success = request.args.get("success")
     error = request.args.get("error")
 
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
+        return abort(403)
+
+    user_id = session.get("user_id")
+    if in_roles("admin"):
+        verified_org_id = int(organization_id)
+    else:
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict:
+            return abort(403)
+        verified_org_id = verified_org_id_dict["organization_id"]
+        if verified_org_id != int(organization_id):
+            print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+            return abort(403)
+    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
+    if verified_org_id != int(organization_id):
+        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
+        return abort(403)
+
     db_study = studies.get_study_by_id(study_id)
+    if not db_study:
+        return abort(404)
+    if int(organization_id) != db_study["organization_id"]:
+        return abort(403)
     disability_list = disabilities.get_disability_list_by_studyid(study_id)
 
     study = {
@@ -595,10 +663,24 @@ def enrolment_table_data_converter(enrolment_list, table_header):
 def organization_unlist(organization_user_id, study_id, profile_id):
     page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
-    organization_user_id = int(organization_user_id)
-    organization_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
+
+    if not is_authenticated() or not in_roles(["admin", "organization"]):
+        return abort(403)
+
+    organization_id = int(organization_id)
     study_id = int(study_id)
     profile_id = int(profile_id)
+
+    study = studies.get_study_by_id(study_id)
+    if not study:
+        return abort(404)
+    if organization_id != study["organization_id"]:
+        return abort(403)
+    if not in_roles("admin"):
+        user_id = session.get("user_id")
+        verified_org_id_dict = users.get_organization_id_by_userid(user_id)
+        if not verified_org_id_dict or verified_org_id_dict["organization_id"] != organization_id:
+            return abort(403)
 
     enrolments.delete_enrollment(study_id, profile_id)
 
