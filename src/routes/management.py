@@ -28,7 +28,7 @@ def index():
 
 @management_bp.route("/approval")
 def approval():
-    page_languages = ['nl', 'en']
+    page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     lang = get_i18n()
@@ -189,6 +189,11 @@ def approval():
     research_table_data = research_table.export_to_macro()
     enrollment_table_data = enrollment_table.export_to_macro()
 
+    ALLOWED_TABS = ["user", "research", "enrollment"]
+    tab = request.args.get("tab")
+    if tab not in ALLOWED_TABS or tab is None:
+        tab = "user"
+
     return render(
         "approval.html",
         page_translated=page_translated,
@@ -198,6 +203,7 @@ def approval():
         research_table_count=len(research_data),
         enrollment_table=enrollment_table_data,
         enrollment_table_count=len(enrollment_data),
+        tab=tab,
     )
 
 
@@ -256,7 +262,7 @@ def approval_user_reject(type, id):
             "Inschrijving",
             "Afgekeurd",
         )  # user is default reciever_type
-    return redirect_page("management/approval")
+    return redirect_page("management/approval?tab=" + type)
 
 
 @management_bp.route("/approval/<type>/<id>/approve")
@@ -296,7 +302,7 @@ def approval_user_approve(type, id):
             "Inschrijving",
             "Goedgekeurd",
         )  # user is default reciever_type
-    return redirect_page("management/approval")
+    return redirect_page("management/approval?tab=" + type)
 
 
 @management_bp.route("/approval/note/<user_id>", methods=["GET", "POST"])
@@ -313,4 +319,4 @@ def approval_edit_note(user_id):
     elif request.method == "POST":
         note = request.form.get("note")
         profile.update_note(user_id, note)
-        return redirect_page("management/approval")
+        return redirect_page("management/approval?tab=user&notification_id=1")

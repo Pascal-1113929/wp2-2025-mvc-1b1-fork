@@ -86,7 +86,7 @@ def organization_redirect():
 
 @org_bp.route("/<id>/")
 def organization_dashboard_render(id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     if not is_authenticated() or not in_roles(["admin", "organization"]):
@@ -99,7 +99,12 @@ def organization_dashboard_render(id):
     study_id = request.args.get("study_id")
     changes_study = None
 
-    if close_success == "1" or close_error == "1" or open_success == "1" or open_error == "1":
+    if (
+        close_success == "1"
+        or close_error == "1"
+        or open_success == "1"
+        or open_error == "1"
+    ):
         if study_id:
             changes_study = studies.get_study_by_id(study_id)
 
@@ -140,7 +145,7 @@ def organization_dashboard_render(id):
             "modify",
         ]
         table = Table(study_list)
-        table.set_column_lang('nl', table_header)
+        table.set_column_lang("nl", table_header)
 
         table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
         table.add_column(
@@ -187,26 +192,28 @@ def organization_dashboard_render(id):
                 ],
             ],
         )
+
         table.whitelist_data(table_header)
         table.set_order(table_header)
 
         study_table_data = table.export_to_macro()
 
-    return render("organization.html",
-                  page_translated=page_translated,
-                  organization=org,
-                  study_list=study_table_data,
-                  close_success=close_success,
-                  close_error=close_error,
-                  open_success=open_success,
-                  open_error=open_error,
-                  changes_study=changes_study
-                  )
+    return render(
+        "organization.html",
+        page_translated=page_translated,
+        organization=org,
+        study_list=study_table_data,
+        close_success=close_success,
+        close_error=close_error,
+        open_success=open_success,
+        open_error=open_error,
+        study=study,
+    )
 
 
 @org_bp.route("/add", methods=["GET", "POST"])
 def org_register_add():
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
@@ -258,14 +265,20 @@ def org_register_add():
                 message = f"Er is iets fout gegaan: {str(e)}"
                 return redirect_page(f"organization/add?error={message}")
 
-    return render("organization-add.html", page_translated=page_translated, success=success, error=error, errors=errors)
+    return render(
+        "organization-add.html",
+        page_translated=page_translated,
+        success=success,
+        error=error,
+        errors=errors,
+    )
 
 
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
 # Is aangepast door Pascal na verdere inspectie
 @org_bp.route("/research/add", methods=["GET", "POST"])
 def research_register():
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
@@ -351,7 +364,7 @@ def research_register():
 
 @org_bp.route("/<organization_id>/study/<study_id>/")
 def organization_study_page_render(organization_id, study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     user_id = session.get("user_id")
@@ -435,10 +448,14 @@ def organization_study_close(organization_id, study_id):
 
     try:
         studies.set_research_status(study_id, 4)
-        return redirect_page(f"/organization/{organization_id}?close-success=1&study_id={study_id}")
+        return redirect_page(
+            f"/organization/{organization_id}?close-success=1&study_id={study_id}"
+        )
     except Exception as e:
         print(e)
-        return redirect_page(f"/organization/{organization_id}?close-error=1&study_id={study_id}")
+        return redirect_page(
+            f"/organization/{organization_id}?close-error=1&study_id={study_id}"
+        )
 
 
 @org_bp.route("/<organization_id>/study/<study_id>/open")
@@ -448,15 +465,19 @@ def organization_study_open(organization_id, study_id):
 
     try:
         studies.set_research_status(study_id, 2)
-        return redirect_page(f"/organization/{organization_id}/?open-success=1&study_id={study_id}")
+        return redirect_page(
+            f"/organization/{organization_id}/?open-success=1&study_id={study_id}"
+        )
     except Exception as e:
         print(e)
-        return redirect_page(f"/organization/{organization_id}/?open-error=1&study_id={study_id}")
+        return redirect_page(
+            f"/organization/{organization_id}/?open-error=1&study_id={study_id}"
+        )
 
 
 @org_bp.route("/<organization_id>/study/<study_id>/edit", methods=["GET", "POST"])
 def organization_study_edit_page_render(organization_id, study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
@@ -493,14 +514,29 @@ def organization_study_edit_page_render(organization_id, study_id):
         disability_list = [disability]
 
         try:
-            studies.update_study(study_id, title, description, start_date, end_date, research_type, location,
-                                 1 if reward else 0, reward, age_min, age_max)
+            studies.update_study(
+                study_id,
+                title,
+                description,
+                start_date,
+                end_date,
+                research_type,
+                location,
+                1 if reward else 0,
+                reward,
+                age_min,
+                age_max,
+            )
             disabilities.update_study_disabilities(study_id, disability_list)
-            return redirect_page(f"/organization/{organization_id}/study/{study_id}/edit?success=1")
+            return redirect_page(
+                f"/organization/{organization_id}/study/{study_id}/edit?success=1"
+            )
         except Exception as e:
             message = f"Er is iets fout gegaan"
             print(e)
-            return redirect_page(f"/organization/{organization_id}/study/{study_id}/edit?error={message}")
+            return redirect_page(
+                f"/organization/{organization_id}/study/{study_id}/edit?error={message}"
+            )
 
     if success:
         success = "Success Onderzoek gewijzigd!"
@@ -546,7 +582,7 @@ def enrolment_table_data_converter(enrolment_list, table_header):
 
 @org_bp.route("<organization_id>/study/<study_id>/<profile_id>/unlist")
 def organization_unlist(organization_id, study_id, profile_id):
-    page_languages = ['nl', 'en']
+    page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     organization_id = int(organization_id)
@@ -555,4 +591,9 @@ def organization_unlist(organization_id, study_id, profile_id):
 
     enrolments.delete_enrollment(study_id, profile_id)
 
-    return render("study-org-unlist.html", page_translated=page_translated, oid=organization_id, sid=study_id)
+    return render(
+        "study-org-unlist.html",
+        page_translated=page_translated,
+        oid=organization_id,
+        sid=study_id,
+    )
