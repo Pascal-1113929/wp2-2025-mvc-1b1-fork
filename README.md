@@ -18,7 +18,7 @@ Het installeer van alle dependencies is platform specefiek, voer uit welke platf
 git clone https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice.git
 ```
 
-#### 2. Git Clone
+#### 2. verplaatsen naar map
 ```bash
 cd wp2-2025-mvc-1b1-codingenterprice
 ```
@@ -26,7 +26,6 @@ cd wp2-2025-mvc-1b1-codingenterprice
 ```bash
 pip install -r requirements.txt
 ```
-
 #### 4. Environment
 1. Dupliceer .env.example en maar er .env van
 2. Vul de volgende waardes in voor een locale email test:
