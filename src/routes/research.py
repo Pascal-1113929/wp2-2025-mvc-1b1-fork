@@ -61,12 +61,14 @@ def research_dashboard_render():
     if enrolled_page < 1:
         enrolled_page = 1
 
+    preferences_values = request.args.getlist("preferences")
+    if preferences_values:
+        show_matching = 1 if "1" in preferences_values else 0
+    else:
+        show_matching = 1
+
     if role == "expert":
-        preferences_values = request.args.getlist("preferences")
-        if preferences_values:
-            show_matching = 1 if "1" in preferences_values else 0
-        else:
-            show_matching = 1
+
         is_expert = True
         expert_user = dict(users.get_user_by_id(userid))
         expert_profile = dict(profiles.get_profile_by_userid(userid))
