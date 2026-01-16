@@ -185,7 +185,7 @@ def organization_dashboard_render(id):
                     [
                         "close",
                         ".organization/<organization_id>/study/<id>/close",
-                        "fa-solid fa-trash",
+                        "fa-solid fa-lock",
                         "warning",
                     ],
                 ],
@@ -195,7 +195,7 @@ def organization_dashboard_render(id):
                     [
                         "re-open",
                         ".organization/<organization_id>/study/<id>/open",
-                        "fa-solid fa-trash",
+                        "fa-solid fa-lock-open",
                         "warning",
                     ],
                 ],
@@ -205,7 +205,7 @@ def organization_dashboard_render(id):
                     [
                         "edit",
                         ".organization/<organization_id>/study/<id>/edit",
-                        "fa-solid fa-trash",
+                        "fa-solid fa-pen-to-square",
                         "warning",
                     ],
                 ],
