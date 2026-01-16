@@ -7,6 +7,7 @@
 /* layouts */
 @import url("./layouts/navbar.css");
 @import url("./layouts/forms.css");
+@import url("./layouts/tabs.css");
 
 /* pages specific */
 @import url("./pages/organization.css");
