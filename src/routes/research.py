@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, session, render_template
+from flask import Blueprint, request, session, render_template
 
 from models.enrollment import Enrollment
 from models.disabilities import Disablity
@@ -30,6 +30,7 @@ research_bp = Blueprint("research", __name__)
 def research_dashboard_render():
     page_languages = ['nl']
     page_translated = check_translation(page_languages, get_iso_639_1())
+    search_query = request.args.get("search", "").lower()
 
     userid = session.get("user_id")
     role = session.get("role")
@@ -85,7 +86,14 @@ def research_dashboard_render():
             study["end_date"] = datetime.strptime(study["end_date"], "%Y-%m-%d")
             study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
             study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
-            available_studies.append(study)
+            available_studies.append(study)   
+        if search_query:
+            available_studies = [
+                study for study in available_studies
+                if search_query in study["title"].lower()
+                or search_query in study["organization"].lower()
+                or search_query in study["location_display"].lower()
+            ]
 
         enrolled_studies = []
         for study_id in enrolment_study_ids:
@@ -123,6 +131,14 @@ def research_dashboard_render():
             study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
             study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
             available_studies.append(study)
+        
+        if search_query:
+            available_studies = [
+                study for study in available_studies
+                if search_query in study["title"].lower()
+                or search_query in study["organization"].lower()
+                or search_query in study["location_display"].lower()
+            ]
 
         enrolled_studies = []
         expert = None

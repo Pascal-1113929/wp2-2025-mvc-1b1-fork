@@ -18,6 +18,13 @@
     <header>
         <h1>{{ lang.research_title }}</h1>
     </header>
+    <form method="get" class="table-search" role="search">
+    <label for="search-input"> {{ lang.research_search_label }} </label>
+    <input type="text" id="search-input" name="search" placeholder="{{ lang.research_search_placeholder }}">
+
+    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> {{ lang.research_search_button }}</button>
+
+</form>
     <div class="seperator"></div>
     <section class="sectioncard">
         <h2><i class="fa-solid fa-book"></i> {{ lang.research_running_title }}</h2>
