@@ -88,13 +88,12 @@ class Table:
     def _create_post_button_element(self, element_def):
         form_data = element_def[6] if len(element_def) > 6 else None
 
-        # Process the action URL and hidden fields for placeholders
         if isinstance(form_data, dict) and "action" in form_data:
             processed_form_data = form_data.copy()
             processed_form_data["action"] = process_values(
                 [form_data["action"]], self.current_row
             )[0]
-            # Process hidden fields values
+
             if "hidden_fields" in form_data:
                 processed_hidden_fields = {}
                 for key, value in form_data["hidden_fields"].items():
