@@ -5,7 +5,7 @@
 {% block content %}
 <main >
     <section>
-        <form class="cm-form" action="{{ url_for('management.approval_edit_note', language=base.locale, user_id=profile_data.user_id)}}" method="post">
+        <form class="cm-form" action="{{ url_for('approval.approval_edit_note', language=base.locale, user_id=profile_data.user_id)}}" method="post">
 
             <div class="form-group">
                 <label for="prf-inro">{{ lang.management_approval_user_editnote_title}} {{ profile_data.first_name }} {{ profile_data.last_name }}</label>

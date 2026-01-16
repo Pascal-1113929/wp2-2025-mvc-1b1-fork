@@ -59,7 +59,7 @@ def approval():
                 "button",
                 [
                     lang.get("management_approval_users_option_editnote"),
-                    ".management/approval/note/<id>",
+                    ".approval/note/<id>",
                     "fa-solid fa-pen-to-square",
                     "warning",
                 ],
@@ -68,7 +68,7 @@ def approval():
                 "button",
                 [
                     lang.get("management_approval_users_option_approve"),
-                    ".management/approval/user/<id>/approve",
+                    ".approval/user/<id>/approve",
                     "fa-solid fa-check",
                     "",
                 ],
@@ -77,7 +77,7 @@ def approval():
                 "button",
                 [
                     lang.get("management_approval_users_option_reject"),
-                    ".management/approval/user/<id>/reject",
+                    ".approval/user/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
                 ],
@@ -101,7 +101,7 @@ def approval():
                 "button",
                 [
                     lang.get("management_approval_research_option_approve"),
-                    ".management/approval/research/<id>/approve",
+                    ".approval/research/<id>/approve",
                     "fa-solid fa-check",
                     "",
                 ],
@@ -110,7 +110,7 @@ def approval():
                 "button",
                 [
                     lang.get("management_approval_research_option_reject"),
-                    ".management/approval/research/<id>/reject",
+                    ".approval/research/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
                 ],
@@ -142,7 +142,7 @@ def approval():
                 "button",
                 [
                     lang.get("management_approval_enrollment_option_approve"),
-                    ".management/approval/enrollment/<id>/approve",
+                    ".approval/enrollment/<id>/approve",
                     "fa-solid fa-check",
                     "",
                 ],
@@ -151,7 +151,7 @@ def approval():
                 "button",
                 [
                     lang.get("management_approval_enrollment_option_reject"),
-                    ".management/approval/enrollment/<id>/reject",
+                    ".approval/enrollment/<id>/reject",
                     "fa-solid fa-xmark",
                     "danger",
                 ],
@@ -288,7 +288,7 @@ def approval_user_reject(type, id):
             "Afgekeurd",
         )  # user is default reciever_type
     return redirect_page(
-        "management/approval?tab=" + type + "&alert_id=2&alert_field=" + field_name
+        "approval?tab=" + type + "&alert_id=2&alert_field=" + field_name
     )
 
 
@@ -333,7 +333,7 @@ def approval_user_approve(type, id):
             "Goedgekeurd",
         )  # user is default reciever_type
     return redirect_page(
-        "management/approval?tab=" + type + "&alert_id=1&alert_field=" + field_name
+        "approval?tab=" + type + "&alert_id=1&alert_field=" + field_name
     )
 
 
@@ -349,6 +349,4 @@ def approval_edit_note(user_id):
     elif request.method == "POST":
         note = request.form.get("note")
         profile.update_note(user_id, note)
-        return redirect_page(
-            "management/approval?tab=user&alert_id=3&alert_field=" + field_name
-        )
+        return redirect_page("approval?tab=user&alert_id=3&alert_field=" + field_name)
