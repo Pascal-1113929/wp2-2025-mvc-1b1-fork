@@ -289,6 +289,9 @@ def research_dashboard_render():
             "age_max",
         ]
 
+    if "title" not in selected_columns:
+        selected_columns.insert(0, "title")  # insert at the beginning
+
     table_header = selected_columns
 
     available_table = Table(available_studies_paginated)
