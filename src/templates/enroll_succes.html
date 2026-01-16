@@ -1,7 +1,9 @@
 {% extends 'layouts/default.html' %}
 
 {% block content %}
-<h1>Je bent ingeschreven</h1>
-<p>Bedankt voor je deelname.</p>
-<a href="/{{ base.locale }}/research">Terug naar het overzicht</a>
+<main>
+    <h1>{{ lang.research_enroll_success_title }}</h1>
+    <p>{{ lang.research_enroll_success_message }}</p>
+    <a href="/{{ base.locale }}/research">{{ lang.research_enroll_success_btn_go_back }}</a>
+</main>
 {% endblock %}

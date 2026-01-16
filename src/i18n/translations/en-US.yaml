@@ -252,6 +252,9 @@
 "research_enroll_form_availability": "Availability:"
 "research_enroll_btn_confirm": "Confirm"
 "research_enroll_btn_cancel": "Cancel"
+"research_enroll_success_title": "You are successfully enrolled in the study!"
+"research_enroll_success_message": "Thank you for your interest in our study. We will review your application and contact you shortly."
+"research_enroll_success_btn_go_back": "Go back to the overview"
 
 "admin_org_choice_title": "Choose a organization to view"
 "admin_org_choice_table_title": "Table of organizations"
