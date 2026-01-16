@@ -37,7 +37,7 @@
                                 {{ button(text=lang.nav_organization, href=".organization/", class_name="ghost" if not base.path.startswith("/organization"), icon="fa-solid fa-building") }}
                             {% endif %}
                             {% if base.user.role == "admin" %}
-                                {{ button(text=lang.nav_approval, href=".management/approval", class_name="ghost" if not base.path.startswith("/management/approval"), icon="fa-solid fa-check-double") }}
+                                {{ button(text=lang.nav_approval, href=".management/approval", class_name="ghost" if not base.path.startswith("/approval"), icon="fa-solid fa-check-double") }}
                             {% endif %}
                         {% endif %}
                     </div>

@@ -18,15 +18,10 @@ study = Study()
 organization = Organization()
 enrollment = Enrollment()
 
-management_bp = Blueprint("management", __name__)
+approval_bp = Blueprint("approval", __name__)
 
 
-@management_bp.route("/")
-def index():
-    return render("management.html")
-
-
-@management_bp.route("/approval")
+@approval_bp.route("/")
 def approval():
     page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
@@ -255,7 +250,7 @@ def email_generate(
         raise Exception("Unknown reciever_type")
 
 
-@management_bp.route("/approval/<type>/<id>/reject")
+@approval_bp.route("/<type>/<id>/reject")
 def approval_user_reject(type, id):
     field_name = ""
     if type == "user":
@@ -297,7 +292,7 @@ def approval_user_reject(type, id):
     )
 
 
-@management_bp.route("/approval/<type>/<id>/approve")
+@approval_bp.route("/<type>/<id>/approve")
 def approval_user_approve(type, id):
     field_name = ""
     if type == "user":
@@ -342,7 +337,7 @@ def approval_user_approve(type, id):
     )
 
 
-@management_bp.route("/approval/note/<user_id>", methods=["GET", "POST"])
+@approval_bp.route("/note/<user_id>", methods=["GET", "POST"])
 def approval_edit_note(user_id):
     user = profile.get_profile_by_userid(user_id)
     field_name = profile.get_name_by_userid(user_id)
