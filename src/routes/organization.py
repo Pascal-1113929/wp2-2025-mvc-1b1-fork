@@ -368,7 +368,6 @@ def research_register(organization_user_id):
                         "end_date": end_date,
                     },
                 )
-                print(study_id)
                 disabilities.create_study_disabilities(study_id, disability)
 
                 message = "Onderzoek succesvol aangemaakt!"

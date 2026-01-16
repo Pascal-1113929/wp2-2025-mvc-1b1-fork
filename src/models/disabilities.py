@@ -100,10 +100,6 @@ class Disablity:
     def create_study_disabilities(self, study_id, disability_id):
         with self.db.connect() as con:
             cur = con.cursor()
-            print(f"""
-            INSERT INTO profile_disabilities (profile_id, disability_id)
-                        Values ({study_id}, {disability_id})
-            """)
             cur.execute(
                 """
             INSERT INTO study_disabilities (study_id, disability_id)

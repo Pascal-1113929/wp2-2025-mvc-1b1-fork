@@ -54,7 +54,6 @@ def expert_dashboard_render():
     if profile:
         user_disability_ids = disabilities.get_disability_ids_by_profileid(profile["id"])
         user_disability_ids = tuple(user_disability_ids)
-        print(user_disability_ids)
     else:
         user_disability_ids = ()
     profile = profiles.get_profile_by_userid(session["user_id"])
@@ -218,7 +217,6 @@ def expert_profile(id):
     table.set_order(table_header)
 
     table_data = table.export_to_macro()
-    print(allow_delete)
 
     return render(
         "expert-profile.html",

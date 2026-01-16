@@ -121,7 +121,6 @@ class User:
             cur = con.cursor()
             profile = profile_class.get_profile_by_userid(user_id)
             profile_id = int(profile["id"])
-            print(profile_id, type(profile_id))
             cur.execute(
                 "DELETE FROM profile_disabilities WHERE profile_id = ?", (profile_id,)
             )
