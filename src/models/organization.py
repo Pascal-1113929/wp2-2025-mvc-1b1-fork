@@ -17,10 +17,11 @@ class Organization:
             cur = con.cursor()
             cur.execute(
                 """
-                INSERT INTO organizations (name, type, website, description, contact_person, email, phone)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """,
-                (name, type, website, description, contact_person, email, phone),
+                INSERT INTO organizations
+                (name, type, website, description, contact_person, email, phone, details)
+                VALUES (?, ?, ?, ?, ?, ?, ?, NULL)
+                """
+                , (name, type, website, description, contact_person, email, phone)
             )
             con.commit()
             return cur.lastrowid

@@ -288,10 +288,9 @@ def org_register_add():
                     status=2,
                 )
 
-                message = "Organisatie succesvol aangemaakt!"
                 return redirect_page("organization/add?success=1")
             except Exception as e:
-                message = f"Er is iets fout gegaan: {str(e)}"
+                message = f"Something went wrong: {str(e)}"
                 return redirect_page(f"organization/add?error={message}")
 
     return render(

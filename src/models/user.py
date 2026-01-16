@@ -76,9 +76,10 @@ class User:
             cur = con.cursor()
             cur.execute(
                 """
-                INSERT INTO users (email, password, organization_id, role, status_id, approve_notification)
-                VALUES (?, ?, ?, ?, ?)
-            """,
+                INSERT INTO users
+                (email, password, organization_id, role, status_id, approve_notification)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
                 (email, password, organization_id, role, status, approve_notification),
             )
             con.commit()
