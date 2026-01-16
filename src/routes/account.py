@@ -77,7 +77,7 @@ def account_logout():
 
 @account_bp.route("/register", methods=["GET", "POST"])
 def account_register():
-    page_languages = ['nl']
+    page_languages = ['nl', 'en']
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
@@ -158,7 +158,7 @@ def account_register():
 
     return render(
         "register.html",
-        page_languages=page_languages,
+        page_translated=page_translated,
         disabilities=disability_dropdown.export_to_macro(),
         success=success,
         error=error,
@@ -209,7 +209,7 @@ def expert_profile(id):
 
     return render(
         "expert-profile.html",
-        page_languages=page_languages,
+        page_translated=page_translated,
         user=user,
         table_data=table_data,
         allow_delete=allow_delete,

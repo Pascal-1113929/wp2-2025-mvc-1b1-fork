@@ -9,7 +9,7 @@ from models.profile import Profile
 from models.study import Study
 from models.user import User
 from view import render, redirect_page
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import NotFound, abort
 from utils.table import Table
 from utils.auth import in_roles
 from utils.mail import send_mail
@@ -169,9 +169,12 @@ def study_dashboard_render(study_id):
         user_id = session["user_id"]
 
     study = studies.get_study_by_id(study_id)
+    if study is None:
+        abort(404)
+
     organization = organizations.get_organization_by_id(study["organization_id"])
     disability_list = disabilities.get_disability_list_by_studyid(study["id"])
-    if not in_roles("admin"):
+    if in_roles("expert"):
         profile = profiles.get_profile_by_userid(user_id)
         enrolled = enrolments.enrolment_check(study["id"], profile["id"])
     study["disabilities"] = disability_list

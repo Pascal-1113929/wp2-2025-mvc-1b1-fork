@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template
+from flask import Blueprint, request, render_template, abort
 
 from view import render, redirect_page
 from models.user import User
@@ -191,7 +191,7 @@ def approval():
 
     return render(
         "approval.html",
-        page_languages=page_languages,
+        page_translated=page_translated,
         user_table=user_table_data,
         user_table_count=len(user_data),
         research_table=research_table_data,
@@ -222,10 +222,15 @@ def email_generate(
 @management_bp.route("/approval/<type>/<id>/reject")
 def approval_user_reject(type, id):
     if type == "user":
+        name = profile.get_name_by_userid(id)
+
+        if not name:
+            abort(404)
+
         users.set_user_status(id, 3)
         email_generate(
             "Account Afgekeurd",
-            profile.get_name_by_userid(id),
+            name,
             id,
             "Account",
             "Afgekeurd",
@@ -257,10 +262,15 @@ def approval_user_reject(type, id):
 @management_bp.route("/approval/<type>/<id>/approve")
 def approval_user_approve(type, id):
     if type == "user":
+        name = profile.get_name_by_userid(id)
+
+        if not name:
+            abort(404)
+
         users.set_user_status(id, 2)
         email_generate(
             "Account Goedgekeurd",
-            profile.get_name_by_userid(id),
+            name,
             id,
             "Account",
             "Goedgekeurd",
@@ -292,6 +302,9 @@ def approval_user_approve(type, id):
 @management_bp.route("/approval/note/<user_id>", methods=["GET", "POST"])
 def approval_edit_note(user_id):
     user = profile.get_profile_by_userid(user_id)
+
+    if not user:
+        abort(404)
 
     if request.method == "GET":
         if user.get("notes") is None:

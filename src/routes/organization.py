@@ -52,14 +52,25 @@ def organization_dashboard_render(id):
     open_success = request.args.get("open-success")
     open_error = request.args.get("open-error")
     study_id = request.args.get("study_id")
-    study = None
+    changes_study = None
 
     if close_success == "1" or close_error == "1" or open_success == "1" or open_error == "1":
         if study_id:
-            study = studies.get_study_by_id(study_id)
+            changes_study = studies.get_study_by_id(study_id)
+
+            if changes_study is None:
+                changes_study = {
+                    "title": "Study Title Not found",
+                }
 
     user_id = session.get("user_id")
-    verified_org_id = users.get_organization_id_by_userid(id)["organization_id"]
+    verified_org_id_dict = users.get_organization_id_by_userid(id)
+
+    if not verified_org_id_dict:
+        abort(404)
+
+    verified_org_id = verified_org_id_dict["organization_id"]
+
     if not in_roles("admin"):
         if user_id != int(id):
             return abort(403)
@@ -144,7 +155,7 @@ def organization_dashboard_render(id):
                   close_error=close_error,
                   open_success=open_success,
                   open_error=open_error,
-                  study=study
+                  changes_study=changes_study
                   )
 
 
