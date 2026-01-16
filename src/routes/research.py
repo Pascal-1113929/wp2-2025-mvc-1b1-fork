@@ -29,7 +29,7 @@ research_bp = Blueprint("research", __name__)
 
 @research_bp.route("/")
 def research_dashboard_render():
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     userid = session.get("user_id")
@@ -206,25 +206,23 @@ def research_dashboard_render():
         is_expert=is_expert,
         available_study_table_data=available_study_table_data,
         enrolled_study_table_data=enrolled_study_table_data,
-
         # pagination metadata
         available_page=available_page,
         total_pages_available=total_pages_available,
         has_prev_available=available_page > 1,
         has_next_available=available_page < total_pages_available,
-        available_page_size=available_page_size,
-
+        available_page_size=str(available_page_size),
         enrolled_page=enrolled_page,
         total_pages_enrolled=total_pages_enrolled,
         has_prev_enrolled=enrolled_page > 1,
         has_next_enrolled=enrolled_page < total_pages_enrolled,
-        enrolled_page_size=enrolled_page_size
+        enrolled_page_size=enrolled_page_size,
     )
 
 
 @research_bp.route("/<study_id>")
 def study_dashboard_render(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     if in_roles("expert"):
@@ -264,7 +262,7 @@ def study_dashboard_render(study_id):
 
 @research_bp.route("/<study_id>/enroll")
 def enroll_page(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     if not is_authenticated() or not in_roles("expert"):
@@ -276,7 +274,13 @@ def enroll_page(study_id):
     user = users.get_user_by_id(user_id)
     profile = profiles.get_profile_by_userid(user_id)
 
-    return render("enroll.html", page_translated=page_translated, study=study, user=user, profile=profile)
+    return render(
+        "enroll.html",
+        page_translated=page_translated,
+        study=study,
+        user=user,
+        profile=profile,
+    )
 
 
 @research_bp.route("/<study_id>/enroll", methods=["POST"])
@@ -305,7 +309,7 @@ def enroll_confirm(study_id):
 
 @research_bp.route("/<study_id>/enroll/success")
 def enroll_success(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     return render("enroll_succes.html", page_translated=page_translated)
@@ -313,7 +317,7 @@ def enroll_success(study_id):
 
 @research_bp.route("/<study_id>/unlist")
 def unlist_page(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
 
     if not is_authenticated() or not in_roles("expert"):
         abort(403)
@@ -345,7 +349,7 @@ def unlist_confirm(study_id):
 
 @research_bp.route("/<study_id>/unlist/success")
 def unlist_success(study_id):
-    page_languages = ['nl']
+    page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     return render("unlist_success.html", page_translated=page_translated)
