@@ -557,14 +557,31 @@ def enrolment_table_data_converter(enrolment_list, table_header):
 
     table.set_type("title", "link", [".organization/<organization_user_id>/study/<id>"])
     table.add_column(
-        "view_profile", "button", ["Bekijk Profiel", ".expert-profile/<user_id>"]
+        "view_profile",
+        [
+            [
+                "button",
+                [
+                    "Bekijk Profiel",
+                    ".expert-profile/<user_id>",
+                    "",
+                    "primary",
+                ],
+            ]
+        ],
     )
     table.add_column(
         "unlist",
-        "button",
         [
-            "Uitschrijven",
-            ".organization/<organization_user_id>/study/<study_id>/<profile_id>/unlist",
+            [
+                "button",
+                [
+                    "Uitschrijven",
+                    ".organization/<organization_user_id>/study/<study_id>/<profile_id>/unlist",
+                    "",
+                    "danger",
+                ],
+            ]
         ],
     )
     table.whitelist_data(table_header)
