@@ -1,0 +1,88 @@
+{% extends 'layouts/default.html' %}
+
+{% block content %}
+<main class="home">
+    <section class="sectioncard">
+
+        {% if success %}
+            <div class="alert alert-success">
+                {{ success }}
+                <a href="/{{ base.locale }}/organization/{{ organization_user_id }}" class="button" type="button">{{ lang.organization_research_edit_return_overview }}</a>
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form class="cm-form" action="{{ url_for('organization.organization_study_edit_page_render', study_id=study.id, organization_user_id=organization_user_id, language=base.locale)}}" method="post">
+
+            <div class="form-group">
+                <label for="title">{{ lang.organization_research_edit_title_label }}</label>
+                <input type="text" id="title" name="title" maxlength="255" value="{{ study.title }}" required placeholder="{{ lang.organization_research_edit_title_placeholder }}">
+            </div>
+
+            <div class="form-group">
+                <label for="description">{{ lang.organization_research_edit_description_label }}</label>
+                <textarea id="description" name="description" rows="4" required placeholder="{{ lang.organization_research_edit_description_placeholder }}">{{ study.description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="dropdown-research_type">{{ lang.organization_research_edit_type_label }}</label>
+                {{ dropdown(options=[
+                    {"value": "telefonisch", "text": lang.organization_research_edit_type_phone, "selected": study.study_type == "telefonisch"},
+                    {"value": "online", "text": lang.organization_research_edit_type_online, "selected": study.study_type == "online"},
+                    {"value": "op locatie", "text": lang.organization_research_edit_type_on_site, "selected": study.study_type == "op locatie"}
+                ], name="research_type", id="research_type", class="", required=true, value=request.form.get('research_type', ''), placeholder=lang.organization_research_edit_type_placeholder) }}
+            </div>
+
+            <div class="form-group">
+                <label for="location">{{ lang.organization_research_edit_location_label }}</label>
+                {% set location = study.location or "" %}
+                <input type="text" id="location" name="location" class="" placeholder="{{ lang.organization_research_edit_location_placeholder }}" value="{{ location }}">
+            </div>
+
+            <div class="form-group-wrap-2">
+                <div class="form-group">
+                    <label for="age_min">{{ lang.organization_research_edit_age_min_label }}</label>
+                    <input type="number" id="age_min" name="age_min" value="{{ study.age_min }}" min="1" required placeholder="{{ lang.organization_research_edit_age_min_placeholder }}">
+                </div>
+                <div class="form-group">
+                    <label for="age_max">{{ lang.organization_research_edit_age_max_label }}</label>
+                    <input type="number" id="age_max" name="age_max" value="{{ study.age_max }}" max="200" required placeholder="{{ lang.organization_research_edit_age_max_placeholder }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dropdown-disability">{{ lang.organization_research_edit_disabilities_label }}</label>
+                {% set selected_id = study.disability_list[0].id|string if study.disability_list else "" %}
+                {{ dropdown(options=disabilities, name="disability", id="disability", class="", required=true, value=selected_id, placeholder=lang.organization_research_edit_disabilities_placeholder) }}
+            </div>
+
+            <div class="form-group-wrap-2">
+                <div class="form-group">
+                    <label for="start_date">{{ lang.organization_research_edit_start_date_label }}</label>
+                    <input type="date" id="start_date" name="start_date" value="{{ study.start_date }}" required placeholder="{{ lang.organization_research_edit_start_date_placeholder }}">
+                </div>
+                <div class="form-group">
+                    <label for="end_date">{{ lang.organization_research_edit_end_date_label }}</label>
+                    <input type="date" id="end_date" name="end_date" value="{{ study.end_date }}" required placeholder="{{ lang.organization_research_edit_end_date_placeholder }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="reward">{{ lang.organization_research_edit_reward_label }}</label>
+                <input type="text" id="reward" name="reward" value="{{ study.reward }}" placeholder="{{ lang.organization_research_edit_reward_placeholder }}">
+            </div>
+
+            <div class="grid-section">
+                <button class="submit-btn" type="submit">{{ lang.organization_research_edit_btn_save }}</button>
+                <button class="reset-btn" type="reset">{{ lang.organization_research_edit_btn_reset }}</button>
+            </div>
+        </form>
+
+    </section>
+</main>
+{% endblock %}

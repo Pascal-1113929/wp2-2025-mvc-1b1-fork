@@ -7,6 +7,7 @@
 /* layouts */
 @import url("./layouts/navbar.css");
 @import url("./layouts/forms.css");
+@import url("./layouts/tabs.css");
 
 /* pages specific */
 @import url("./pages/organization.css");
@@ -53,7 +54,9 @@ body {
         radial-gradient(circle at 80% 0%, #dff3e8, transparent 45%), var(--bg);
     color: var(--text);
     line-height: 1.6;
-    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 a {
@@ -61,7 +64,8 @@ a {
 }
 
 main {
-    max-width: 1252px;
+    width: 100%;
+    max-width: 1472px;
     margin: 0 auto;
     padding: 32px 24px 80px;
 }
@@ -73,6 +77,12 @@ h4 {
     color: var(--text);
     margin: 0 0 12px;
     line-height: 1.2;
+}
+main header {
+    text-align: center;
+}
+main section {
+    margin-top: 48px;
 }
 
 p {
@@ -93,7 +103,7 @@ p {
 }
 
 .horizontal-spacer {
- width: 2vw
+    width: 2vw;
 }
 
 .button-group {
@@ -101,3 +111,33 @@ p {
     gap: 1rem;
     flex-wrap: wrap;
 }
+.footer {
+    background-color: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    margin-top: auto;
+    width: 100%;
+}
+
+.footer-inner {
+    max-width: 1252px;
+    margin: 0 auto;
+    padding: 0 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.pagination .btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-decoration: none;
+}
+

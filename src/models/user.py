@@ -26,11 +26,12 @@ class User:
             else:
                 return None
 
-    def get_new_users(self):
+    def get_users_by_status(self, status):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                "SELECT * FROM users INNER JOIN profiles ON users.id = profiles.user_id WHERE users.status_id = 1"
+                "SELECT * FROM users INNER JOIN profiles ON users.id = profiles.user_id WHERE users.status_id = ?",
+                (status,),
             )
             con.commit()
             result = cur.fetchall()
@@ -42,27 +43,44 @@ class User:
 
             return users
 
-    def set_user_status(self, user_id, status):
+    def set_user_status(self, user_id, status, approve_notification=1):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                "UPDATE users SET status_id = ? WHERE id = ?",
-                (status, user_id),
+                "UPDATE users SET status_id = ?, approve_notification = ? WHERE id = ?",
+                (status, approve_notification, user_id),
+            )
+            con.commit()
+            return cur.lastrowid
+
+    def set_user_approve_notifications(self, user_id, approve_notification=1):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "UPDATE users SET approve_notification = ? WHERE id = ?",
+                (approve_notification, user_id),
             )
             con.commit()
             return cur.lastrowid
 
     def create(
-        self, email, password, organization_id=None, role="organization", status=1
+        self,
+        email,
+        password,
+        organization_id=None,
+        role="organization",
+        status=1,
+        approve_notification=1,
     ):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
                 """
-                INSERT INTO users (email, password, organization_id, role, status_id)
-                VALUES (?, ?, ?, ?, ?)
-            """,
-                (email, password, organization_id, role, status),
+                INSERT INTO users
+                (email, password, organization_id, role, status_id, approve_notification)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (email, password, organization_id, role, status, approve_notification),
             )
             con.commit()
             return cur.lastrowid
@@ -104,8 +122,9 @@ class User:
             cur = con.cursor()
             profile = profile_class.get_profile_by_userid(user_id)
             profile_id = int(profile["id"])
-            print(profile_id, type(profile_id))
-            cur.execute("DELETE FROM profile_disabilities WHERE profile_id = ?", (profile_id,))
+            cur.execute(
+                "DELETE FROM profile_disabilities WHERE profile_id = ?", (profile_id,)
+            )
             cur.execute("DELETE FROM profiles WHERE id = ?", (profile_id,))
             cur.execute("DELETE FROM users WHERE id = ?", (user_id,))
 
@@ -121,7 +140,11 @@ class User:
             cur = con.cursor()
             cur.execute("SELECT organization_id FROM users WHERE id = ?", (id,))
             con.commit()
-            return dict(cur.fetchone())
+            row = cur.fetchone()
+            if row:
+                return dict(row)
+            else:
+                return None
 
     def get_email_by_id(self, id: int):
         with self.db.connect() as con:

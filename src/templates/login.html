@@ -1,41 +1,48 @@
 {% from "macros/components/link.html" import link %}
+{% from "macros/components/button.html" import button %}
 
 {% extends 'layouts/default.html' %}
 
 {% block content %}
-<main class="home">
+<main>
+
+    <header>
+        <h1>{{ lang.account_login_title }}</h1>
+    </header>
+
+
     <form
         class="cm-form"
         action="{{ url_for('account.account_login', language=base.locale)}}"
         method="post"
     >
         {% if post_status %}
-        <div class="alert alert-error">Invalid email or password</div>
+        <div class="alert alert-error">{{ lang.account_login_error_invalid_credentials }}</div>
         {% endif %}
         <div class="form-group">
-            <label for="usr-email">Email</label>
+            <label for="usr-email"><i class="fa-regular fa-envelope"></i> {{ lang.account_login_field_email_title }}</label>
             <input
                 id="usr-email"
                 type="email"
                 name="email"
                 required
-                placeholder="Voer hier uw naam in"
+                placeholder="{{ lang.account_login_field_email_placeholder }}"
             />
         </div>
         <div class="form-group">
-            <label for="usr-pass">Wachtwoord</label>
+            <label for="usr-pass"><i class="fa-solid fa-key"></i> {{ lang.account_login_field_password_title }}</label>
             <input
                 id="usr-pass"
                 type="password"
                 name="password"
                 required
-                placeholder="Voer hier uw wachtwoord in"
+                placeholder="{{ lang.account_login_field_password_placeholder }}"
             />
         </div>
         <div class="form-group">
-            <button class="submit-btn" type="submit">Login</button>
-            {{ link(href=".register", text="Geen account? Register hier") }}
+            {{ button(type="submit", text=lang.account_login_btn_submit, class_name="submit-btn", icon="fa-solid fa-right-to-bracket") }}
         </div>
+        {{ link(href=".register", text=lang.account_login_btn_register) }}
     </form>
 </main>
 {% endblock %}

@@ -88,7 +88,11 @@ class Database:
                             role
                             TEXT
                             NOT
-                            NULL
+                            NULL,
+                            approve_notification
+                            INTEGER
+                            NOT NULL
+                            DEFAULT 0
                             CHECK (
                             role
                             IN
@@ -442,11 +446,7 @@ class Database:
             (id, status)
             VALUES (?, ?)
                             """,
-                [
-                    (1, "nieuw"),
-                    (2, "goedgekeurd"),
-                    (3, "afgekeurd"),
-                ],
+                [(1, "nieuw"), (2, "goedgekeurd"), (3, "afgekeurd"), (4, "gesloten")],
             )
 
             # Organizations
@@ -498,15 +498,16 @@ class Database:
             cur.executemany(
                 """
                             INSERT
-                            OR IGNORE INTO users (email, password, role, status_id, organization_id)
-                VALUES (?, ?, ?, ?, ?)
+                            OR IGNORE INTO users (email, password, role, status_id, organization_id,
+                            approve_notification)
+                VALUES (?, ?, ?, ?, ?, ?)
                             """,
                 [
-                    ("admin@hub.com", "admin", "admin", 2, None),
-                    ("org-ah@hub.com", "secret", "organization", 2, 2),
-                    ("sanne@example.com", "secret", "expert", 2, None),
-                    ("jamal@example.com", "secret", "expert", 2, None),
-                    ("lotte@example.com", "secret", "expert", 1, None),
+                    ("admin@hub.com", "admin", "admin", 2, None, 1),
+                    ("org-ah@hub.com", "secret", "organization", 2, 2, 1),
+                    ("sanne@example.com", "secret", "expert", 2, None, 1),
+                    ("jamal@example.com", "secret", "expert", 2, None, 1),
+                    ("lotte@example.com", "secret", "expert", 1, None, 1),
                 ],
             )
 

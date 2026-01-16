@@ -8,6 +8,27 @@ document.addEventListener("DOMContentLoaded", () => {
         path_parts[1] = e.target.value;
         window.location.href = window.location.origin + path_parts.join("/");
     });
+
+    const el_dropdown_page_size = document.getElementById("dropdown-available_page_size");
+        if (el_dropdown_page_size) {
+            el_dropdown_page_size.addEventListener("change", (e) => {
+                e.target.closest("form").submit();
+            });
+        }
+
+        const el_dropdown_page_size_enrolled = document.getElementById("dropdown-enrolled_page_size");
+        if (el_dropdown_page_size_enrolled) {
+            el_dropdown_page_size_enrolled.addEventListener("change", (e) => {
+                e.target.closest("form").submit();
+            });
+        }
+
+        const el_preferences = document.getElementById("preferences");
+        if (el_preferences) {
+            el_preferences.addEventListener("change", (e) => {
+                e.target.closest("form").submit();
+            });
+        }
 });
 
 let toggle = document.querySelector(".nav-toggle");

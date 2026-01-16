@@ -1,22 +1,29 @@
 from flask import Flask
+from dotenv import load_dotenv
+import os
 
 from routes.account import account_bp
 from routes.index import index_bp
 from routes.organization import org_bp
 from routes.research import research_bp
-from routes.management import management_bp
+from routes.approval import approval_bp
 from routes.error import error_bp
 from view import redirect_page
+from utils.auth import in_roles
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "aseu4a3fh375yaw3kjsddsafa3w95uhdsf"
+app.jinja_env.globals.update(in_roles=in_roles)
+
 
 BLUEPRINTS = {
     "": [error_bp],
     "/": [index_bp, account_bp],
     "/organization": org_bp,
     "/research": research_bp,
-    "/management": management_bp,
+    "/approval": approval_bp,
 }
 
 
@@ -48,4 +55,4 @@ if __name__ == "__main__":
                 register_bp(url_prefix, blueprint)
         else:
             register_bp(url_prefix, blueprint_or_list)
-    app.run(debug=True)
+    app.run(debug=True, host=os.getenv("http_host"), port=os.getenv("http_port"))

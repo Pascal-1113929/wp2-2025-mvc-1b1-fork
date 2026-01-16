@@ -2,9 +2,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
 
 CONNECTION = {"host": os.getenv("smtp_host"), "port": os.getenv("smtp_port")}
 

@@ -1,5 +1,7 @@
-table, th, td {
-    border: 1px solid black;
+table,
+th,
+td {
+    border: 2px solid var(--border);
     border-collapse: collapse;
     padding-left: 0.5vw;
     padding-right: 0.5vw;

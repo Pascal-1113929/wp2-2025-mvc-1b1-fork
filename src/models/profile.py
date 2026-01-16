@@ -38,20 +38,20 @@ class Profile:
             con.commit()
 
     def create(
-        self,
-        userid: int,
-        firstname,
-        lastname,
-        gender,
-        postal,
-        intro,
-        phone,
-        birthdate,
-        atools,
-        contact,
-        researchtype,
-        availability,
-        aterms,
+            self,
+            userid: int,
+            firstname,
+            lastname,
+            gender,
+            postal,
+            intro,
+            phone,
+            birthdate,
+            atools,
+            contact,
+            researchtype,
+            availability,
+            aterms,
     ):
         with self.db.connect() as con:
             cur = con.cursor()
@@ -91,11 +91,26 @@ class Profile:
             except TypeError:
                 return None
 
-    def update_profile(self, userid: int, firstname, lastname, gender, postal, intro, phone, birthdate, atools, contact,
-                       researchtype, availability, aterms):
+    def update_profile(
+        self,
+        userid: int,
+        firstname,
+        lastname,
+        gender,
+        postal,
+        intro,
+        phone,
+        birthdate,
+        atools,
+        contact,
+        researchtype,
+        availability,
+        aterms,
+    ):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("""
+            cur.execute(
+                """
             UPDATE profiles SET
                             first_name = ?,
                             last_name = ?,
@@ -110,8 +125,23 @@ class Profile:
                             preferred_study_type = ?,
                             availability = ?
                 WHERE user_id = ?
-                        """, (firstname, lastname, postal, gender, phone, birthdate, atools, intro, aterms, contact,
-                              researchtype, availability, userid))
+                        """,
+                (
+                    firstname,
+                    lastname,
+                    postal,
+                    gender,
+                    phone,
+                    birthdate,
+                    atools,
+                    intro,
+                    aterms,
+                    contact,
+                    researchtype,
+                    availability,
+                    userid,
+                ),
+            )
             con.commit()
             return cur.lastrowid
 
@@ -120,5 +150,23 @@ class Profile:
             cur = con.cursor()
             cur.execute("SELECT * FROM profiles WHERE user_id = ?", (userid,))
             con.commit()
-            row = dict(cur.fetchone())
-            return row["first_name"] + " " + row["last_name"]
+            row = cur.fetchone()
+
+            if row is None:
+                return None
+            else:
+                return row["first_name"] + " " + row["last_name"]
+
+    def update_guardian(self, profile_id, guardian_name, guardian_email, guardian_phone, has_guardian):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("""
+                       UPDATE profiles
+                       SET has_guardian   = ?,
+                           guardian_name  = ?,
+                           guardian_email = ?,
+                           guardian_phone = ?
+                       WHERE id = ?
+                       """, (has_guardian, guardian_name, guardian_email, guardian_phone, profile_id))
+            con.commit()
+        return cur.lastrowid

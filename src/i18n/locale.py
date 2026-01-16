@@ -1,10 +1,14 @@
+from flask import request
 import os
 import yaml
 
 base_directory = os.path.dirname(os.path.abspath(__file__))
 
 
-def get_i18n(locale):
+def get_i18n(locale=None):
+    if locale is None:
+        locale = request.path.split("/")[1]
+
     translation_file = os.path.join(base_directory, "translations", f"{locale}.yaml")
     if not os.path.exists(translation_file):
         translation_file = os.path.join(base_directory, "translations", "nl-NL.yaml")
@@ -20,3 +24,9 @@ def list_locales():
             if filename.endswith(filetype):
                 locales.append(filename[: -len(filetype) - 1])
     return locales
+
+
+def get_iso_639_1():
+    locale = request.path.split("/")[1]
+    locale = locale.split("-")[0]
+    return locale

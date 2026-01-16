@@ -5,9 +5,9 @@
 
 {% block content %}
     <main >
-        <h1>Logged out successfully</h1>
-        <p>You can safely close this window.</p>
-        {{ button(text="Log back in", href=".login") }}
+        <h1>{{ lang.account_logout_title }}</h1>
+        <p>{{ lang.account_logout_description }}</p>
+        {{ button(text=lang.account_logout_backtologin, href=".login") }}
 
 
     </main>

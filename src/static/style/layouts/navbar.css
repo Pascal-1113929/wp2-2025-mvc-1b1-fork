@@ -10,7 +10,7 @@ nav {
 }
 
 .nav-inner {
-    max-width: 1252px;
+    max-width: 1472px;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -28,6 +28,7 @@ nav {
 }
 
 .nav-left {
+    margin-top: 12px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -37,7 +38,7 @@ nav {
     display: flex;
     gap: 8px;
 }
-.nav-toggle{
+.nav-toggle {
     display: none;
 }
 
@@ -47,18 +48,22 @@ nav {
     gap: 10px;
 }
 
+.nav-r-button {
+    margin-top: 10px;
+}
+
 @media (max-width: 768px) {
-    .nav-left{
+    .nav-left {
         order: 3;
     }
-    .nav-toggle{
+    .nav-toggle {
         display: block;
         background: none;
         border: none;
         font-size: 24px;
         cursor: pointer;
     }
-    .nav-inner{
+    .nav-inner {
         flex-wrap: wrap;
     }
     .nav-links {
@@ -77,4 +82,19 @@ nav {
         width: 100%;
         justify-content: space-between;
     }
+}
+
+.lang-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.lang-container label {
+    line-height: 1;
+    opacity: 0.8;
+    margin-bottom: -4px;
+    width: 100%;
+    text-align: center;
 }

@@ -80,13 +80,26 @@ class Disablity:
             con.commit()
             return cur.lastrowid
 
+    def update_study_disabilities(self, study_id, new_disabilities):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT disability_id FROM study_disabilities WHERE study_id = ?", (study_id,))
+            current_ids = {row[0] for row in cur.fetchall()}
+
+            new_ids = {d for d in new_disabilities}
+
+            if current_ids != new_ids:
+                cur.execute("DELETE FROM study_disabilities WHERE study_id = ?", (study_id,))
+                for d_id in new_ids:
+                    cur.execute(
+                        "INSERT INTO study_disabilities (study_id, disability_id) VALUES (?, ?)",
+                        (study_id, d_id)
+                    )
+                con.commit()
+
     def create_study_disabilities(self, study_id, disability_id):
         with self.db.connect() as con:
             cur = con.cursor()
-            print(f"""
-            INSERT INTO profile_disabilities (profile_id, disability_id)
-                        Values ({study_id}, {disability_id})
-            """)
             cur.execute(
                 """
             INSERT INTO study_disabilities (study_id, disability_id)

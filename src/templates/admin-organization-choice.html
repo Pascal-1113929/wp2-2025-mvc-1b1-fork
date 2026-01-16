@@ -1,0 +1,25 @@
+{% from "macros/components/table.html" import table %}
+
+{% extends 'layouts/default.html' %} {% block content %}
+
+    {% set table_header = [
+            lang.admin_org_choice_organization,
+            lang.admin_org_choice_website,
+            lang.admin_org_choice_view
+        ]
+%}
+
+<main class="home">
+    <header>
+        <h1>{{ lang.admin_org_choice_title }}</h1>
+    </header>
+    <a href="/{{ base.locale }}/organization/add" class="button" type="button">{{ lang.org_create }}</a>
+    <section>
+
+        <h2>{{ lang.admin_org_choice_table_title }}</h2>
+        {{ table(table_header, organization_table_data) }}
+    </section>
+
+</main>
+
+{% endblock %}
