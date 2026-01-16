@@ -166,8 +166,10 @@ def account_register():
 
         try:
             parsed_date = datetime.strptime(birthdate, date_format)
+            if not (1900 <= parsed_date.year <= datetime.now().year):
+                errors["birthdate"] = True
         except (ValueError, TypeError):
-            redirect_page(f"/register?error=Birthdate invalid date")
+            return redirect_page(f"register?error=Invalid birthdate")
 
         if not errors:
             try:
@@ -358,8 +360,10 @@ def expert_profile_edit(uid):
 
         try:
             parsed_date = datetime.strptime(birthdate, date_format)
+            if not (1900 <= parsed_date.year <= datetime.now().year):
+                errors["birthdate"] = True
         except (ValueError, TypeError):
-            redirect_page(f"/register?error=Birthdate invalid date")
+            return redirect_page(f"/profile/{uid}/edit?error=Invalid birthdate")
 
         guardian_name = request.form.get("guardian_name", "").strip()
         guardian_email = request.form.get("guardian_email", "").strip()
@@ -375,11 +379,6 @@ def expert_profile_edit(uid):
             has_guardian = 1
         else:
             has_guardian = 0
-
-        try:
-            parsed_date = datetime.strptime(birthdate, date_format)
-        except (ValueError, TypeError):
-            errors["birthdate"] = True
 
         try:
             users.update_email(id, email)
