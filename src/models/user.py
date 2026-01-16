@@ -43,27 +43,37 @@ class User:
 
             return users
 
-    def set_user_status(self, user_id, status):
+    def set_user_status(self, user_id, status, approve_notification=1):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                "UPDATE users SET status_id = ? WHERE id = ?",
-                (status, user_id),
+                "UPDATE users SET status_id = ?, approve_notification = ? WHERE id = ?",
+                (status, approve_notification, user_id),
+            )
+            con.commit()
+            return cur.lastrowid
+
+    def set_user_approve_notifications(self, user_id, approve_notification=1):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute(
+                "UPDATE users SET approve_notification = ? WHERE id = ?",
+                (approve_notification, user_id),
             )
             con.commit()
             return cur.lastrowid
 
     def create(
-        self, email, password, organization_id=None, role="organization", status=1
+            self, email, password, organization_id=None, role="organization", status=1, approve_notification=1
     ):
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
                 """
-                INSERT INTO users (email, password, organization_id, role, status_id)
+                INSERT INTO users (email, password, organization_id, role, status_id, approve_notification)
                 VALUES (?, ?, ?, ?, ?)
             """,
-                (email, password, organization_id, role, status),
+                (email, password, organization_id, role, status, approve_notification),
             )
             con.commit()
             return cur.lastrowid

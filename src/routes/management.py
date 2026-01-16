@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template
+from flask import Blueprint, request, render_template, abort
 
 from view import render, redirect_page
 from models.user import User
@@ -280,7 +280,12 @@ def approval_user_reject(type, id):
 @management_bp.route("/approval/<type>/<id>/approve")
 def approval_user_approve(type, id):
     if type == "user":
-        users.set_user_status(id, 2)
+        name = profile.get_name_by_userid(id)
+
+        if not name:
+            abort(404)
+
+        users.set_user_status(id, 2, 0)
         email_generate(
             "Account Goedgekeurd",
             profile.get_name_by_userid(id),

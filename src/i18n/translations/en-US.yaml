@@ -197,6 +197,7 @@
 "account_register_success": "Successfully Registered. Awaiting Approval!"
 "account_register_error": "An error occurred during registration"
 
+"dashboard_approval_message": "Your account has been approved"
 "dashboard_title": "My account"
 "dashboard_profile_title": "Profile management"
 "dashboard_profile_list_uid": "User ID"

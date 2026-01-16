@@ -6,6 +6,11 @@
     <header>
         <h1>{{ lang.dashboard_title }}</h1>
     </header>
+{% if user.approve_notification == 0 %}
+<section class="alert alert-success">
+<p> {{ lang.dashboard_approval_message }} </p>
+</section>
+{% endif %}
 
     <section class="sectioncard">
         <div class="section-heading">

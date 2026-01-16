@@ -208,6 +208,7 @@
 "account_register_success": "Succesvol geregistreerd. In afwachting van goedkeuring!"
 "account_register_error": "Er is een fout opgetreden tijdens de registratie"
 
+"dashboard_approval_message": "uw Account is goedgekeurd"
 "dashboard_title": "Mijn account"
 "dashboard_profile_title": "Profielbeheer"
 "dashboard_profile_list_uid": "Gebruikers-ID"
