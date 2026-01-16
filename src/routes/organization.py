@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import ceil
 
 from flask import Blueprint, session, abort, request
 
@@ -124,6 +125,11 @@ def organization_dashboard_render(id):
             return abort(403)
     org = organizations.get_organization_by_id(verified_org_id)
 
+    page = request.args.get("page", 1, type=int)
+    page_size = request.args.get("page_size", 10, type=str)  # default 5
+    if page < 1:
+        page = 1
+
     study_table_data = []
     if org is not None:
         study_list = studies.get_study_by_organization_id(verified_org_id)
@@ -131,6 +137,18 @@ def organization_dashboard_render(id):
         for study in study_list:
             study["location_display"] = study["location"] or study["study_type"]
             full_study_list.append(study)
+
+        total_studies = len(study_list)
+        if page_size == "all":
+            PAGE_SIZE = total_studies or 1
+        else:
+            PAGE_SIZE = int(page_size)
+
+        total_pages = ceil(total_studies / PAGE_SIZE)
+        start = (page - 1) * PAGE_SIZE
+        end = start + PAGE_SIZE
+        paginated_studies = study_list[start:end]
+
         table_header = [
             "title",
             "status",
@@ -142,7 +160,7 @@ def organization_dashboard_render(id):
             "age_max",
             "modify",
         ]
-        table = Table(study_list)
+        table = Table(paginated_studies)
         table.set_column_lang("nl", table_header)
 
         table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
@@ -206,7 +224,14 @@ def organization_dashboard_render(id):
         open_success=open_success,
         open_error=open_error,
         changes_study=changes_study,
-        id=id
+        id=id,
+
+        # Pagination variables
+        page=page,
+        page_size=page_size,
+        total_pages=total_pages,
+        has_prev=page > 1,
+        has_next=page < total_pages,
     )
 
 
@@ -278,7 +303,7 @@ def org_register_add():
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
 # Is aangepast door Pascal na verdere inspectie
 @org_bp.route("<organization_user_id>/research/add", methods=["GET", "POST"])
-def research_register():
+def research_register(organization_user_id):
     if not is_authenticated() or not in_roles(["organization", "admin"]):
         return abort(403)
     page_languages = ["nl"]

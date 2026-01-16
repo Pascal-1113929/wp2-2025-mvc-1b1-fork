@@ -35,7 +35,29 @@
     <section>
         <h2>Lijst met onderzoeken</h2>
         <div class="spacer"></div>
+        <form method="get" class="page-size-form">
+            <label for="page_size">{{ lang.page_size }}:</label>
+            <select name="page_size" id="page_size" onchange="this.form.submit()">
+                {% for size in [5, 10, 25, 50, 100, 'all'] %}
+                    <option value="{{ size }}" {% if page_size|string == size|string %}selected{% endif %}>
+                        {{ size }}
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="page" value="{{ page }}">
+        </form>
         {{ table(['Titel', 'Status', 'StartDatum', 'Einddatum', 'Locatie', 'Vergoeding', 'Minimum leeftijd', 'Maximum leeftijd', "Modify"], study_list) }}
+        {% if total_pages > 1 %}
+        <nav class="pagination" aria-label="Research list pagination">
+            {% if has_prev %}
+                <a href="?page={{ page - 1 }}&page_size={{ page_size }}">Previous</a>
+            {% endif %}
+            Page {{ page }} / {{ total_pages }}
+            {% if has_next %}
+                <a href="?page={{ page + 1 }}&page_size={{ page_size }}">Next</a>
+            {% endif %}
+        </nav>
+        {% endif %}
     </section>
     </main>
 {% else %}
