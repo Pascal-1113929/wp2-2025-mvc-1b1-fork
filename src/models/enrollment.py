@@ -12,6 +12,23 @@ class Enrollment:
             con.commit()
             return cur.fetchone()
 
+    def count_by_user_id(self, user_id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT COUNT() FROM enrollments INNER JOIN profiles ON profiles.id == enrollments.profile_id "
+                        "WHERE profiles.user_id == ?", (user_id,))
+            con.commit()
+            return cur.fetchone()
+
+    def count_by_organization_id(self, organization_id):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("SELECT count() FROM enrollments "
+                        "INNER JOIN studies ON enrollments.study_id == studies.id "
+                        "WHERE studies.organization_id == ?", (organization_id,))
+            con.commit()
+            return cur.fetchone()
+
     def create(self, study_id, profile_id, status):
         with self.db.connect() as con:
             cur = con.cursor()

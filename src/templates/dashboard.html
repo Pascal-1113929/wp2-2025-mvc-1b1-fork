@@ -54,8 +54,8 @@
         </div>
     </section>
     {% endif %}
-    {% if in_roles(['expert', 'admin']) %}
 
+    {% if in_roles(['expert']) %}
     <section class="sectioncard">
         <div class="section-heading">
             <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_expert_title }}</h2>
@@ -70,14 +70,11 @@
                 <p class="stat-label">{{ lang.dashboard_statistics_expert_card_researchapproval }}</p>
                 <p class="stat-value">{{ stats[4] }}</p>
             </article>
-            <article class="stat-card">
-                <p class="stat-label">{{ lang.dashboard_statistics_expert_card_enrollmentapproval }}</p>
-                <p class="stat-value">{{ stats[5] }}</p>
-            </article>
         </div>
     </section>
     {% endif %}
-    {% if in_roles(['organization', 'admin']) %}
+
+    {% if in_roles(['organization']) %}
     <section class="sectioncard">
         <div class="section-heading">
             <h2><i class="fa-solid fa-chart-line"></i> {{ lang.dashboard_statistics_organization_title }}</h2>
