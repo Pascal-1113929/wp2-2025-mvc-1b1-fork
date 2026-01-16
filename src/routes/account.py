@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, request, session
 
 from models.disabilities import Disablity
@@ -159,6 +161,13 @@ def account_register():
         for field, value in required_fields.items():
             if not value:
                 errors[field] = True
+
+        date_format = "%Y-%m-%d"
+
+        try:
+            parsed_date = datetime.strptime(birthdate, date_format)
+        except (ValueError, TypeError):
+            redirect_page(f"/register?error=Birthdate invalid date")
 
         if not errors:
             try:
@@ -345,6 +354,13 @@ def expert_profile_edit(uid):
         availability = request.form.get("availability")
         aterms = request.form.get("aterms")
 
+        date_format = "%Y-%m-%d"
+
+        try:
+            parsed_date = datetime.strptime(birthdate, date_format)
+        except (ValueError, TypeError):
+            redirect_page(f"/register?error=Birthdate invalid date")
+
         guardian_name = request.form.get("guardian_name", "").strip()
         guardian_email = request.form.get("guardian_email", "").strip()
         guardian_phone = request.form.get("guardian_phone", "").strip()
@@ -359,6 +375,11 @@ def expert_profile_edit(uid):
             has_guardian = 1
         else:
             has_guardian = 0
+
+        try:
+            parsed_date = datetime.strptime(birthdate, date_format)
+        except (ValueError, TypeError):
+            errors["birthdate"] = True
 
         try:
             users.update_email(id, email)

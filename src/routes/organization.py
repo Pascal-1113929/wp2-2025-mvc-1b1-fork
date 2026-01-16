@@ -99,10 +99,10 @@ def organization_dashboard_render(id):
     changes_study = None
 
     if (
-        close_success == "1"
-        or close_error == "1"
-        or open_success == "1"
-        or open_error == "1"
+            close_success == "1"
+            or close_error == "1"
+            or open_success == "1"
+            or open_error == "1"
     ):
         if study_id:
             changes_study = studies.get_study_by_id(study_id)
@@ -330,6 +330,20 @@ def research_register(organization_user_id):
         disability = request.form.get("disability")
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
+
+        date_format = "%Y-%m-%d"
+
+        try:
+            parsed_date = datetime.strptime(start_date, date_format)
+        except (ValueError, TypeError):
+            redirect_page(f"organization/{organization_user_id}/research/add?error=Startdate invalid date")
+
+        date_format = "%Y-%m-%d"
+
+        try:
+            parsed_date = datetime.strptime(end_date, date_format)
+        except (ValueError, TypeError):
+            redirect_page(f"organization/{organization_user_id}/research/add?error=End date invalid date")
 
         required_fields = {
             "title": title,
@@ -630,6 +644,20 @@ def organization_study_edit_page_render(organization_user_id, study_id):
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
         disability_list = [disability]
+
+        date_format = "%Y-%m-%d"
+
+        try:
+            parsed_date = datetime.strptime(start_date, date_format)
+        except (ValueError, TypeError):
+            redirect_page(f"organization/{organization_user_id}/research/add?error=Startdate invalid date")
+
+        date_format = "%Y-%m-%d"
+
+        try:
+            parsed_date = datetime.strptime(end_date, date_format)
+        except (ValueError, TypeError):
+            redirect_page(f"organization/{organization_user_id}/research/add?error=End date invalid date")
 
         try:
             studies.update_study(
