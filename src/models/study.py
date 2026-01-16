@@ -15,6 +15,18 @@ class Study:
             con.commit()
             return cur.fetchone()
 
+    def count_available(self, disability_ids):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            placeholders = ','.join(['?'] * len(disability_ids))
+            cur.execute("SELECT COUNT(DISTINCT studies.id) FROM studies "
+                        "INNER JOIN study_disabilities ON studies.id == study_disabilities.study_id "
+                        "WHERE studies.available=1 AND DATE(end_date) > DATE('now') "
+                        f"AND disability_id IN ({placeholders})",
+                        disability_ids)
+            con.commit()
+            return cur.fetchone()
+
     def set_research_status(self, study_id, status):
         with self.db.connect() as con:
             cur = con.cursor()

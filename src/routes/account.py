@@ -50,6 +50,13 @@ def expert_dashboard_render():
     user_id = str(session.get("user_id"))
     user = users.get_user_by_id(user_id)
     users.set_user_approve_notifications(user_id)
+    profile = profiles.get_profile_by_userid(user_id)
+    if profile:
+        user_disability_ids = disabilities.get_disability_ids_by_profileid(profile["id"])
+        user_disability_ids = tuple(user_disability_ids)
+        print(user_disability_ids)
+    else:
+        user_disability_ids = ()
     profile = profiles.get_profile_by_userid(session["user_id"])
     stats = [0] * 9
 
@@ -58,15 +65,15 @@ def expert_dashboard_render():
         stats[1] = len(studies.get_study_by_status(1))
         stats[2] = len(enrollments.get_enrollments_by_status(1))
 
-    if in_roles(["expert", "admin"]):
-        stats[3] = len(studies.get_study_by_status(1))
-        stats[4] = len(studies.get_study_by_status(1))
-        stats[5] = len(studies.get_study_by_status(1))
+    if in_roles(["expert"]):
+        stats[3] = enrollments.count_by_user_id(user_id)
+        stats[4] = studies.count_available(user_disability_ids)
 
-    if in_roles(["organization", "admin"]):
-        stats[6] = len(studies.get_study_by_status(1))
-        stats[7] = len(studies.get_study_by_status(1))
-        stats[8] = len(studies.get_study_by_status(1))
+    if in_roles(["organization"]):
+        stats[6] = len(studies.get_study_by_organization_id(user["organization_id"]))
+        stats[7] = (len(studies.get_study_by_status(1)) + len(studies.get_study_by_status(2)) +
+                    len(studies.get_study_by_status(2)))
+        stats[8] = enrollments.count_by_organization_id(user["organization_id"])
 
     return render("dashboard.html", profile=profile, stats=stats, user_id=user_id, user=user)
 
