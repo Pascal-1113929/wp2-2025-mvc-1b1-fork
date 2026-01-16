@@ -1,5 +1,13 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/ltgmuiIo)
-# Werkplaats 2 - Accessibility hub
+# Werkplaats 2: Accessibility hub
+### Een accessable website voor research
+
+## Credits
+| Naam              | Github         | Discord             | Student nummer |
+|-------------------|----------------|---------------------|----------------|
+| Max van der Wolf  | MVDW-Java      | spit_on_that_thang_ | 1121058        |
+| Amerencio Windzak | ALW-2005       | .atjezuid           | 1124568        |
+| Shemar Braafheid  | Shemar-126662  | kevin3456           | 1126662        |
+| Pascal Benink     | Pascal-1113929 | desamsamers         | 1113929        |
 
 Bij inlevering moet hier het volgende staan:
 - Installatie instructies
@@ -75,3 +83,31 @@ python src/app.py
 2. navigeer naar src/app.py
 3. klik de play button in pycharm en de app start up
 <img width="1898" height="795" alt="icture1" src="https://github.com/user-attachments/assets/1d79446e-22b6-4519-b4d3-f272afc350a4" />
+
+## Inloggegevens test gebruikers
+| rol           | email             | password    |
+|---------------|-------------------|-------------|
+| admin         | admin@hub.com     | admin       |
+| expert        | sanne@example.com | secret      |
+| organization  | org-ah@hub.com    | secret      |
+
+## ERD
+<img width="973" height="769" alt="image" src="https://github.com/user-attachments/assets/89272be5-dbb1-429f-878d-836350466ab8" />
+
+ERD Gegenereerd met DbVisualizer https://www.dbvis.com/ 
+
+## Mail Fucntionalitijd
+Deze applicatie bevat de nodige connecties om via smtp4dev mail te sturen
+
+## Screenshots
+<img width="945" height="482" alt="image" src="https://github.com/user-attachments/assets/f1c2fd71-24e2-4171-a53a-e7df6b3c31a1" />
+
+<img width="945" height="480" alt="image" src="https://github.com/user-attachments/assets/e9d22f59-7a73-4afd-9d69-4fd1c81a9870" />
+
+<img width="945" height="482" alt="image" src="https://github.com/user-attachments/assets/fbb178bb-812d-476a-9ff0-f539c8ad3cfc" />
+
+
+## Bronnen
+De bronnen staan in 
+- [Sources](https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice/blob/main/docs/SOURCES.md)
+- [GenAI](https://github.com/Rac-Software-Development/wp2-2025-mvc-1b1-codingenterprice/blob/max-doc-update/docs/GenAI.md)
