@@ -4,35 +4,35 @@
 
 
 <main>
-    <h1>Inschrijven voor: {{ study.title }}</h1>
+    <h1>{{ lang.research_enroll_title.replace("%", study.title) }}</h1>
     <form class="en-form" method="post">
 
-        <label for="name">Naam:</label>
+        <label for="name">{{ lang.research_enroll_form_firstname }}</label>
         <input type="text" id="name" name="name" value="{{ profile.first_name }}" readonly>
 
-        <label for="surname">Achternaam:</label>
+        <label for="surname">{{ lang.research_enroll_form_lastname }}</label>
         <input type="text" id="surname" name="surname" value="{{ profile.last_name }}" readonly>
 
-        <label for="email">E-mail:</label>
+        <label for="email">{{ lang.research_enroll_form_email }}</label>
         <input type="email" id="email" name="email" value="{{ user.email }}" readonly>
 
-        <label for="phone">Telefoonnummer:</label>
+        <label for="phone">{{ lang.research_enroll_form_phone }}</label>
         <input type="text" id="phone" name="phone" value="{{ profile.phone }}" readonly>
 
-        <label for="postcode">Postcode:</label>
+        <label for="postcode">{{ lang.research_enroll_form_postalcode }}</label>
         <input type="text" id="postcode" name="postcode" value="{{ profile.postcode }}" readonly>
 
-        <label for="motivation">Motivatie:</label>
+        <label for="motivation">{{ lang.research_enroll_form_motivation }}</label>
         <input type="text" id="motivation" name="intro" value="{{ profile.intro }}" readonly>
 
-        <label for="availability">Beschikbaarheid:</label>
+        <label for="availability">{{ lang.research_enroll_form_availability }}</label>
         <input type="text" id="availability" name="availability" value="{{ profile.availability }}" readonly>
 
 
 
             <div class="button-group" >
-                <button type="submit" class="button">Bevestigen</button>
-                <a href="/{{ base.locale }}/research/{{ study.id }}" class="button">Annuleren</a>
+                <button type="submit" class="button">{{ lang.research_enroll_btn_confirm }}</button>
+                <a href="/{{ base.locale }}/research/{{ study.id }}" class="button danger">{{ lang.research_enroll_btn_cancel }}</a>
             </div>
     </form>
 </main>
