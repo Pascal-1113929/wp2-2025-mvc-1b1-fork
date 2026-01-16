@@ -7,6 +7,7 @@
         {% if success %}
             <div class="alert alert-success">
                 {{ success }}
+                <a href="/{{ base.locale }}/organization/{{ organization_user_id }}" class="button" type="button">{{ lang.return_research_create }}</a>
             </div>
         {% endif %}
 
@@ -16,7 +17,7 @@
             </div>
         {% endif %}
         
-        <form class="cm-form" action="{{ url_for('organization.research_register', language=base.locale)}}" method="post">
+        <form class="cm-form" action="{{ url_for('organization.research_register', language=base.locale, organization_user_id=user_id)}}" method="post">
             <div class="form-group">
                 <label for="title">Onderzoekstitel</label>
                 <input type="text" id="title" name="title" maxlength="255" value="{{ request.form.get('title', '') }}" required placeholder="vul hier uw onderzoekstitel in">

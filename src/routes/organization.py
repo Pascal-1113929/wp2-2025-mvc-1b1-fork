@@ -206,6 +206,7 @@ def organization_dashboard_render(id):
         open_success=open_success,
         open_error=open_error,
         changes_study=changes_study,
+        id=id
     )
 
 
@@ -274,14 +275,15 @@ def org_register_add():
 
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
 # Is aangepast door Pascal na verdere inspectie
-@org_bp.route("/research/add", methods=["GET", "POST"])
-def research_register():
+@org_bp.route("<organization_user_id>/research/add", methods=["GET", "POST"])
+def research_register(organization_user_id):
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
     error = request.args.get("error")
     errors = {}
+    user_id = int(organization_user_id)
     if request.method == "POST":
         title = request.form.get("title")
         description = request.form.get("description")
@@ -319,7 +321,7 @@ def research_register():
                 errors["location"] = True
 
         if not errors:
-            user = users.get_user_by_id(session.get("user_id"))
+            user = users.get_user_by_id(user_id)
 
             try:
                 study_id = studies.create_with_organisation(
@@ -341,10 +343,10 @@ def research_register():
                 disabilities.create_study_disabilities(study_id, disability)
 
                 message = "Onderzoek succesvol aangemaakt!"
-                return redirect_page(f"organization/research/add?success={message}")
+                return redirect_page(f"organization/{organization_user_id}/research/add?success={message}")
             except Exception as e:
                 message = f"Er is iets fout gegaan: {str(e)}"
-                return redirect_page(f"organization/research/add?error={message}")
+                return redirect_page(f"organization/{organization_user_id}/research/add?error={message}")
 
     disability_dropdown = Dropdown(disabilities.get_all_disabilities())
     disability_dropdown.set("value", "<id>")
@@ -357,21 +359,18 @@ def research_register():
         error=error,
         disabilities=disability_dropdown.export_to_macro(),
         errors=errors,
+        user_id=user_id
     )
 
 
-@org_bp.route("/<organization_id>/study/<study_id>/")
-def organization_study_page_render(organization_id, study_id):
+@org_bp.route("/<organization_user_id>/study/<study_id>/")
+def organization_study_page_render(organization_user_id, study_id):
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
-    user_id = session.get("user_id")
-    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
-    if verified_org_id != int(organization_id):
-        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
-        return abort(403)
+    org_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
 
-    org = organizations.get_organization_by_id(organization_id)
+    org = organizations.get_organization_by_id(org_id)
     study = studies.get_study_by_id(study_id)
     raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(study_id, 1)
     raw_verified_enrolment_list = enrolments.get_enrolments_by_study_id(study_id, 2)
@@ -381,7 +380,8 @@ def organization_study_page_render(organization_id, study_id):
         profile = profiles.get_profile_by_id(enrolment["profile_id"])
         user = users.get_user_by_id(profile["user_id"])
         new_enrolment = {
-            "organization_id": int(organization_id),
+            "organization_id": int(org_id),
+            "organization_user_id": int(organization_user_id),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
             "user_id": user["id"],
@@ -398,7 +398,8 @@ def organization_study_page_render(organization_id, study_id):
         profile = profiles.get_profile_by_id(enrolment["profile_id"])
         user = users.get_user_by_id(profile["user_id"])
         verified_enrolment = {
-            "organization_id": int(organization_id),
+            "organization_id": int(org_id),
+            "organization_user_id": int(organization_user_id),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
             "user_id": user["id"],
@@ -425,7 +426,7 @@ def organization_study_page_render(organization_id, study_id):
         verified_enrolment_list, table_header
     )
 
-    if int(organization_id) != study["organization_id"]:
+    if int(org_id) != study["organization_id"]:
         print("forbidden study_orgid mismatch")
         return abort(403)
 
@@ -439,53 +440,47 @@ def organization_study_page_render(organization_id, study_id):
     )
 
 
-@org_bp.route("/<organization_id>/study/<study_id>/close")
-def organization_study_close(organization_id, study_id):
+@org_bp.route("/<organization_user_id>/study/<study_id>/close")
+def organization_study_close(organization_user_id, study_id):
     if not is_authenticated():
         return abort(401)
 
     try:
         studies.set_research_status(study_id, 4)
         return redirect_page(
-            f"/organization/{organization_id}?close-success=1&study_id={study_id}"
+            f"/organization/{organization_user_id}?close-success=1&study_id={study_id}"
         )
     except Exception as e:
         print(e)
         return redirect_page(
-            f"/organization/{organization_id}?close-error=1&study_id={study_id}"
+            f"/organization/{organization_user_id}?close-error=1&study_id={study_id}"
         )
 
 
-@org_bp.route("/<organization_id>/study/<study_id>/open")
-def organization_study_open(organization_id, study_id):
+@org_bp.route("/<organization_user_id>/study/<study_id>/open")
+def organization_study_open(organization_user_id, study_id):
     if not is_authenticated():
         return abort(401)
 
     try:
         studies.set_research_status(study_id, 2)
         return redirect_page(
-            f"/organization/{organization_id}/?open-success=1&study_id={study_id}"
+            f"/organization/{organization_user_id}/?open-success=1&study_id={study_id}"
         )
     except Exception as e:
         print(e)
         return redirect_page(
-            f"/organization/{organization_id}/?open-error=1&study_id={study_id}"
+            f"/organization/{organization_user_id}/?open-error=1&study_id={study_id}"
         )
 
 
-@org_bp.route("/<organization_id>/study/<study_id>/edit", methods=["GET", "POST"])
-def organization_study_edit_page_render(organization_id, study_id):
+@org_bp.route("/<organization_user_id>/study/<study_id>/edit", methods=["GET", "POST"])
+def organization_study_edit_page_render(organization_user_id, study_id):
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
     error = request.args.get("error")
-
-    user_id = session.get("user_id")
-    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
-    if verified_org_id != int(organization_id):
-        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
-        return abort(403)
 
     db_study = studies.get_study_by_id(study_id)
     disability_list = disabilities.get_disability_list_by_studyid(study_id)
@@ -527,13 +522,13 @@ def organization_study_edit_page_render(organization_id, study_id):
             )
             disabilities.update_study_disabilities(study_id, disability_list)
             return redirect_page(
-                f"/organization/{organization_id}/study/{study_id}/edit?success=1"
+                f"/organization/{organization_user_id}/study/{study_id}/edit?success=1"
             )
         except Exception as e:
             message = f"Er is iets fout gegaan"
             print(e)
             return redirect_page(
-                f"/organization/{organization_id}/study/{study_id}/edit?error={message}"
+                f"/organization/{organization_user_id}/study/{study_id}/edit?error={message}"
             )
 
     if success:
@@ -553,13 +548,14 @@ def organization_study_edit_page_render(organization_id, study_id):
         disabilities=disability_dropdown.export_to_macro(),
         success=success,
         error=error,
+        organization_user_id=organization_user_id,
     )
 
 
 def enrolment_table_data_converter(enrolment_list, table_header):
     table = Table(enrolment_list)
 
-    table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
+    table.set_type("title", "link", [".organization/<organization_user_id>/study/<id>"])
     table.add_column(
         "view_profile", "button", ["Bekijk Profiel", ".expert-profile/<user_id>"]
     )
@@ -568,7 +564,7 @@ def enrolment_table_data_converter(enrolment_list, table_header):
         "button",
         [
             "Uitschrijven",
-            ".organization/<organization_id>/study/<study_id>/<profile_id>/unlist",
+            ".organization/<organization_user_id>/study/<study_id>/<profile_id>/unlist",
         ],
     )
     table.whitelist_data(table_header)
@@ -578,12 +574,12 @@ def enrolment_table_data_converter(enrolment_list, table_header):
     return table_data
 
 
-@org_bp.route("<organization_id>/study/<study_id>/<profile_id>/unlist")
-def organization_unlist(organization_id, study_id, profile_id):
+@org_bp.route("<organization_user_id>/study/<study_id>/<profile_id>/unlist")
+def organization_unlist(organization_user_id, study_id, profile_id):
     page_languages = ["nl", "en"]
     page_translated = check_translation(page_languages, get_iso_639_1())
-
-    organization_id = int(organization_id)
+    organization_user_id = int(organization_user_id)
+    organization_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
     study_id = int(study_id)
     profile_id = int(profile_id)
 

@@ -7,16 +7,18 @@
         {% if success %}
             <div class="alert alert-success">
                 {{ success }}
+            <a href="/{{ base.locale }}/organization/{{ organization_user_id }}" class="button" type="button">{{ lang.return_research_create }}</a>
             </div>
         {% endif %}
 
         {% if error %}
             <div class="alert alert-error">
                 {{ error }}
+
             </div>
         {% endif %}
         
-        <form class="cm-form" action="{{ url_for('organization.organization_study_edit_page_render', study_id=study.id, organization_id=study.organization_id, language=base.locale)}}" method="post">
+        <form class="cm-form" action="{{ url_for('organization.organization_study_edit_page_render', study_id=study.id, organization_user_id=organization_user_id, language=base.locale)}}" method="post">
             <div class="form-group">
                 <label for="title">Onderzoekstitel</label>
                 <input type="text" id="title" name="title" maxlength="255" value="{{ study.title }}" required placeholder="vul hier uw onderzoekstitel in">
