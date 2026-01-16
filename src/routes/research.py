@@ -51,7 +51,6 @@ def research_dashboard_render():
 
     args = request.args.to_dict(flat=True)
     args.pop("tab", None)  # Remove 'tab' key if present
-    print(args)
     extra_args = "&" + urlencode(args)
 
     # Available studies
@@ -128,7 +127,8 @@ def research_dashboard_render():
             study["end_date"] = datetime.strptime(study["end_date"], "%Y-%m-%d")
             study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
             study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
-            available_studies.append(study)   
+            available_studies.append(study)
+
         if search_query:
             available_studies = [
                 study for study in available_studies
@@ -192,7 +192,7 @@ def research_dashboard_render():
             study["start_date"] = study["start_date"].strftime("%d-%m-%Y")
             study["end_date"] = study["end_date"].strftime("%d-%m-%Y")
             available_studies.append(study)
-        
+
         if search_query:
             available_studies = [
                 study for study in available_studies
@@ -257,16 +257,16 @@ def research_dashboard_render():
 
     if not selected_columns:
         selected_columns = [
-        "title",
-        "organization",
-        "start_date",
-        "end_date",
-        "location_display",
-        "reward",
-        "age_min",
-        "age_max",
-    ]
-    
+            "title",
+            "organization",
+            "start_date",
+            "end_date",
+            "location_display",
+            "reward",
+            "age_min",
+            "age_max",
+        ]
+
     table_header = selected_columns
 
     available_table = Table(available_studies_paginated)
@@ -316,8 +316,6 @@ def study_dashboard_render(study_id):
     study = studies.get_study_by_id(study_id)
     if study is None:
         abort(404)
-
-    print(study)
 
     organization = organizations.get_organization_by_id(study["organization_id"])
     disability_list = disabilities.get_disability_list_by_studyid(study["id"])

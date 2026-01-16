@@ -38,20 +38,20 @@ class Profile:
             con.commit()
 
     def create(
-        self,
-        userid: int,
-        firstname,
-        lastname,
-        gender,
-        postal,
-        intro,
-        phone,
-        birthdate,
-        atools,
-        contact,
-        researchtype,
-        availability,
-        aterms,
+            self,
+            userid: int,
+            firstname,
+            lastname,
+            gender,
+            postal,
+            intro,
+            phone,
+            birthdate,
+            atools,
+            contact,
+            researchtype,
+            availability,
+            aterms,
     ):
         with self.db.connect() as con:
             cur = con.cursor()
@@ -156,3 +156,17 @@ class Profile:
                 return None
             else:
                 return row["first_name"] + " " + row["last_name"]
+
+    def update_guardian(self, profile_id, guardian_name, guardian_email, guardian_phone, has_guardian):
+        with self.db.connect() as con:
+            cur = con.cursor()
+            cur.execute("""
+                       UPDATE profiles
+                       SET has_guardian   = ?,
+                           guardian_name  = ?,
+                           guardian_email = ?,
+                           guardian_phone = ?
+                       WHERE id = ?
+                       """, (has_guardian, guardian_name, guardian_email, guardian_phone, profile_id))
+            con.commit()
+        return cur.lastrowid

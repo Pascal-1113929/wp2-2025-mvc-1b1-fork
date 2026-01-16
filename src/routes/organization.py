@@ -523,11 +523,12 @@ def organization_study_page_render(organization_user_id, study_id):
     )
 
 
-@org_bp.route("/<organization_id>/study/<study_id>/close")
-def organization_study_close(organization_id, study_id):
+@org_bp.route("/<organization_user_id>/study/<study_id>/close")
+def organization_study_close(organization_user_id, study_id):
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(401)
     study = studies.get_study_by_id(study_id)
+    organization_id = organizations.get_organization_userid(organization_user_id)
     if not study:
         return abort(404)
     if int(organization_id) != study["organization_id"]:
@@ -550,11 +551,12 @@ def organization_study_close(organization_id, study_id):
         )
 
 
-@org_bp.route("/<organization_id>/study/<study_id>/open")
-def organization_study_open(organization_id, study_id):
+@org_bp.route("/<organization_user_id>/study/<study_id>/open")
+def organization_study_open(organization_user_id, study_id):
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(401)
     study = studies.get_study_by_id(study_id)
+    organization_id = organizations.get_organization_userid(organization_user_id)
     if not study:
         return abort(404)
     if int(organization_id) != study["organization_id"]:

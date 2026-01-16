@@ -204,6 +204,12 @@
 "account_register_link_login": "Already have an account? Log in here"
 "account_register_success": "Successfully Registered. Awaiting Approval!"
 "account_register_error": "An error occurred during registration"
+"account_register_field_guardian_name": "Guardian Name"
+"account_register_field_guardian_name_placeholder": "Enter guardian's full name"
+"account_register_field_guardian_email": "Guardian Email"
+"account_register_field_guardian_email_placeholder": "Enter guardian's email"
+"account_register_field_guardian_phone": "Guardian Phone"
+"account_register_field_guardian_phone_placeholder": "Enter guardian's phone number"
 
 "dashboard_approval_message": "Your account has been approved"
 "dashboard_title": "My account"
