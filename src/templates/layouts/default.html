@@ -47,7 +47,10 @@
                     <label for="dropdown-language-selector">{{ lang.lang_select_label }}</label>
                     {{ dropdown(options=[
                         {"value": "nl-NL", "text": "🇳🇱 Nederlands", "selected": base.locale == "nl-NL", "lang": "nl"},
-                        {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US", "lang": "en"}
+                        {"value": "en-US", "text": "🇺🇸 English", "selected": base.locale == "en-US", "lang": "en"},
+                        {"value": "es-ES", "text": "🇪🇸 Español", "selected": base.locale == "es-ES", "lang": "es"},
+                        {"value": "fr-FR", "text": "🇫🇷 Français", "selected": base.locale == "fr-FR", "lang": "fr"},
+                        {"value": "jp-JP", "text": "🇯🇵 日本語", "selected": base.locale == "jp-JP", "lang": "jp"}
                     ], name="", id="language-selector") }}
                 </div>
                 <div class="nav-r-button">
