@@ -280,3 +280,30 @@
 "bad_enrollments": "Rejected enrollments"
 "all_show": "Currently showing all enrollments"
 "research_tab_description": "Choose which enrollment status you want to view: Under review, Approved, or Rejected"
+
+'unsubscribe_completed': 'Unsubscription Completed'
+
+organization_study_page_title: "Study page: %study% of %organization%"
+
+organization_study_new_registrations_list_title: "List of registrations with status 'new'"
+organization_study_verified_registrations_list_title: "List of registrations with status 'approved'"
+
+organization_study_table_row_size_description: "Amount of records on page:"
+organization_study_table_row_size_each_page: "% each page"
+organization_study_table_row_show_everything: "Show everything"
+
+organization_study_table_columns:
+  - "Name"
+  - "Phone number"
+  - "Email"
+  - "Contact preference"
+  - "Availability"
+  - "View profile"
+  - "Delete"
+
+organization_study_previous: "Previous"
+organization_study_next: "Next"
+organization_study_page: "Page"
+
+organization_study_unsubscribe_completed: "Unsubscription Completed"
+organization_study_go_to_study_org: "Go to Study Page"

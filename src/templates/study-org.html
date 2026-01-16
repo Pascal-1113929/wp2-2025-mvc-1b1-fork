@@ -4,84 +4,91 @@
 
 {% block content %}
 
-
-    <main>
-<!--        Dit zit in main vanwege styling redenen-->
+<main>
+    <!-- This is in main for styling reasons -->
     <header>
         <h1>
-            Inschrijflijst pagina: {{ study.title }} van {{ organization.name }}
+            {{ lang.organization_study_page_title.replace('%study%', study.title).replace('%organization%', organization.name) }}
         </h1>
     </header>
-            <section>
-        <h2>Lijst van inschrijvingen met status nieuw</h2>
+
+    <section>
+        <h2>{{ lang.organization_study_new_registrations_list_title }}</h2>
 
         <form method="get" class="page-size-form">
             <div style="display: flex; align-items: center; gap: 8px;">
-                <label for="available_page_size">{{ lang.table_row_size_description }}</label>
+                <label for="available_page_size">{{ lang.organization_study_table_row_size_description }}</label>
                 {{ dropdown(options=[
-                {"value": "5", "text": lang.table_row_size_each_page.replace('%', "5"), "selected": available_page_size == "5"},
-                    {"value": "10", "text": lang.table_row_size_each_page.replace('%', "10"), "selected": available_page_size == "10"},
-                    {"value": "25", "text": lang.table_row_size_each_page.replace('%', "25"), "selected": available_page_size == "25"},
-                    {"value": "50", "text": lang.table_row_size_each_page.replace('%', "50"), "selected": available_page_size == "50"},
-                    {"value": "100", "text": lang.table_row_size_each_page.replace('%', "100"), "selected": available_page_size == "100"},
-                    {"value": "all", "text": lang.table_row_show_everything, "selected": available_page_size == "all"}
-                ], name="new_page_size", id="available_page_size", placeholder=lang.table_row_size_each_page.replace('%', new_page_size)) }}
+                    {"value": "5", "text": lang.organization_study_table_row_size_each_page.replace('%', "5"), "selected": available_page_size == "5"},
+                    {"value": "10", "text": lang.organization_study_table_row_size_each_page.replace('%', "10"), "selected": available_page_size == "10"},
+                    {"value": "25", "text": lang.organization_study_table_row_size_each_page.replace('%', "25"), "selected": available_page_size == "25"},
+                    {"value": "50", "text": lang.organization_study_table_row_size_each_page.replace('%', "50"), "selected": available_page_size == "50"},
+                    {"value": "100", "text": lang.organization_study_table_row_size_each_page.replace('%', "100"), "selected": available_page_size == "100"},
+                    {"value": "all", "text": lang.organization_study_table_row_show_everything, "selected": available_page_size == "all"}
+                ], name="new_page_size", id="available_page_size", placeholder=lang.organization_study_table_row_size_each_page.replace('%', new_page_size)) }}
             </div>
             <input type="hidden" name="new_page" value="{{ new_page }}">
             <input type="hidden" name="verified_page" value="{{ verified_page }}">
             <input type="hidden" name="verified_page_size" value="{{ verified_page_size }}">
         </form>
 
-        {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_new) }}
+        {{ table(lang.organization_study_table_columns, table_data_new) }}
 
         {% if total_pages_new > 1 %}
         <nav class="pagination">
             {% if has_prev_new %}
-                <a href="?new_page={{ new_page-1 }}&new_page_size={{ new_page_size }}&verified_page={{ verified_page }}&verified_page_size={{ verified_page_size }}">Previous</a>
+                <a href="?new_page={{ new_page-1 }}&new_page_size={{ new_page_size }}&verified_page={{ verified_page }}&verified_page_size={{ verified_page_size }}">
+                    {{ lang.organization_study_previous }}
+                </a>
             {% endif %}
-            Page {{ new_page }} / {{ total_pages_new }}
+            {{ lang.organization_study_page }} {{ new_page }} / {{ total_pages_new }}
             {% if has_next_new %}
-                <a href="?new_page={{ new_page+1 }}&new_page_size={{ new_page_size }}&verified_page={{ verified_page }}&verified_page_size={{ verified_page_size }}">Next</a>
+                <a href="?new_page={{ new_page+1 }}&new_page_size={{ new_page_size }}&verified_page={{ verified_page }}&verified_page_size={{ verified_page_size }}">
+                    {{ lang.organization_study_next }}
+                </a>
             {% endif %}
         </nav>
         {% endif %}
     </section>
 
     <section>
-        <h2>Lijst van inschrijvingen met status goedgekeurd</h2>
+        <h2>{{ lang.organization_study_verified_registrations_list_title }}</h2>
 
         <form method="get">
-            <label for="verified_page_size">{{ lang.page_size }}:</label>
             <div style="display: flex; align-items: center; gap: 8px;">
-                <label for="available_page_size">{{ lang.table_row_size_description }}</label>
+                <label for="verified_page_size">{{ lang.organization_study_table_row_size_description }}</label>
                 {{ dropdown(options=[
-                {"value": "5", "text": lang.table_row_size_each_page.replace('%', "5"), "selected": available_page_size == "5"},
-                    {"value": "10", "text": lang.table_row_size_each_page.replace('%', "10"), "selected": available_page_size == "10"},
-                    {"value": "25", "text": lang.table_row_size_each_page.replace('%', "25"), "selected": available_page_size == "25"},
-                    {"value": "50", "text": lang.table_row_size_each_page.replace('%', "50"), "selected": available_page_size == "50"},
-                    {"value": "100", "text": lang.table_row_size_each_page.replace('%', "100"), "selected": available_page_size == "100"},
-                    {"value": "all", "text": lang.table_row_show_everything, "selected": available_page_size == "all"}
-                ], name="verified_page_size", id="available_page_size", placeholder=lang.table_row_size_each_page.replace('%', verified_page_size)) }}
+                    {"value": "5", "text": lang.organization_study_table_row_size_each_page.replace('%', "5"), "selected": verified_page_size == "5"},
+                    {"value": "10", "text": lang.organization_study_table_row_size_each_page.replace('%', "10"), "selected": verified_page_size == "10"},
+                    {"value": "25", "text": lang.organization_study_table_row_size_each_page.replace('%', "25"), "selected": verified_page_size == "25"},
+                    {"value": "50", "text": lang.organization_study_table_row_size_each_page.replace('%', "50"), "selected": verified_page_size == "50"},
+                    {"value": "100", "text": lang.organization_study_table_row_size_each_page.replace('%', "100"), "selected": verified_page_size == "100"},
+                    {"value": "all", "text": lang.organization_study_table_row_show_everything, "selected": verified_page_size == "all"}
+                ], name="verified_page_size", id="verified_page_size", placeholder=lang.organization_study_table_row_size_each_page.replace('%', verified_page_size)) }}
             </div>
             <input type="hidden" name="verified_page" value="{{ verified_page }}">
             <input type="hidden" name="new_page" value="{{ new_page }}">
             <input type="hidden" name="new_page_size" value="{{ new_page_size }}">
         </form>
 
-        {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_verified) }}
+        {{ table(lang.organization_study_table_columns, table_data_verified) }}
 
         {% if total_pages_verified > 1 %}
         <nav class="pagination">
             {% if has_prev_verified %}
-                <a href="?verified_page={{ verified_page-1 }}&verified_page_size={{ verified_page_size }}&new_page={{ new_page }}&new_page_size={{ new_page_size }}">Previous</a>
+                <a href="?verified_page={{ verified_page-1 }}&verified_page_size={{ verified_page_size }}&new_page={{ new_page }}&new_page_size={{ new_page_size }}">
+                    {{ lang.organization_study_previous }}
+                </a>
             {% endif %}
-            Page {{ verified_page }} / {{ total_pages_verified }}
+            {{ lang.organization_study_page }} {{ verified_page }} / {{ total_pages_verified }}
             {% if has_next_verified %}
-                <a href="?verified_page={{ verified_page+1 }}&verified_page_size={{ verified_page_size }}&new_page={{ new_page }}&new_page_size={{ new_page_size }}">Next</a>
+                <a href="?verified_page={{ verified_page+1 }}&verified_page_size={{ verified_page_size }}&new_page={{ new_page }}&new_page_size={{ new_page_size }}">
+                    {{ lang.organization_study_next }}
+                </a>
             {% endif %}
         </nav>
         {% endif %}
     </section>
-    </main>
+</main>
 
 {% endblock %}

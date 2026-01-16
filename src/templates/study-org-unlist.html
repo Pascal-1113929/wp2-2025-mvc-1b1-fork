@@ -4,17 +4,25 @@
 
 {% block content %}
 
-
-    <main>
-<!--        Dit zit in main vanwege styling redenen-->
+<main>
+    <!-- This is in main for styling reasons -->
     <header>
         <h1>
-            Uitschrijving Voltooid
+            {{ lang.unsubscribe_completed }}
         </h1>
     </header>
-        <section>
-            {{ button(text=lang.go_to_study_org, href=url_for('organization.organization_study_page_render', organization_user_id=organization_user_id, study_id=sid, language=base.locale), class_name="small-button") }}
-        </section>
-    </main>
+    <section>
+        {{ button(
+            text=lang.go_to_study_org,
+            href=url_for(
+                'organization.organization_study_page_render',
+                organization_user_id=organization_user_id,
+                study_id=sid,
+                language=base.locale
+            ),
+            class_name="small-button"
+        ) }}
+    </section>
+</main>
 
 {% endblock %}
