@@ -378,7 +378,7 @@ edit_profile: "Profiel bewerken"
 "organization_study_previous": "Vorige"
 "organization_study_next": "Volgende"
 "organization_study_page": "Pagina"
-"organization_study_unsubscribe_completed": "Uitschrijven voltooid"
+"unsubscribe_completed": "Uitschrijven voltooid"
 "organization_study_go_to_study_org": "Ga naar Onderzoekspagina"
 
 "research_study_page_title": "Detailpagina: %study% van %organization%"
