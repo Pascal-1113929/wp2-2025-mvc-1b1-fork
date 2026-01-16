@@ -1,4 +1,5 @@
 {% from "macros/components/table.html" import table %}
+{% from "macros/components/dropdown.html" import dropdown %}
 
 {% extends 'layouts/default.html' %}
 {% block content %}
@@ -26,14 +27,17 @@
 
         <!-- Page size dropdown -->
         <form method="get" class="page-size-form">
-            <label for="available_page_size">{{ lang.page_size }}:</label>
-            <select name="available_page_size" id="available_page_size" onchange="this.form.submit()">
-                {% for size in [5, 10, 25, 50, 100, 'all'] %}
-                    <option value="{{ size }}" {% if available_page_size|string == size|string %}selected{% endif %}>
-                        {{ size }}
-                    </option>
-                {% endfor %}
-            </select>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="available_page_size">{{ lang.table_row_size_description }}</label>
+                {{ dropdown(options=[
+                    {"value": "5", "text": "5 " + lang.table_row_size_each_page, "selected": available_page_size == "5"},
+                    {"value": "10", "text": "10 " + lang.table_row_size_each_page, "selected": available_page_size == "10"},
+                    {"value": "25", "text": "25 " + lang.table_row_size_each_page, "selected": available_page_size == "25"},
+                    {"value": "50", "text": "50 " + lang.table_row_size_each_page, "selected": available_page_size == "50"},
+                    {"value": "100", "text": "100 " + lang.table_row_size_each_page, "selected": available_page_size == "100"},
+                    {"value": "all", "text": lang.table_row_show_everything, "selected": available_page_size == "all"}
+                ], name="available_page_size", id="available_page_size", placeholder=available_page_size + lang.table_row_size_each_page) }}
+            </div>
 
             <!-- Preserve current pages for both tables -->
             <input type="hidden" name="available_page" value="{{ available_page }}">
