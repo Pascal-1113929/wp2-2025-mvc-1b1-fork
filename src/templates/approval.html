@@ -1,5 +1,6 @@
 {% from "macros/components/table.html" import table %}
 {% from "macros/components/button.html" import button %}
+{% from "macros/components/alert.html" import alert %}
 
 {% extends 'layouts/default.html' %} {% block content %}
 
@@ -8,11 +9,7 @@
         <h1>{{ lang.management_approval_title }}</h1>
     </header>
 
-    {% if notification is not none %}
-        <div class="alert alert-{{ notification.type }}">
-            {{ notification.message }}
-        </div>
-    {% endif %}
+    {{ alert(alert_view) }}
 
     <section class="sectioncard">
         <p class="muted">{{ lang.management_approval_tab_description }}</p>

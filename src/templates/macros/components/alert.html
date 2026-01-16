@@ -1,0 +1,7 @@
+{% macro alert(alert) %}
+    {% if alert is not none %}
+        <div class="alert alert-{{ alert.type }}">
+            {{ alert.message }}
+        </div>
+    {% endif %}
+{% endmacro %}
