@@ -62,4 +62,4 @@ De AI heeft mij geholpen om sneller inzicht te krijgen in de code en om zelfstan
 Ik heb de gegenereerde code altijd zelf gecontroleerd en aangepast zodat deze paste binnen het project en de gemaakte afspraken binnen het team.
 
 ## Overig gebruik GenAI
-- Genarative Ai is gebruikt om vertalingen nar meerdere talen moegelijk te maken
+- Genarative Ai is gebruikt om vertalingen naar meerdere talen moegelijk te maken
