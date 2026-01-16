@@ -11,6 +11,8 @@ from utils.dropdown import Dropdown
 from utils.table import Table
 from utils.auth import is_authenticated, in_roles
 from werkzeug.exceptions import NotFound, Forbidden
+from i18n.locale import get_iso_639_1
+from utils.translate import check_translation
 
 users = User()
 profiles = Profile()
@@ -45,6 +47,7 @@ def account_login():
 def expert_dashboard_render():
     if not is_authenticated():
         return redirect_page("/login")
+    user_id = str(session.get("user_id"))
     profile = profiles.get_profile_by_userid(session["user_id"])
     stats = [0] * 9
 
@@ -63,7 +66,7 @@ def expert_dashboard_render():
         stats[7] = len(studies.get_study_by_status(1))
         stats[8] = len(studies.get_study_by_status(1))
 
-    return render("dashboard.html", profile=profile, stats=stats)
+    return render("dashboard.html", profile=profile, stats=stats, user_id=user_id)
 
 
 @account_bp.route("/logout")
@@ -74,7 +77,8 @@ def account_logout():
 
 @account_bp.route("/register", methods=["GET", "POST"])
 def account_register():
-    page_languages = ['nl']
+    page_languages = ['nl', 'en']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
     error = request.args.get("error")
@@ -154,6 +158,7 @@ def account_register():
 
     return render(
         "register.html",
+        page_translated=page_translated,
         disabilities=disability_dropdown.export_to_macro(),
         success=success,
         error=error,
@@ -163,8 +168,6 @@ def account_register():
 
 @account_bp.route("/expert-profile")
 def expert_profile_redirect():
-    page_languages = ['nl']
-
     userid = session.get("user_id")
     return redirect_page(f"/expert-profile/{userid}")
 
@@ -172,6 +175,7 @@ def expert_profile_redirect():
 @account_bp.route("/expert-profile/<id>")
 def expert_profile(id):
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     userid = session.get("user_id")
     allow_delete = False
@@ -205,6 +209,7 @@ def expert_profile(id):
 
     return render(
         "expert-profile.html",
+        page_translated=page_translated,
         user=user,
         table_data=table_data,
         allow_delete=allow_delete,
@@ -216,6 +221,7 @@ def expert_profile(id):
 )  # form werkt alleen met post dus standaard geen delete eventueel voor latere api optie
 def expert_profile_delete(uid):
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     userid = session.get("user_id")
     role = session.get("role")
@@ -242,13 +248,14 @@ def expert_profile_delete(uid):
         session.pop("role")
         return redirect_page()
 
-    return render("expert-delete.html", profile=profile, uid=uid)
+    return render("expert-delete.html", page_translated=page_translated, profile=profile, uid=uid)
 
 
 @account_bp.route("/expert-profile/<uid>/edit", methods=["GET", "POST"])
 # Using Post as this is the only way to avoid using Javascript
 def expert_profile_edit(uid):
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
     error = request.args.get("error")
@@ -327,6 +334,7 @@ def expert_profile_edit(uid):
 
     return render(
         "expert-profile-edit.html",
+        page_translated=page_translated,
         disabilities=disability_dropdown.export_to_macro(),
         user=user,
         success=success,
@@ -337,6 +345,7 @@ def expert_profile_edit(uid):
 @account_bp.route("/status")
 def account_status():
     page_languages = ['nl']
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     userid = session.get("user_id")
     user = users.get_user_by_id(userid)
@@ -344,4 +353,4 @@ def account_status():
     user["status"] = status
     user["name"] = profiles.get_user_name(userid)
 
-    return render("status-page.html", user=user)
+    return render("status-page.html", page_translated=page_translated, user=user)

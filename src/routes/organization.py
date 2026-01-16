@@ -52,7 +52,7 @@ def organization_dashboard_render(id):
     open_success = request.args.get("open-success")
     open_error = request.args.get("open-error")
     study_id = request.args.get("study_id")
-    study = None
+    changes_study = None
 
     if (
         close_success == "1"
@@ -61,10 +61,21 @@ def organization_dashboard_render(id):
         or open_error == "1"
     ):
         if study_id:
-            study = studies.get_study_by_id(study_id)
+            changes_study = studies.get_study_by_id(study_id)
+
+            if changes_study is None:
+                changes_study = {
+                    "title": "Study Title Not found",
+                }
 
     user_id = session.get("user_id")
-    verified_org_id = users.get_organization_id_by_userid(id)["organization_id"]
+    verified_org_id_dict = users.get_organization_id_by_userid(id)
+
+    if not verified_org_id_dict:
+        abort(404)
+
+    verified_org_id = verified_org_id_dict["organization_id"]
+
     if not in_roles("admin"):
         if user_id != int(id):
             return abort(403)
@@ -158,6 +169,7 @@ def organization_dashboard_render(id):
 @org_bp.route("/add", methods=["GET", "POST"])
 def org_register_add():
     page_languages = ["nl"]
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
     error = request.args.get("error")
@@ -208,7 +220,13 @@ def org_register_add():
                 message = f"Er is iets fout gegaan: {str(e)}"
                 return redirect_page(f"organization/add?error={message}")
 
-    return render("organization-add.html", success=success, error=error, errors=errors)
+    return render(
+        "organization-add.html",
+        page_translated=page_translated,
+        success=success,
+        error=error,
+        errors=errors,
+    )
 
 
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
@@ -216,6 +234,7 @@ def org_register_add():
 @org_bp.route("/research/add", methods=["GET", "POST"])
 def research_register():
     page_languages = ["nl"]
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
     error = request.args.get("error")
@@ -290,6 +309,7 @@ def research_register():
 
     return render(
         "organization-research.html",
+        page_translated=page_translated,
         success=success,
         error=error,
         disabilities=disability_dropdown.export_to_macro(),
@@ -300,6 +320,7 @@ def research_register():
 @org_bp.route("/<organization_id>/study/<study_id>/")
 def organization_study_page_render(organization_id, study_id):
     page_languages = ["nl"]
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     user_id = session.get("user_id")
     verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
@@ -367,6 +388,7 @@ def organization_study_page_render(organization_id, study_id):
 
     return render(
         "study-org.html",
+        page_translated=page_translated,
         organization=org,
         study=study,
         table_data_new=table_data_new,
@@ -411,6 +433,7 @@ def organization_study_open(organization_id, study_id):
 @org_bp.route("/<organization_id>/study/<study_id>/edit", methods=["GET", "POST"])
 def organization_study_edit_page_render(organization_id, study_id):
     page_languages = ["nl"]
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     success = request.args.get("success")
     error = request.args.get("error")
@@ -482,6 +505,7 @@ def organization_study_edit_page_render(organization_id, study_id):
 
     return render(
         "organization-research-edit.html",
+        page_translated=page_translated,
         study=study,
         disabilities=disability_dropdown.export_to_macro(),
         success=success,
@@ -513,8 +537,8 @@ def enrolment_table_data_converter(enrolment_list, table_header):
 
 @org_bp.route("<organization_id>/study/<study_id>/<profile_id>/unlist")
 def organization_unlist(organization_id, study_id, profile_id):
-    page_languages = ["nl"]
-    check_translation(page_languages, get_iso_639_1())
+    page_languages = ["nl", "en"]
+    page_translated = check_translation(page_languages, get_iso_639_1())
 
     organization_id = int(organization_id)
     study_id = int(study_id)
@@ -522,4 +546,9 @@ def organization_unlist(organization_id, study_id, profile_id):
 
     enrolments.delete_enrollment(study_id, profile_id)
 
-    return render("study-org-unlist.html", oid=organization_id, sid=study_id)
+    return render(
+        "study-org-unlist.html",
+        page_translated=page_translated,
+        oid=organization_id,
+        sid=study_id,
+    )

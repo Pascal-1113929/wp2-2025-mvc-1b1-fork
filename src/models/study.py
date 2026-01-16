@@ -113,9 +113,9 @@ class Study:
             )
             con.commit()
             row = cur.fetchone()
-            try:
+            if row:
                 return dict(row)
-            except TypeError:
+            else:
                 return None
 
     def get_available_enrolled_study_by_id(self, study_id: int):
@@ -135,13 +135,6 @@ class Study:
             except TypeError:
                 return None
 
-    def get_study_by_id(self, study_id: int):
-        with self.db.connect() as con:
-            cur = con.cursor()
-            cur.execute("SELECT * FROM studies WHERE id=?", (study_id,))
-            con.commit()
-            return dict(cur.fetchone())
-
     def get_study_by_status(self, status_id: int):
         with self.db.connect() as con:
             cur = con.cursor()
@@ -159,7 +152,8 @@ class Study:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                """INSERT INTO studies (organization_id, title, description, study_type, location,age_min, age_max, reward, start_date, end_date, status_id, available, has_reward)
+                """INSERT INTO studies (organization_id, title, description, study_type, location,age_min, age_max, 
+                                        reward, start_date, end_date, status_id, available, has_reward)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
@@ -230,4 +224,3 @@ class Study:
                         ))
             con.commit()
             return cur.lastrowid
-
