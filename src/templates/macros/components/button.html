@@ -1,5 +1,15 @@
-{% macro button(href="", text="", class_name="", icon="", type="button") %}
-    {% if href %}
+{% macro button(href="", text="", class_name="", icon="", type="button", form_data=None) %}
+    {% if form_data %}
+        <form method="POST" action="{{ form_data.action }}" style="display: inline;">
+            {% for key, value in form_data.hidden_fields.items() %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            <button type="submit" class="button{% if class_name %} {{ class_name }}{% endif %}">
+                {% if icon %}
+                    <i class="{{ icon }}"></i> {% endif %}{{ text }}
+            </button>
+        </form>
+    {% elif href %}
         <a
             {% if href.startswith('.') %}
                 href="/{{ request.path.split('/')[1] }}/{{ href[1:] }}" role="button"

@@ -7,10 +7,13 @@ class Table:
         if not isinstance(data, list):
             data = [data]
         self.table_data = copy.deepcopy(data)
+        self.current_row = {}
+        self._skip_processing = False
 
     def export_to_macro(self):
         table_data = []
         for row in self.table_data:
+            self.current_row = row
             table_row = []
             for key, value in row.items():
                 processed_value = self._process_cell_value(value)
@@ -35,6 +38,17 @@ class Table:
             ]
 
     def _process_list_cell(self, value):
+        if self._is_post_button_definition(value):
+            return [self._create_post_button_element(value)]
+
+        if (
+            len(value) > 0
+            and isinstance(value[0], dict)
+            and value[0].get("type") == "button"
+            and "form_data" in value[0]
+        ):
+            return value
+
         if not value:
             return [{"type": "text", "value": ""}]
 
@@ -64,13 +78,36 @@ class Table:
                 "value": str(element_def[1]) if element_def[1] is not None else "",
             }
 
-    def _create_button_element(self, element_def):
+    def _is_post_button_definition(self, value):
+        if not isinstance(value, list) or len(value) == 0:
+            return False
+        if value[0] == "button" and len(value) > 5 and value[5] == "POST":
+            return True
+        return False
+
+    def _create_post_button_element(self, element_def):
+        form_data = element_def[6] if len(element_def) > 6 else None
+
+        # Process the action URL and hidden fields for placeholders
+        if isinstance(form_data, dict) and "action" in form_data:
+            processed_form_data = form_data.copy()
+            processed_form_data["action"] = process_values(
+                [form_data["action"]], self.current_row
+            )[0]
+            # Process hidden fields values
+            if "hidden_fields" in form_data:
+                processed_hidden_fields = {}
+                for key, value in form_data["hidden_fields"].items():
+                    processed_hidden_fields[key] = process_values(
+                        [value], self.current_row
+                    )[0]
+                processed_form_data["hidden_fields"] = processed_hidden_fields
+            form_data = processed_form_data
+
         return {
             "type": "button",
             "text": str(element_def[1]) if element_def[1] is not None else "",
-            "href": str(element_def[2])
-            if len(element_def) > 2 and element_def[2] is not None
-            else "#",
+            "form_data": form_data,
             "icon": str(element_def[3])
             if len(element_def) > 3 and element_def[3] is not None
             else None,
@@ -78,6 +115,24 @@ class Table:
             if len(element_def) > 4 and element_def[4] is not None
             else None,
         }
+
+    def _create_button_element(self, element_def):
+        if len(element_def) > 5 and element_def[5] == "POST":
+            return self._create_post_button_element(element_def)
+        elif len(element_def) > 2:
+            return {
+                "type": "button",
+                "text": str(element_def[1]) if element_def[1] is not None else "",
+                "href": str(element_def[2])
+                if len(element_def) > 2 and element_def[2] is not None
+                else "#",
+                "icon": str(element_def[3])
+                if len(element_def) > 3 and element_def[3] is not None
+                else None,
+                "class_name": str(element_def[4])
+                if len(element_def) > 4 and element_def[4] is not None
+                else None,
+            }
 
     def _create_link_element(self, element_def):
         return {
@@ -154,7 +209,16 @@ class Table:
 
     def add_column(self, key, column_def):
         for row in self.table_data:
-            column_value = process_conditional_elements(column_def, row)
+            if (
+                len(column_def) > 0
+                and isinstance(column_def[0], list)
+                and len(column_def[0]) > 5
+                and column_def[0][5] == "POST"
+            ):
+                self.current_row = row
+                column_value = [self._create_post_button_element(column_def[0])]
+            else:
+                column_value = process_conditional_elements(column_def, row)
             row[key] = column_value
 
     def set_column_lang(self, lang, keys):

@@ -35,6 +35,7 @@ def research_dashboard_render():
     age_min = request.args.get("age_min", type=int)
     age_max = request.args.get("age_max", type=int)
     study_type = request.args.getlist("study_type", type=str)
+    selected_columns = request.args.getlist("selected_columns", type=str)
 
     userid = session.get("user_id")
     role = session.get("role")
@@ -225,7 +226,8 @@ def research_dashboard_render():
     end = start + enrolled_PAGE_SIZE
     enrolled_studies_paginated = enrolled_studies[start:end]
 
-    table_header = [
+    if not selected_columns:
+        selected_columns = [
         "title",
         "organization",
         "start_date",
@@ -235,6 +237,8 @@ def research_dashboard_render():
         "age_min",
         "age_max",
     ]
+    
+    table_header = selected_columns
 
     available_table = Table(available_studies_paginated)
     available_table.set_type("title", "link", [".research/<id>"])

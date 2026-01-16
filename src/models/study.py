@@ -18,12 +18,14 @@ class Study:
     def count_available(self, disability_ids):
         with self.db.connect() as con:
             cur = con.cursor()
-            placeholders = ','.join(['?'] * len(disability_ids))
-            cur.execute("SELECT COUNT(DISTINCT studies.id) FROM studies "
-                        "INNER JOIN study_disabilities ON studies.id == study_disabilities.study_id "
-                        "WHERE studies.available=1 AND DATE(end_date) > DATE('now') "
-                        f"AND disability_id IN ({placeholders})",
-                        disability_ids)
+            placeholders = ",".join(["?"] * len(disability_ids))
+            cur.execute(
+                "SELECT COUNT(DISTINCT studies.id) FROM studies "
+                "INNER JOIN study_disabilities ON studies.id == study_disabilities.study_id "
+                "WHERE studies.available=1 AND DATE(end_date) > DATE('now') "
+                f"AND disability_id IN ({placeholders})",
+                disability_ids,
+            )
             con.commit()
             return cur.fetchone()
 
@@ -120,8 +122,7 @@ class Study:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                "SELECT * FROM studies "
-                "WHERE id=? ",
+                "SELECT * FROM studies WHERE id=? ",
                 (study_id,),
             )
             con.commit()
@@ -165,7 +166,7 @@ class Study:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute(
-                """INSERT INTO studies (organization_id, title, description, study_type, location,age_min, age_max, 
+                """INSERT INTO studies (organization_id, title, description, study_type, location,age_min, age_max,
                                         reward, start_date, end_date, status_id, available, has_reward)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
@@ -197,43 +198,54 @@ class Study:
     def get_organization_id_by_id(self, id):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute(
-                "SELECT organization_id FROM studies WHERE id=?", (id,)
-            )
+            cur.execute("SELECT organization_id FROM studies WHERE id=?", (id,))
             row = dict(cur.fetchone())
             return row["organization_id"]
 
-    def update_study(self, study_id: int, title: str,
-                     description: str, start_date: str, end_date: str, study_type: str,
-                     location: str | None, has_reward: int, reward: str,
-                     age_min: int, age_max: int):
+    def update_study(
+        self,
+        study_id: int,
+        title: str,
+        description: str,
+        start_date: str,
+        end_date: str,
+        study_type: str,
+        location: str | None,
+        has_reward: int,
+        reward: str,
+        age_min: int,
+        age_max: int,
+    ):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("""
+            cur.execute(
+                """
                         UPDATE studies
                         SET title       = ?,
                             description = ?,
                             start_date  = ?,
                             end_date    = ?,
                             study_type  = ?,
-                            location    = ?,    
+                            location    = ?,
                             has_reward  = ?,
                             reward      = ?,
                             age_min     = ?,
                             age_max     = ?
                         WHERE id = ?
-                        """, (
-                            title,
-                            description,
-                            start_date,
-                            end_date,
-                            study_type,
-                            location,
-                            has_reward,
-                            reward,
-                            age_min,
-                            age_max,
-                            study_id
-                        ))
+                        """,
+                (
+                    title,
+                    description,
+                    start_date,
+                    end_date,
+                    study_type,
+                    location,
+                    has_reward,
+                    reward,
+                    age_min,
+                    age_max,
+                    study_id,
+                ),
+            )
             con.commit()
             return cur.lastrowid

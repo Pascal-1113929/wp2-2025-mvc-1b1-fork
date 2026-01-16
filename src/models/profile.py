@@ -91,11 +91,26 @@ class Profile:
             except TypeError:
                 return None
 
-    def update_profile(self, userid: int, firstname, lastname, gender, postal, intro, phone, birthdate, atools, contact,
-                       researchtype, availability, aterms):
+    def update_profile(
+        self,
+        userid: int,
+        firstname,
+        lastname,
+        gender,
+        postal,
+        intro,
+        phone,
+        birthdate,
+        atools,
+        contact,
+        researchtype,
+        availability,
+        aterms,
+    ):
         with self.db.connect() as con:
             cur = con.cursor()
-            cur.execute("""
+            cur.execute(
+                """
             UPDATE profiles SET
                             first_name = ?,
                             last_name = ?,
@@ -110,8 +125,23 @@ class Profile:
                             preferred_study_type = ?,
                             availability = ?
                 WHERE user_id = ?
-                        """, (firstname, lastname, postal, gender, phone, birthdate, atools, intro, aterms, contact,
-                              researchtype, availability, userid))
+                        """,
+                (
+                    firstname,
+                    lastname,
+                    postal,
+                    gender,
+                    phone,
+                    birthdate,
+                    atools,
+                    intro,
+                    aterms,
+                    contact,
+                    researchtype,
+                    availability,
+                    userid,
+                ),
+            )
             con.commit()
             return cur.lastrowid
 

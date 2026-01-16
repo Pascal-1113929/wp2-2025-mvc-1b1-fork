@@ -64,7 +64,13 @@ class User:
             return cur.lastrowid
 
     def create(
-            self, email, password, organization_id=None, role="organization", status=1, approve_notification=1
+        self,
+        email,
+        password,
+        organization_id=None,
+        role="organization",
+        status=1,
+        approve_notification=1,
     ):
         with self.db.connect() as con:
             cur = con.cursor()

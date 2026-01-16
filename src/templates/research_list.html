@@ -4,7 +4,31 @@
 {% extends 'layouts/default.html' %}
 {% block content %}
 
-<form method="get" class="table-filters">
+
+
+{% set table_header = [
+    lang.research_table_title,
+    lang.research_table_organization,
+    lang.research_table_startdate,
+    lang.research_table_enddate,
+    lang.research_table_location,
+    lang.research_table_compensation,
+    lang.research_table_minage,
+    lang.research_table_maxage
+] %}
+
+<main>
+    <header>
+        <h1>{{ lang.research_title }}</h1>
+    </header>
+
+    <form method="get" class="cm-form table-filters">
+
+     <label for="search-input"> {{ lang.research_search_label }} </label>
+    <input type="text" id="search-input" name="search" placeholder="{{ lang.research_search_placeholder }}">
+
+    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> {{ lang.research_search_button }}</button>
+
     <fieldset>
         <legend> Filter Onderzoeken</legend>
 
@@ -18,6 +42,45 @@
             <label for="age_max">Maximum leeftijd</label>
             <input type="number" id="age_max" name="age_max" min="0" placeholder="Maximum leeftijd" value="{{ request.args.get('age_max', '') }}">
         </div>
+
+        <fieldset>
+            <legend>Toon kolommen</legend>
+            <label>
+                <input type="checkbox" name="selected_columns" value="title"
+                    {% if 'title' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Titel
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="organization"
+                        {% if 'organization' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Organisatie
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="start_date"
+                        {% if 'start_date' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Startdatum
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="end_date"
+                        {% if 'end_date' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Einddatum
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="location_display"
+                        {% if 'location_display' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Locatie
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="age_min"   
+                        {% if 'age_min' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Minimum leeftijd
+            </label>
+            <label>
+                <input type="checkbox" name="selected_columns" value="age_max"
+                        {% if 'age_max' in request.args.getlist('selected_columns') or not request.args.getlist('selected_columns') %}checked{% endif %}>
+                Maximum leeftijd
+            </label>
+        </fieldset>
 
         <fieldset>
             <legend>Type onderzoek</legend>
@@ -35,34 +98,12 @@
             </label>
         </fieldset>
 
-        <button type="submit">Filter toepassen</button>
+        <button type="submit" class="button">Filter toepassen</button>
 
 
     </fieldset>
 </form>
-
-{% set table_header = [
-    lang.research_table_title,
-    lang.research_table_organization,
-    lang.research_table_startdate,
-    lang.research_table_enddate,
-    lang.research_table_location,
-    lang.research_table_compensation,
-    lang.research_table_minage,
-    lang.research_table_maxage
-] %}
-
-<main>
-    <header>
-        <h1>{{ lang.research_title }}</h1>
-    </header>
-    <form method="get" class="table-search" role="search">
-    <label for="search-input"> {{ lang.research_search_label }} </label>
-    <input type="text" id="search-input" name="search" placeholder="{{ lang.research_search_placeholder }}">
-
-    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> {{ lang.research_search_button }}</button>
-
-</form>
+   
     <div class="seperator"></div>
  <!-- Available studies -->
     <section class="sectioncard">
