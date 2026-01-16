@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import ceil
 
 from flask import Blueprint, session, abort, request
 
@@ -124,6 +125,11 @@ def organization_dashboard_render(id):
             return abort(403)
     org = organizations.get_organization_by_id(verified_org_id)
 
+    page = request.args.get("page", 1, type=int)
+    page_size = request.args.get("page_size", 10, type=str)  # default 5
+    if page < 1:
+        page = 1
+
     study_table_data = []
     if org is not None:
         study_list = studies.get_study_by_organization_id(verified_org_id)
@@ -131,6 +137,18 @@ def organization_dashboard_render(id):
         for study in study_list:
             study["location_display"] = study["location"] or study["study_type"]
             full_study_list.append(study)
+
+        total_studies = len(study_list)
+        if page_size == "all":
+            PAGE_SIZE = total_studies or 1
+        else:
+            PAGE_SIZE = int(page_size)
+
+        total_pages = ceil(total_studies / PAGE_SIZE)
+        start = (page - 1) * PAGE_SIZE
+        end = start + PAGE_SIZE
+        paginated_studies = study_list[start:end]
+
         table_header = [
             "title",
             "status",
@@ -142,7 +160,7 @@ def organization_dashboard_render(id):
             "age_max",
             "modify",
         ]
-        table = Table(study_list)
+        table = Table(paginated_studies)
         table.set_column_lang("nl", table_header)
 
         table.set_type("title", "link", [".organization/<organization_id>/study/<id>"])
@@ -206,7 +224,14 @@ def organization_dashboard_render(id):
         open_success=open_success,
         open_error=open_error,
         changes_study=changes_study,
-        id=id
+        id=id,
+
+        # Pagination variables
+        page=page,
+        page_size=page_size,
+        total_pages=total_pages,
+        has_prev=page > 1,
+        has_next=page < total_pages,
     )
 
 
@@ -278,7 +303,7 @@ def org_register_add():
 # Dit is na een merge conflict verwijderd en door pascal weer toegevoegd orginele auteur was ALW-2005
 # Is aangepast door Pascal na verdere inspectie
 @org_bp.route("<organization_user_id>/research/add", methods=["GET", "POST"])
-def research_register():
+def research_register(organization_user_id):
     if not is_authenticated() or not in_roles(["organization", "admin"]):
         return abort(403)
     page_languages = ["nl"]
@@ -377,9 +402,13 @@ def organization_study_page_render(organization_user_id, study_id):
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(403)
 
+    organization_id_dict = users.get_organization_id_by_userid(organization_user_id)
+    organization_id = organization_id_dict["organization_id"]
+
     user_id = session.get("user_id")
     if in_roles("admin"):
-        verified_org_id = int(organization_id)
+        verified_org_id_dict = users.get_organization_id_by_userid(organization_user_id)
+        verified_org_id = verified_org_id_dict["organization_id"]
     else:
         verified_org_id_dict = users.get_organization_id_by_userid(user_id)
         if not verified_org_id_dict:
@@ -393,19 +422,27 @@ def organization_study_page_render(organization_user_id, study_id):
         print(f"forbidden id mismatch {verified_org_id} {organization_id}")
         return abort(403)
 
-    org = organizations.get_organization_by_id(org_id)
+    org = organizations.get_organization_by_id(organization_id)
     study = studies.get_study_by_id(study_id)
+
     if not study:
         return abort(404)
+
     raw_new_enrolment_list = enrolments.get_enrolments_by_study_id(study_id, 1)
     raw_verified_enrolment_list = enrolments.get_enrolments_by_study_id(study_id, 2)
+
+    new_page = request.args.get("new_page", 1, type=int)
+    new_page_size = request.args.get("new_page_size", 10, type=str)
+
+    verified_page = request.args.get("verified_page", 1, type=int)
+    verified_page_size = request.args.get("verified_page_size", 10, type=str)
 
     new_enrolment_list = []
     for enrolment in raw_new_enrolment_list:
         profile = profiles.get_profile_by_id(enrolment["profile_id"])
         user = users.get_user_by_id(profile["user_id"])
         new_enrolment = {
-            "organization_id": int(org_id),
+            "organization_id": int(organization_id),
             "organization_user_id": int(organization_user_id),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
@@ -423,7 +460,7 @@ def organization_study_page_render(organization_user_id, study_id):
         profile = profiles.get_profile_by_id(enrolment["profile_id"])
         user = users.get_user_by_id(profile["user_id"])
         verified_enrolment = {
-            "organization_id": int(org_id),
+            "organization_id": int(organization_id),
             "organization_user_id": int(organization_user_id),
             "study_id": enrolment["study_id"],
             "profile_id": profile["id"],
@@ -436,6 +473,20 @@ def organization_study_page_render(organization_user_id, study_id):
         }
         verified_enrolment_list.append(verified_enrolment)
 
+    def paginate_list(data_list, page, page_size):
+        total = len(data_list)
+        if page_size == "all":
+            PAGE_SIZE = total or 1
+        else:
+            PAGE_SIZE = int(page_size)
+        total_pages = ceil(total / PAGE_SIZE)
+        start = (page - 1) * PAGE_SIZE
+        end = start + PAGE_SIZE
+        return data_list[start:end], total_pages
+
+    paginated_new, total_pages_new = paginate_list(new_enrolment_list, new_page, new_page_size)
+    paginated_verified, total_pages_verified = paginate_list(verified_enrolment_list, verified_page, verified_page_size)
+
     table_header = [
         "name",
         "phonenr",
@@ -446,12 +497,10 @@ def organization_study_page_render(organization_user_id, study_id):
         "unlist",
     ]
 
-    table_data_new = enrolment_table_data_converter(new_enrolment_list, table_header)
-    table_data_verified = enrolment_table_data_converter(
-        verified_enrolment_list, table_header
-    )
+    table_data_new = enrolment_table_data_converter(paginated_new, table_header)
+    table_data_verified = enrolment_table_data_converter(paginated_verified, table_header)
 
-    if int(org_id) != study["organization_id"]:
+    if int(organization_id) != study["organization_id"]:
         print("forbidden study_orgid mismatch")
         return abort(403)
 
@@ -462,6 +511,18 @@ def organization_study_page_render(organization_user_id, study_id):
         study=study,
         table_data_new=table_data_new,
         table_data_verified=table_data_verified,
+
+        # Pagination variables
+        new_page=new_page,
+        new_page_size=new_page_size,
+        total_pages_new=total_pages_new,
+        has_prev_new=new_page > 1,
+        has_next_new=new_page < total_pages_new,
+        verified_page=verified_page,
+        verified_page_size=verified_page_size,
+        total_pages_verified=total_pages_verified,
+        has_prev_verified=verified_page > 1,
+        has_next_verified=verified_page < total_pages_verified,
     )
 
 

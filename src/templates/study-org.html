@@ -12,14 +12,69 @@
             Inschrijflijst pagina: {{ study.title }} van {{ organization.name }}
         </h1>
     </header>
-        <section>
-            <h2>Lijst van inschrijvingen met status nieuw</h2>
-            {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_new) }}
-        </section>
             <section>
-            <h2>Lijst van inschrijvingen met status goedgekeurd</h2>
-            {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_verified) }}
-        </section>
+        <h2>Lijst van inschrijvingen met status nieuw</h2>
+
+        <form method="get">
+            <label for="new_page_size">{{ lang.page_size }}:</label>
+            <select name="new_page_size" id="new_page_size" onchange="this.form.submit()">
+                {% for size in [5,10,25,50,100,'all'] %}
+                    <option value="{{ size }}" {% if new_page_size|string == size|string %}selected{% endif %}>
+                        {{ size }}
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="new_page" value="{{ new_page }}">
+            <input type="hidden" name="verified_page" value="{{ verified_page }}">
+            <input type="hidden" name="verified_page_size" value="{{ verified_page_size }}">
+        </form>
+
+        {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_new) }}
+
+        {% if total_pages_new > 1 %}
+        <nav class="pagination">
+            {% if has_prev_new %}
+                <a href="?new_page={{ new_page-1 }}&new_page_size={{ new_page_size }}&verified_page={{ verified_page }}&verified_page_size={{ verified_page_size }}">Previous</a>
+            {% endif %}
+            Page {{ new_page }} / {{ total_pages_new }}
+            {% if has_next_new %}
+                <a href="?new_page={{ new_page+1 }}&new_page_size={{ new_page_size }}&verified_page={{ verified_page }}&verified_page_size={{ verified_page_size }}">Next</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Lijst van inschrijvingen met status goedgekeurd</h2>
+
+        <form method="get">
+            <label for="verified_page_size">{{ lang.page_size }}:</label>
+            <select name="verified_page_size" id="verified_page_size" onchange="this.form.submit()">
+                {% for size in [5,10,25,50,100,'all'] %}
+                    <option value="{{ size }}" {% if verified_page_size|string == size|string %}selected{% endif %}>
+                        {{ size }}
+                    </option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="verified_page" value="{{ verified_page }}">
+            <input type="hidden" name="new_page" value="{{ new_page }}">
+            <input type="hidden" name="new_page_size" value="{{ new_page_size }}">
+        </form>
+
+        {{ table(['naam','telefoonnummer','email','contactvoorkeur','beschikbaarheid','profiel_bekijken','verwijderen'], table_data_verified) }}
+
+        {% if total_pages_verified > 1 %}
+        <nav class="pagination">
+            {% if has_prev_verified %}
+                <a href="?verified_page={{ verified_page-1 }}&verified_page_size={{ verified_page_size }}&new_page={{ new_page }}&new_page_size={{ new_page_size }}">Previous</a>
+            {% endif %}
+            Page {{ verified_page }} / {{ total_pages_verified }}
+            {% if has_next_verified %}
+                <a href="?verified_page={{ verified_page+1 }}&verified_page_size={{ verified_page_size }}&new_page={{ new_page }}&new_page_size={{ new_page_size }}">Next</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+    </section>
     </main>
 
 {% endblock %}
