@@ -286,6 +286,8 @@
 "profile_delete_title": "Delete account"
 "profile_delete_message": "Are you sure you want to delete your account?"
 "profile_delete_btn_confirm": "Delete"
+"profile_edit_btn_submit": "Save changes"
+"profile_edit_alert": "Changes saved successfully!"
 
 "lang_select_label": "Select your language"
 

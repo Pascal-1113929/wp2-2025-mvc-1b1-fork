@@ -5,7 +5,7 @@
     <section class="sectioncard">
                 {% if success %}
             <div class="alert alert-success">
-                <p>Succesvol Profiel gewijzigd!</p>
+                <p>{{ lang.profile_edit_alert }}</p>
                 <a href="/{{ base.locale }}/profile/{{ user.user_id }}" class="button" type="button">{{ lang.return_expert_edit }}</a>
             </div>
         {% endif %}
@@ -17,90 +17,90 @@
         {% endif %}
         <form class="cm-form" action="{{ url_for('account.expert_profile_edit', uid=user.user_id, language=base.locale)}}" method="post">
             <div class="form-group">
-                <label for="usr-email">Email</label>
-                <input id="usr-email" type="email" name="email" required placeholder="Voer hier uw email in" value="{{ user.email }}">
+                <label for="usr-email">{{ lang.account_register_field_email_title }}</label>
+                <input id="usr-email" type="email" name="email" required placeholder="{{ lang.account_register_field_email_placeholder }}" value="{{ user.email }}">
             </div>
 
             <div class="form-group">
-                <label for="prf-fname">Voornaam</label>
-                <input id="prf-fname" type="text" name="firstname" required placeholder="vul hier uw voornaam in" value="{{ user.first_name }}">
+                <label for="prf-fname">{{ lang.account_register_field_firstname_title }}</label>
+                <input id="prf-fname" type="text" name="firstname" required placeholder="{{ lang.account_register_field_firstname_placeholder }}" value="{{ user.first_name }}">
             </div>
 
             <div class="form-group">
-                <label for="prf-lname">Achternaam</label>
-                <input id="prf-lname" type="text" name="lastname" required placeholder="vul hier uw achternaam in" value="{{ user.last_name }}">
+                <label for="prf-lname">{{ lang.account_register_field_lastname_title }}</label>
+                <input id="prf-lname" type="text" name="lastname" required placeholder="{{ lang.account_register_field_lastname_placeholder }}" value="{{ user.last_name }}">
             </div>
 
             <div class="form-group">
-                <label for="dropdown-prf-gender">Gender</label>
+                <label for="dropdown-prf-gender">{{ lang.account_register_field_gender_title }}</label>
                 {{ dropdown(options=[
-                    {"value": "M", "text": "Man", "selected": user.gender == "M"},
-                    {"value": "V", "text": "Vrouw", "selected": user.gender == "V"},
-                    {"value": "X", "text": "Anders", "selected": user.gender == "X"}
-                ], name="gender", id="prf-gender", class="", required=true, placeholder="Selecteer uw geslacht") }}
+                    {"value": "M", "text": lang.account_register_field_gender_male, "selected": user.gender == "M"},
+                    {"value": "V", "text": lang.account_register_field_gender_female, "selected": user.gender == "V"},
+                    {"value": "X", "text": lang.account_register_field_gender_other, "selected": user.gender == "X"}
+                ], name="gender", id="prf-gender", class="", required=true, placeholder=lang.account_register_field_gender_placeholder) }}
             </div>
 
             <div class="form-group">
-                <label for="dropdown-prf-disability">Beperkingen:</label>
+                <label for="dropdown-prf-disability">{{ lang.account_register_field_disability_title }}</label>
                 {% set selected_id = user.disability_list[0].id|string if user.disability_list else "" %}
-                {{ dropdown(options=disabilities, name="disability", id="prf-disability", class="", required=true, placeholder="Selecteer een beperking", value=selected_id) }}
+                {{ dropdown(options=disabilities, name="disability", id="prf-disability", class="", required=true, placeholder=lang.account_register_field_disability_placeholder, value=selected_id) }}
             </div>
 
             <div class="form-group">
-                <label for="prf-postal">Postcode</label>
-                <input id="prf-postal" type="text" name="postal" placeholder="vul hier postcode in" value="{{ user.postcode }}">
+                <label for="prf-postal">{{ lang.account_register_field_postal_title }}</label>
+                <input id="prf-postal" type="text" name="postal" placeholder="{{ lang.account_register_field_postal_placeholder }}" value="{{ user.postcode }}">
             </div>
 
             <div class="form-group">
-                <label for="prf-inro">Intro</label>
-                <textarea id="prf-inro" name="intro" rows="4" aria-setsize="false" placeholder="vul hier uw intro voor uw profiel in">{{ user.intro }}</textarea>
+                <label for="prf-inro">{{ lang.account_register_field_intro_title }}</label>
+                <textarea id="prf-inro" name="intro" rows="4" aria-setsize="false" placeholder="{{ lang.account_register_field_intro_placeholder }}">{{ user.intro }}</textarea>
             </div>
 
             <div class="form-group">
-                <label for="phone">Telefoonnummer</label>
-                <input id="phone" type="tel" name="phone" placeholder="Bijv: 067409236450" maxlength="10" value="{{ user.phone }}">
+                <label for="phone">{{ lang.account_register_field_phone_title }}</label>
+                <input id="phone" type="tel" name="phone" placeholder="{{ lang.account_register_field_phone_placeholder }}" maxlength="10" value="{{ user.phone }}">
             </div>
 
             <div class="form-group">
-                <label for="prf-bdate">Geboorte Datum</label>
+                <label for="prf-bdate">{{ lang.account_register_field_birthdate_title }}</label>
                 <input id="prf-bdate" type="date" name="birthdate" value="{{ user.birth_date }}">
             </div>
 
             <div class="form-group">
-                <label for="prf-atools">Hulpmiddelen</label>
-                <input id="prf-atools" type="text" name="atools" placeholder="Bijv: Screenreader" value="{{ user.assistive_tools }}">
+                <label for="prf-atools">{{ lang.account_register_field_atools_title }}</label>
+                <input id="prf-atools" type="text" name="atools" placeholder="{{ lang.account_register_field_atools_placeholder }}" value="{{ user.assistive_tools }}">
             </div>
 
             <div class="form-group">
-                <label for="dropdown-prf-contact">Contact preferentie</label>
+                <label for="dropdown-prf-contact">{{ lang.account_register_field_contact_title }}</label>
                 {{ dropdown(options=[
-                    {"value": "telefoon", "text": "Telefoon", "selected": user.contact_preference == "telefoon"},
-                    {"value": "e-mail", "text": "E-mail", "selected": user.contact_preference == "e-mail"},
-                ], name="contact", id="prf-contact", class="", required=true, placeholder="Selecteer uw contact preferentie") }}
+                    {"value": "telefoon", "text": lang.account_register_field_contact_phone, "selected": user.contact_preference == "telefoon"},
+                    {"value": "e-mail", "text": lang.account_register_field_contact_email, "selected": user.contact_preference == "e-mail"},
+                ], name="contact", id="prf-contact", class="", required=true, placeholder=lang.account_register_field_contact_placeholder) }}
             </div>
 
             <div class="form-group">
-                <label for="dropdown-prf-researchtype">Onderzoek type preferentie</label>
+                <label for="dropdown-prf-researchtype">{{ lang.account_register_field_researchtype_title }}</label>
                 {{ dropdown(options=[
-                    {"value": "telefonisch", "text": "Telefonisch", "selected": user.preferred_study_type == "telefonisch"},
-                    {"value": "online", "text": "Online", "selected": user.preferred_study_type == "online"},
-                    {"value": "locatie", "text": "Op locatie", "selected": user.preferred_study_type == "locatie"},
-                ], name="researchtype", id="prf-researchtype", class="", required=true, placeholder="Selecteer uw onderzoek type preferentie") }}
+                    {"value": "telefonisch", "text": lang.account_register_field_researchtype_phone, "selected": user.preferred_study_type == "telefonisch"},
+                    {"value": "online", "text": lang.account_register_field_researchtype_online, "selected": user.preferred_study_type == "online"},
+                    {"value": "locatie", "text": lang.account_register_field_researchtype_location, "selected": user.preferred_study_type == "locatie"},
+                ], name="researchtype", id="prf-researchtype", class="", required=true, placeholder=lang.account_register_field_researchtype_placeholder) }}
             </div>
 
             <div class="form-group">
-                <label for="prf-availab">Beschikbaarheid</label>
-                <input id="prf-availab" type="text" name="availability" placeholder="Bijv: Ma-Wo overdag" value="{{ user.availability }}">
+                <label for="prf-availab">{{ lang.account_register_field_availability_title }}</label>
+                <input id="prf-availab" type="text" name="availability" placeholder="{{ lang.account_register_field_availability_placeholder }}" value="{{ user.availability }}">
             </div>
 
             <!-- Guardian -->
             <div class="form-group">
-                <label for="prf-guardian-name">Naam toezichthouder (optioneel)</label>
+                <label for="prf-guardian-name">{{ lang.account_register_field_guardian_name }}</label>
                 <input
                     id="prf-guardian-name"
                     type="text"
                     name="guardian_name"
-                    placeholder="Naam van de toezichthouder"
+                    placeholder="{{ lang.account_register_field_guardian_name_placeholder }}"
                     value="{{ user.guardian_name or "" }}"
                 >
                 {% if errors.guardian_name %}
@@ -109,12 +109,12 @@
             </div>
 
             <div class="form-group">
-                <label for="prf-guardian-email">E-mail toezichthouder</label>
+                <label for="prf-guardian-email">{{ lang.account_register_field_guardian_email }}</label>
                 <input
                     id="prf-guardian-email"
                     type="email"
                     name="guardian_email"
-                    placeholder="E-mail van de toezichthouder"
+                    placeholder="{{ lang.account_register_field_guardian_email_placeholder }}"
                     value="{{ user.guardian_email or "" }}"
                 >
                 {% if errors.guardian_email %}
@@ -123,12 +123,12 @@
             </div>
 
             <div class="form-group">
-                <label for="prf-guardian-phone">Telefoonnummer toezichthouder</label>
+                <label for="prf-guardian-phone">{{ lang.account_register_field_guardian_phone }}</label>
                 <input
                     id="prf-guardian-phone"
                     type="tel"
                     name="guardian_phone"
-                    placeholder="Telefoonnummer van de toezichthouder"
+                    placeholder="{{ lang.account_register_field_guardian_phone_placeholder }}"
                     value="{{ user.guardian_phone or "" }}"
                 >
                 {% if errors.guardian_phone %}
@@ -138,12 +138,12 @@
 
             <div class="form-check">
                 <input type="checkbox" id="prf-aterms" name="aterms" value=1 required {% if user.agreed_terms == 1 %} checked {% endif %}>
-                <label for="prf-aterms"> Ik ben het eens met de Userpolicy</label>
+                <label for="prf-aterms"> {{ lang.account_register_field_terms_label }}</label>
             </div>
 
             <div class="grid-section">
-                <button class="submit-btn" type="submit">Opslaan</button>
-                <button class="reset-btn" type="reset">Reset</button>
+                <button class="submit-btn" type="submit">{{ lang.profile_edit_btn_submit }}</button>
+                <button class="reset-btn" type="reset">{{ lang.account_register_btn_reset }}</button>
             </div>
         </form>
 
