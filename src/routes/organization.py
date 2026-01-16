@@ -528,7 +528,7 @@ def organization_study_close(organization_user_id, study_id):
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(401)
     study = studies.get_study_by_id(study_id)
-    organization_id = organizations.get_organization_userid(organization_user_id)
+    organization_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
     if not study:
         return abort(404)
     if int(organization_id) != study["organization_id"]:
@@ -556,7 +556,7 @@ def organization_study_open(organization_user_id, study_id):
     if not is_authenticated() or not in_roles(["admin", "organization"]):
         return abort(401)
     study = studies.get_study_by_id(study_id)
-    organization_id = organizations.get_organization_userid(organization_user_id)
+    organization_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
     if not study:
         return abort(404)
     if int(organization_id) != study["organization_id"]:
@@ -584,6 +584,7 @@ def organization_study_edit_page_render(organization_user_id, study_id):
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
+    organization_id = users.get_organization_id_by_userid(organization_user_id)["organization_id"]
     success = request.args.get("success")
     error = request.args.get("error")
 
@@ -601,14 +602,11 @@ def organization_study_edit_page_render(organization_user_id, study_id):
         if verified_org_id != int(organization_id):
             print(f"forbidden id mismatch {verified_org_id} {organization_id}")
             return abort(403)
-    verified_org_id = users.get_organization_id_by_userid(user_id)["organization_id"]
-    if verified_org_id != int(organization_id):
-        print(f"forbidden id mismatch {verified_org_id} {organization_id}")
-        return abort(403)
 
     db_study = studies.get_study_by_id(study_id)
     if not db_study:
         return abort(404)
+
     if int(organization_id) != db_study["organization_id"]:
         return abort(403)
     disability_list = disabilities.get_disability_list_by_studyid(study_id)
