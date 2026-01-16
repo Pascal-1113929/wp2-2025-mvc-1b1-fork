@@ -359,6 +359,8 @@ def approval_submit():
 
     if type == "user":
         field_name = profile.get_name_by_userid(id)
+        if field_name is None:
+            redirect_page("http://127.0.0.1:8080/en-US/approval/?tab=enrollment&alert_id=4")
         users.set_user_status(id, status)
         email_generate(
             "Account Afgekeurd" if click == "reject" else "Account Goedgekeurd",
@@ -370,6 +372,8 @@ def approval_submit():
     elif type == "research":
         study.set_research_status(id, status)
         organization_id = study.get_organization_id_by_id(id)
+        if organization_id is None:
+            redirect_page("http://127.0.0.1:8080/en-US/approval/?tab=enrollment&alert_id=4")
         field_name = organization.get_name_by_id(organization_id)
         email_generate(
             "Onderzoek Afgekeurd" if click == "reject" else "Onderzoek Goedgekeurd",
@@ -382,6 +386,8 @@ def approval_submit():
     elif type == "enrollment":
         enrollment.set_enrollment_status(id, status)
         user_id = enrollment.get_user_id_by_enrollment_id(id)
+        if user_id is None:
+            redirect_page("http://127.0.0.1:8080/en-US/approval/?tab=enrollment&alert_id=4")
         field_name = profile.get_name_by_userid(user_id)
         email_generate(
             "Inschrijving Afgekeurd"

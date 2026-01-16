@@ -150,5 +150,9 @@ class Profile:
             cur = con.cursor()
             cur.execute("SELECT * FROM profiles WHERE user_id = ?", (userid,))
             con.commit()
-            row = dict(cur.fetchone())
-            return row["first_name"] + " " + row["last_name"]
+            row = cur.fetchone()
+
+            if row is None:
+                return None
+            else:
+                return row["first_name"] + " " + row["last_name"]

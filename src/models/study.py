@@ -212,8 +212,11 @@ class Study:
         with self.db.connect() as con:
             cur = con.cursor()
             cur.execute("SELECT organization_id FROM studies WHERE id=?", (id,))
-            row = dict(cur.fetchone())
-            return row["organization_id"]
+            row = cur.fetchone()
+            if row is None:
+                return None
+            else:
+                return dict(row)["organization_id"]
 
     def update_study(
         self,
