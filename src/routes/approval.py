@@ -79,7 +79,7 @@ def approval():
                 "button",
                 [
                     lang.get("approval_users_option_viewprofile"),
-                    ".expert-profile/<id>",
+                    ".profile/<id>",
                     "fa-solid fa-eye",
                     "info",
                 ],
@@ -189,7 +189,7 @@ def approval():
                 "button",
                 [
                     lang.get("approval_enrollment_option_viewprofile"),
-                    ".expert-profile/<user_id>",
+                    ".profile/<user_id>",
                     "fa-solid fa-eye",
                     "info",
                 ],

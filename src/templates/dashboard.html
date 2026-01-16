@@ -25,8 +25,8 @@
             </ul>
         </div>
         {% if profile %}
-            {{ button(text=lang.dashboard_profile_btn_edit, href=".expert-profile/"+user_id+"/edit", icon="fa-solid fa-gear") }}
-            {{ button(text=lang.dashboard_profile_btn_view, href=".expert-profile/"+user_id, icon="fa-solid fa-user") }}
+            {{ button(text=lang.dashboard_profile_btn_edit, href=".profile/"+user_id+"/edit", icon="fa-solid fa-gear") }}
+            {{ button(text=lang.dashboard_profile_btn_view, href=".profile/"+user_id, icon="fa-solid fa-user") }}
         {% endif %}
     </section>
 

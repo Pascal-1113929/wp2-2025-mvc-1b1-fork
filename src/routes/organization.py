@@ -716,7 +716,7 @@ def enrolment_table_data_converter(enrolment_list, table_header):
                 "button",
                 [
                     "Bekijk Profiel",
-                    ".expert-profile/<user_id>",
+                    ".profile/<user_id>",
                     "",
                     "primary",
                 ],
@@ -772,6 +772,7 @@ def organization_unlist(organization_user_id, study_id, profile_id):
     return render(
         "study-org-unlist.html",
         page_translated=page_translated,
+        organization_user_id=organization_user_id,
         oid=organization_id,
         sid=study_id,
     )
