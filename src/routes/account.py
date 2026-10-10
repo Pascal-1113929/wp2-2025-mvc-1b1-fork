@@ -39,7 +39,7 @@ def account_login():
             session["user_id"] = user["id"]
             session["role"] = user["role"]
             user_dict = dict(user)
-            if user_dict["status_id"] != 2:
+            if user_dict["status_id"] != 2: #Status ID 2 means approved, so if the user is not approved
                 return redirect_page("/status")
             return redirect_page("/dashboard")
         else:
@@ -53,6 +53,8 @@ def expert_dashboard_render():
         return redirect_page("/login")
     user_id = str(session.get("user_id"))
     user = users.get_user_by_id(user_id)
+    if user["status_id"] != 2: #Status ID 2 means approved, so if the user is not approved
+        return redirect_page("/status")
     users.set_user_approve_notifications(user_id)
     profile = profiles.get_profile_by_userid(user_id)
     if profile:

@@ -10,6 +10,7 @@ from models.organization import Organization
 from models.profile import Profile
 from models.study import Study
 from models.user import User
+from utils.check_status import check_status
 from view import render, redirect_page
 from werkzeug.exceptions import NotFound, abort
 from utils.table import Table
@@ -39,6 +40,7 @@ def research_dashboard_render():
     selected_columns = request.args.getlist("selected_columns", type=str)
 
     userid = session.get("user_id")
+    check_status(userid)
     role = session.get("role")
     is_expert = False
 
@@ -340,6 +342,7 @@ def study_dashboard_render(study_id):
 
     if in_roles("expert"):
         user_id = session["user_id"]
+        check_status(user_id)
 
     study = studies.get_study_by_id(study_id)
     if study is None:
@@ -380,6 +383,7 @@ def enroll_page(study_id):
         abort(403)
 
     user_id = session.get("user_id")
+    check_status(user_id)
 
     study = studies.get_study_by_id(study_id)
     user = users.get_user_by_id(user_id)
@@ -400,6 +404,7 @@ def enroll_confirm(study_id):
         abort(403)
 
     user_id = session.get("user_id")
+    check_status(user_id)
     profile = profiles.get_profile_by_userid(user_id)
     user_name = profiles.get_name_by_userid(user_id)
     study_name = studies.get_study_by_id(study_id)["title"]
@@ -434,6 +439,7 @@ def unlist_page(study_id):
         abort(403)
 
     user_id = session.get("user_id")
+    check_status(user_id)
 
     study = studies.get_study_by_id(study_id)
     user = users.get_user_by_id(user_id)
