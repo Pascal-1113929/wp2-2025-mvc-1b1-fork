@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import Blueprint, request, session
+from flask import Blueprint, abort, request, session
 
 from models.disabilities import Disablity
 from models.profile import Profile
@@ -446,6 +446,9 @@ def expert_profile_edit(uid):
 def account_status():
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
+
+    if not is_authenticated():
+        return redirect_page("/login")
 
     userid = session.get("user_id")
     user = users.get_user_by_id(userid)
