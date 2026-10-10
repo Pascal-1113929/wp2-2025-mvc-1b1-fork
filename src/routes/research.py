@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from functools import wraps
 from math import ceil
 from urllib.parse import urlencode
 
@@ -10,7 +11,6 @@ from models.organization import Organization
 from models.profile import Profile
 from models.study import Study
 from models.user import User
-from utils.check_status import check_status
 from view import render, redirect_page
 from werkzeug.exceptions import NotFound, abort
 from utils.table import Table
@@ -28,8 +28,22 @@ enrolments = Enrollment()
 
 research_bp = Blueprint("research", __name__)
 
+def require_active_status(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print("text")
+        user_id = session.get("user_id")
+        if user_id is None:
+            raise NotFound()
+        user = users.get_user_by_id(str(user_id))
+        if user["status_id"] != 2:
+            return redirect_page("/status")
+        return func(*args, **kwargs)
+    return wrapper
+
 
 @research_bp.route("/")
+@require_active_status
 def research_dashboard_render():
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
@@ -40,7 +54,6 @@ def research_dashboard_render():
     selected_columns = request.args.getlist("selected_columns", type=str)
 
     userid = session.get("user_id")
-    check_status(userid)
     role = session.get("role")
     is_expert = False
 
@@ -336,13 +349,13 @@ def research_dashboard_render():
 
 
 @research_bp.route("/<study_id>")
+@require_active_status
 def study_dashboard_render(study_id):
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
 
     if in_roles("expert"):
         user_id = session["user_id"]
-        check_status(user_id)
 
     study = studies.get_study_by_id(study_id)
     if study is None:
@@ -375,6 +388,7 @@ def study_dashboard_render(study_id):
 
 
 @research_bp.route("/<study_id>/enroll")
+@require_active_status
 def enroll_page(study_id):
     page_languages = ["nl"]
     page_translated = check_translation(page_languages, get_iso_639_1())
@@ -383,7 +397,6 @@ def enroll_page(study_id):
         abort(403)
 
     user_id = session.get("user_id")
-    check_status(user_id)
 
     study = studies.get_study_by_id(study_id)
     user = users.get_user_by_id(user_id)
@@ -399,12 +412,12 @@ def enroll_page(study_id):
 
 
 @research_bp.route("/<study_id>/enroll", methods=["POST"])
+@require_active_status
 def enroll_confirm(study_id):
     if not is_authenticated() or not in_roles("expert"):
         abort(403)
 
     user_id = session.get("user_id")
-    check_status(user_id)
     profile = profiles.get_profile_by_userid(user_id)
     user_name = profiles.get_name_by_userid(user_id)
     study_name = studies.get_study_by_id(study_id)["title"]
@@ -432,6 +445,7 @@ def enroll_success(study_id):
 
 
 @research_bp.route("/<study_id>/unlist")
+@require_active_status
 def unlist_page(study_id):
     page_languages = ["nl"]
 
@@ -439,7 +453,6 @@ def unlist_page(study_id):
         abort(403)
 
     user_id = session.get("user_id")
-    check_status(user_id)
 
     study = studies.get_study_by_id(study_id)
     user = users.get_user_by_id(user_id)
