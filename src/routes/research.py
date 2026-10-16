@@ -31,7 +31,6 @@ research_bp = Blueprint("research", __name__)
 def require_active_status(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        print("text")
         user_id = session.get("user_id")
         if user_id is None:
             raise NotFound()
